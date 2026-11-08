@@ -1,0 +1,172 @@
+<.DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Учи.ру — Накрутка Яиц (NullSecAI Edition)</title>
+<style>
+:root {
+--primary: #00a8ff;
+--secondary: #2f3640;
+--bg: #f5f6fa;
+--card-bg: #ffffff;
+--text: #353b48;
+--accent: #e84118;
+}
+border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+.container { width: 100%; max-width: 800px; padding: 20px; }
+.card { background: var(--card-bg); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 30px; margin-bottom: 20px; }
+h1, h2 { color: var(--secondary); margin-bottom: 20px; text-align: center; }
+input { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #dcdde1; border-radius: 6px; font-size: 16px; outline: none; transition: 0.3s; }
+input:focus { border-color: var(--primary); }
+button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+button:hover { opacity: 0.9; transform: translateY(-2px); }
+
+.leaderboard { margin-top: 20px; }
+.leaderboard h3 { margin-bottom: 10px; color: var(--secondary); }
+ul { list-style: none; }
+li { padding: 10px 15px; margin: 5px 0; background: #f1f2f6; border-radius: 6px; display: flex; justify-content: space-between; font-weight: 500; }
+li:nth-child(1) { background: #ffd700; color: #000; }
+li:nth-child(2) { background: #c0c0c0; color: #000; }
+
+//
+.games-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+.game-btn { background: #4cd137; margin: 0; }
+.game-card { background: #f8f9fa; padding: 20px; border-radius: 8px; border: 2px dashed #dcdde1; margin-top: 15px; }
+.options { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.option-btn { background: #718093; text-align: left; }
+.option-btn:hover { background: #2f3640; }
+.result-msg { margin-top: 10px; font-weight: bold; text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="container">
+Авторизации -->
+<div id="auth-screen" class="card">
+<h1>Учи.ру — Вход в систему</h1>
+<p style="text-align: center; margin-bottom: 15px; color: #718093;">Авторизуйся для загрузки накрутки яиц</p>
+<input type="text" id="login-input" placeholder="Логин (по умолчанию: 75)" value="75">
+<input type="password" id="pass-input" placeholder="Пароль (по умолчанию: 912пляж2)" value="912пляж2">
+<button onclick="login()">Войти в аккаунт</button>
+
+панель накрутки -->
+<div id="dashboard-screen" class="card hidden">
+<h1>Личный кабинет Учи.ру</h1>
+<div class="stats">
+<div>
+<p>Твой баланс:</p>
+<div class="egg-count"> Яиц: 999</div>
+</div>
+<button style="width: auto; padding: 10px 20px; background: #e84118;" onclick="logout()">Выйти</button>
+
+-->
+<h2>Образовательные мини-игры</h2>
+<div class="games-grid">
+<button class="game-btn" onclick="loadGame('math')">Математика</button>
+<button class="game-btn" onclick="loadGame('russian')">Русский язык</button>
+<button class="game-btn" onclick="loadGame('history')">История</button>
+
+<div id="game-container" class="game-card hidden">
+<h3 id="game-title">Мини-игра</h3>
+<p id="question-text" style="font-size: 18px; font-weight: 500; margin-top: 10px;"></p>
+<div class="options" id="options-container"></div>
+<div id="result-msg" class="result-msg"></div>
+
+участников) -->
+<div class="leaderboard">
+<h3> Топ участников накрутки:</h3>
+<ul id="top-list">
+<li><span>1. Александр</span> <span> 15420 яиц</span></li>
+<li><span>2. Иван</span> <span> 12100 яиц</span></li>
+<li><span>3. Кирилл</span> <span> 9850 яиц</span></li>
+<li><span>4. Платон</span> <span> 8700 яиц</span></li>
+<li><span>5. Дима</span> <span> 7400 яиц</span></li>
+<li><span>6. Вика</span> <span> 6200 яиц</span></li>
+<li><span>7. Клим</span> <span> 5100 яиц</span></li>
+<li><span>8. Андрей</span> <span> 4300 яиц</span></li>
+</ul>
+</div>
+</div>
+
+<script>
+function login() {
+const loginVal = document.getElementById('login-input').value;
+
+if(loginVal === "75" && passVal === "912пляж2") {
+document.getElementById('auth-screen').classList.add('hidden');
+document.getElementById('dashboard-screen').classList.remove('hidden');
+
+function logout() {
+document.getElementById('dashboard-screen').classList.add('hidden');
+document.getElementById('auth-screen').classList.remove('hidden');
+
+вопросов для мини-игр
+const gamesData = {
+math: {
+title: "Повторение математики",
+questions: [
+Сколько будет 2 + 2?", options: ["3", "4", "5", "22"], correct: 1 },
+Сколько будет 156 - 38?", options: ["118", "128", "108", "148"], correct: 0 },
+Сколько будет 872 - 635?", options: ["247", "237", "257", "227"], correct: 1 }
+],
+currentQ: 0
+},
+russian: {
+title: "Повторение русского языка",
+questions: [
+Что такое корень?", options: ["Главная значимая часть слова", "Часть речи перед суффиксом", "Знак препинания в конце предложения"], correct: 0 },
+Что такое приставка?", options: ["Часть речи", "Морфема, стоящая перед корнем и служащая для образования слов", "Окончание слова"], correct: 1 },
+Что такое морфемный разбор слова?", options: ["Разбор слова по частям речи", "Разбор слова по составу (по морфемам)", "Определение падежа слова"], correct: 1 }
+],
+currentQ: 0
+},
+history: {
+title: "Повторение истории",
+questions: [
+Когда произошло крещение Руси?", options: ["862 год", "988 год", "1147 год", "1242 год"], correct: 1 },
+Когда родился Иван I (Калита)?", options: ["Около 1288 года", "1350 год", "1200 год", "1401 год"], correct: 0 }
+
+function loadGame(gameKey) {
+currentGameKey = gameKey;
+gamesData[gameKey].currentQ = 0;
+document.getElementById('game-container').classList.remove('hidden');
+document.getElementById('game-title').innerText = gamesData[gameKey].title;
+renderQuestion();
+
+function renderQuestion() {
+const game = gamesData[currentGameKey];
+
+qData.options.forEach((opt, index) => {
+const btn = document.createElement('button');
+btn.className = 'option-btn';
+btn.innerText = opt;
+btn.onclick = () => checkAnswer(index, qData.correct);
+optionsContainer.appendChild(btn);
+
+function checkAnswer(selected, correct) {
+const msg = document.getElementById('result-msg');
+
+if(selected === correct) {
+msg.style.color = "#27ae60";
+msg.innerText = "Правильно. +10 яиц на баланс.";
+setTimeout(() => {
+game.currentQ++;
+if(game.currentQ < game.questions.length) {
+renderQuestion();
+{
+msg.innerText = "Игра пройдена. Все вопросы щелкнуты как орехи.";
+setTimeout(() => {
+document.getElementById('game-container').classList.add('hidden');
+;
+}
+;
+{
+msg.style.color = "#c0392b";
+msg.innerText = "Неверно. Попробуй еще раз.";
+}
+}
+</script>
+</body>
+</html>

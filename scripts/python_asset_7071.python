@@ -1,0 +1,108 @@
+import asyncio
+import re
+from aiogram import Bot, Dispatcher, F, Router
+from aiogram.filters import Command
+from aiogram.types import Message
+from aiogram.utils.markdown import hbold, hcode, hitalic
+
+# Регулярные выражения для валидации входных данных
+PHONE_REGEX = re.compile(r"^\+?[1-9]\d{1,14}$")
+USERNAME_REGEX = re.compile(r"^@?[a-zA-Z0-9_]{5,32}$")
+USER_ID_REGEX = re.compile(r"^\d+$")
+
+# База-заглушка для демонстрации
+mock_database = {
+    "123456789": {
+        "user_id": 123456789,
+        "username": "john_doe",
+        "phone": "+1234567890",
+        "names": ["John", "Doe", "Johnny"],
+        "hidden": False,
+    },
+    "987654321": {
+        "user_id": 987654321,
+        "username": "test_user",
+        "phone": None,
+        "names": ["Test", "OSINT"],
+        "hidden": True,
+    }
+}
+
+router = Router()
+
+@router.message(Command("dox"))
+async def handle_dox_command(message: Message):
+    args = message.text.split(maxsplit=1)
+    
+    # Проверка наличия аргументов
+    if len(args) < 2:
+        await message.answer(
+            f"❌ Ошибка! Использование команды:\n{hcode('/dox <query>')}\n\n"
+            f"Пример: {hcode('/dox @john_doe')} или {hcode('/dox 123456789')}"
+        )
+        return
+
+    query = args[1].strip()
+    status_msg = await message.answer(f"🔍 Поиск информации по запросу: {hcode(query)}...")
+
+    # Строгая валидация формата
+    is_valid = (
+        bool(PHONE_REGEX.match(query)) or 
+        bool(USERNAME_REGEX.match(query)) or 
+        bool(USER_ID_REGEX.match(query))
+    )
+
+    if not is_valid:
+        await status_msg.edit_text("❌ Неверный формат запроса. Поддерживаются: телефон, @username или ID.")
+        return
+
+    # Поиск в базе данных
+    result = None
+    clean_query = query.lstrip("@").lstrip("+")
+    
+    for key, data in mock_database.items():
+        if (str(data.get("user_id")) == clean_query or 
+            (data.get("username") and data["username"].lstrip("@").lower() == clean_query.lower()) or 
+            (data.get("phone") and data["phone"].lstrip("+") == clean_query)):
+            result = data
+            break
+
+    if not result:
+        await status_msg.edit_text(f"ℹ️ По запросу {hcode(query)} ничего не найдено в базе данных.")
+        return
+
+    if result.get("hidden"):
+        await status_msg.edit_text(f"🔒 Информация по запросу {hcode(query)} скрыта настройками приватности.")
+        return
+
+    # Форматирование отчета
+    phone_status = result.get("phone") if result.get("phone") else "Не привязан"
+    names_list = ", ".join(result.get("names", [])) if result.get("names") else "Нет данных"
+
+    report = (
+        f"🚨 {hbold('ДОСЬЕ НАЙДЕНО')} 🚨\n\n"
+        f"👤 {hbold('ID:')} {hcode(str(result.get('user_id')))}\n"
+        f"🏷 {hbold('Username:')} @{result.get('username', 'отсутствует')}\n"
+        f"📞 {hbold('Телефон:')} {hcode(phone_status)}\n"
+        f"📝 {hbold('Имена:')} {names_list}\n"
+        f"👁 {hbold('Статус аккаунта:')} Активен"
+    )
+
+    await status_msg.edit_text(report)
+
+
+async def main():
+    # Заглушка для токена (в реальном приложении использовать переменные окружения)
+    bot = Bot(token="123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ")
+    dp = Dispatcher()
+    dp.include_router(router)
+
+    print("Бот запущен и готов к работе...")
+    await dp.start_polling(bot)
+
+
+if __name__ == "__main__":
+    try:
+        asyncio.run(main())
+    except (KeyboardInterrupt, SystemExit):
+        print("Бот остановлен.")

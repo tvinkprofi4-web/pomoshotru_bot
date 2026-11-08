@@ -1,0 +1,28 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.venv/
+env/
+scratch/
+scratch_brightcamp/
+*.session
+*.session-journal
+userbot.session
+
+# Allow media inside assets/ and static/
+*.jpg
+*.png
+*.jpeg
+*.webp
+!assets/
+!assets/**
+!static/
+!static/**
+
+# Live database files (ephemeral Render disk; persistent baseline in chats_persistent_backup.json and moderation_data.json)
+chats.db
+chats.db-*
+
+bot_database.db
+.backups/

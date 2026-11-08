@@ -1,0 +1,260 @@
+﻿<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ script.title }} — AI for copil Git & Script Hub</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#0b111a',
+                        darkcard: '#131d2a',
+                        darkborder: '#1e2d42',
+                        darkhover: '#192637',
+                        accentblue: '#2b86e4',
+                        accentcyan: '#00d2ff',
+                        accentpurple: '#8b5cf6',
+                        accentgreen: '#10b981',
+                        accentamber: '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Prism.js for Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0b111a;
+            color: #f8fafc;
+        }
+        pre, code, .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        pre[class*="language-"] {
+            background: #0d1520 !important;
+            border: 1px solid #1e2d42;
+            border-radius: 12px;
+            margin: 0;
+            padding: 1.25rem;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+        .line-numbers .line-numbers-rows {
+            border-right: 1px solid #1e2d42 !important;
+            padding: 1.25rem 0 !important;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b111a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e2d42;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2b86e4;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- HEADER -->
+    <header class="h-16 bg-slate-900/90 backdrop-blur-md border-b border-darkborder sticky top-0 z-30 flex items-center justify-between px-4 lg:px-8">
+        <div class="flex items-center gap-3">
+            <a href="/" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-400 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-blue-500/20 hover:opacity-90 transition">
+                <i class="fa-solid fa-code"></i>
+            </a>
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="font-extrabold text-base tracking-wide text-white">AI for copil</span>
+                    <span class="bg-blue-500/15 text-cyan-400 border border-cyan-500/30 text-[10px] px-2 py-0.5 rounded-full font-mono font-semibold">Git Raw Hub</span>
+                </div>
+                <div class="text-xs text-slate-400 flex items-center gap-2">
+                    <a href="/" class="hover:text-cyan-400 transition"><i class="fa-solid fa-house text-[10px] mr-1"></i>Главная</a>
+                    <span>/</span>
+                    <span class="text-slate-200 font-medium truncate max-w-[200px] sm:max-w-xs">{{ script.title }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <a href="https://t.me/Pomoshotru_bot" target="_blank" class="hidden sm:flex items-center gap-1.5 bg-blue-600/20 hover:bg-blue-600/30 text-cyan-400 border border-blue-500/30 px-3 py-1.5 rounded-lg text-xs font-semibold transition">
+                <i class="fa-brands fa-telegram"></i>
+                <span>Telegram Бот</span>
+            </a>
+            <a href="/" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-darkborder px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+                <i class="fa-solid fa-table-columns"></i>
+                <span>Панель управления</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col gap-5">
+        
+        <!-- SCRIPT INFO CARD -->
+        <div class="bg-darkcard border border-darkborder rounded-2xl p-5 shadow-xl flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div class="flex flex-col gap-2">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="px-2.5 py-1 rounded-lg text-xs font-bold font-mono uppercase tracking-wider {% if script.language in ['lua', 'luau'] %}bg-purple-500/20 text-purple-300 border border-purple-500/30{% elif script.language in ['cpp', 'c++'] %}bg-blue-500/20 text-blue-300 border border-blue-500/30{% elif script.language in ['py', 'python'] %}bg-emerald-500/20 text-emerald-300 border border-emerald-500/30{% elif script.language in ['html', 'js', 'ts'] %}bg-amber-500/20 text-amber-300 border border-amber-500/30{% else %}bg-slate-700/50 text-slate-300 border border-slate-600/30{% endif %}">
+                        <i class="fa-solid fa-code mr-1"></i>{{ script.language }}
+                    </span>
+                    <h1 class="text-xl sm:text-2xl font-bold text-white">{{ script.title }}</h1>
+                </div>
+                <div class="flex flex-wrap items-center gap-4 text-xs text-slate-400">
+                    <span class="flex items-center gap-1.5"><i class="fa-regular fa-clock text-slate-500"></i> {{ script.created_at }}</span>
+                    <span class="flex items-center gap-1.5"><i class="fa-regular fa-user text-slate-500"></i> {{ script.author_name or 'AI for copil' }}</span>
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-eye text-slate-500"></i> {{ script.views }} просмотров</span>
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-file-code text-slate-500"></i> {{ lines_count }} строк ({{ size_kb }} KB)</span>
+                </div>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="flex flex-wrap items-center gap-2">
+                {% if script.language in ['lua', 'luau'] %}
+                <button id="btn-copy-loadstring" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold px-3.5 py-2 rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-purple-500/20 transition transform active:scale-95">
+                    <i class="fa-solid fa-bolt"></i>
+                    <span>Скопировать Loadstring</span>
+                </button>
+                {% endif %}
+
+                {% if script.language in ['html', 'htm'] %}
+                <a href="/site/{{ script.script_id }}" target="_blank" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold px-3.5 py-2 rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition transform active:scale-95">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    <span>Открыть сайт вживую</span>
+                </a>
+                {% endif %}
+
+                <button id="btn-copy-code" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-darkborder font-semibold px-3.5 py-2 rounded-xl text-xs flex items-center gap-2 transition active:scale-95">
+                    <i class="fa-regular fa-copy"></i>
+                    <span>Копировать код</span>
+                </button>
+
+                <a href="/raw/{{ script.script_id }}" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-darkborder font-semibold px-3.5 py-2 rounded-xl text-xs flex items-center gap-2 transition active:scale-95">
+                    <i class="fa-solid fa-link"></i>
+                    <span>Raw URL</span>
+                </a>
+
+                <button id="btn-download" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-darkborder font-semibold px-3.5 py-2 rounded-xl text-xs flex items-center gap-2 transition active:scale-95">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Скачать</span>
+                </button>
+            </div>
+        </div>
+
+        {% if script.language in ['lua', 'luau'] %}
+        <!-- ROBLOX LOADSTRING BOX -->
+        <div class="bg-purple-950/30 border border-purple-500/30 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-3 overflow-hidden">
+                <div class="w-8 h-8 rounded-lg bg-purple-600/30 text-purple-300 flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-gamepad"></i>
+                </div>
+                <div class="overflow-hidden">
+                    <div class="text-[11px] font-semibold text-purple-300 uppercase tracking-wider">Roblox Executor 1-Line Loader</div>
+                    <code id="loadstring-text" class="text-xs text-purple-100 font-mono select-all truncate block">loadstring(game:HttpGet("{{ raw_url }}"))()</code>
+                </div>
+            </div>
+            <button id="btn-copy-loadstring-2" class="bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition flex-shrink-0">
+                <i class="fa-regular fa-copy"></i>
+                <span>Копировать</span>
+            </button>
+        </div>
+        {% endif %}
+
+        <!-- CODE VIEWER BLOCK -->
+        <div class="bg-darkcard border border-darkborder rounded-2xl overflow-hidden shadow-2xl flex flex-col">
+            <!-- Code Bar -->
+            <div class="h-11 bg-slate-900/90 border-b border-darkborder px-4 flex items-center justify-between text-xs text-slate-400">
+                <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-1.5 mr-2">
+                        <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+                    </div>
+                    <span class="font-mono text-slate-300 font-semibold">{{ script.script_id }}.{{ file_ext }}</span>
+                </div>
+                <div class="flex items-center gap-3 font-mono text-[11px]">
+                    <span>UTF-8</span>
+                    <span>•</span>
+                    <span>{{ script.language }}</span>
+                </div>
+            </div>
+
+            <!-- Code Body -->
+            <div class="relative overflow-x-auto">
+                <pre class="line-numbers"><code class="language-{{ prism_lang }}">{{ script.code }}</code></pre>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-darkcard border-t border-darkborder py-6 px-4 text-center text-xs text-slate-500 mt-auto">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+            <span>© 2026 <strong>AI for copil</strong> (by k3rnel). High-Speed Git & Script Raw Cloud.</span>
+            <div class="flex items-center gap-4 text-slate-400">
+                <a href="/" class="hover:text-white transition">Панель управления</a>
+                <a href="https://t.me/Pomoshotru_bot" target="_blank" class="hover:text-white transition">Telegram Бот</a>
+                <a href="https://pomoshotru-bot.onrender.com" target="_blank" class="hover:text-white transition">Render Cloud</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Prism JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-lua.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-rust.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+
+    <script>
+        const rawCode = {{ script.code | tojson }};
+        const scriptId = {{ script.script_id | tojson }};
+        const fileExt = {{ file_ext | tojson }};
+        const rawUrl = {{ raw_url | tojson }};
+
+        function doCopy(text, elId) {
+            navigator.clipboard.writeText(text).then(() => {
+                const el = document.getElementById(elId);
+                if (el) {
+                    const oldHTML = el.innerHTML;
+                    el.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> Скопировано!';
+                    setTimeout(() => { el.innerHTML = oldHTML; }, 2000);
+                }
+            });
+        }
+
+        document.getElementById('btn-copy-code')?.addEventListener('click', () => doCopy(rawCode, 'btn-copy-code'));
+        document.getElementById('btn-copy-loadstring')?.addEventListener('click', () => doCopy('loadstring(game:HttpGet("' + rawUrl + '"))()', 'btn-copy-loadstring'));
+        document.getElementById('btn-copy-loadstring-2')?.addEventListener('click', () => doCopy('loadstring(game:HttpGet("' + rawUrl + '"))()', 'btn-copy-loadstring-2'));
+        document.getElementById('btn-download')?.addEventListener('click', () => {
+            const blob = new Blob([rawCode], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${scriptId}.${fileExt}`;
+            link.click();
+            URL.revokeObjectURL(link.href);
+        });
+    </script>
+</body>
+</html>

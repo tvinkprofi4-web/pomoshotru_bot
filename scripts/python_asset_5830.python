@@ -1,0 +1,20 @@
+async def cmd_setrules(message_or_callback, *kwargs):
+    # Безопасно определяем user_id независимо от того, прилетел Message или CallbackQuery
+    user_id = None
+    if hasattr(message_or_callback, "from_user") and message_or_callback.from_user:
+        user_id = message_or_callback.from_user.id
+    elif hasattr(message_or_callback, "sender_chat") and message_or_callback.sender_chat:
+        user_id = message_or_callback.sender_chat.id
+    elif isinstance(message_or_callback, dict):
+        user_id = message_or_callback.get("from", {}).get("id")
+
+    if not user_id:
+        return
+
+    # Твоя дальнейшая логика установки правил...
+    try:
+        # Пример: проверка прав модератора/админа по user_id
+        pass
+    except Exception as e:
+        # Лог ошибки
+        pass

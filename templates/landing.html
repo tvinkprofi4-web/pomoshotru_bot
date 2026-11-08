@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NULLSEC // GATEWAY</title>
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        if (window.Telegram && window.Telegram.WebApp) {
+            try {
+                window.Telegram.WebApp.ready();
+                window.Telegram.WebApp.expand();
+                window.Telegram.WebApp.setHeaderColor('#06080c');
+                window.Telegram.WebApp.setBackgroundColor('#06080c');
+            } catch(e) {}
+        }
+    </script>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: #06080c;
+            color: #e2e8f0;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.04) 0%, transparent 60%),
+                linear-gradient(rgba(6, 8, 12, 0.88), rgba(6, 8, 12, 0.94)),
+                url('/static/miniapp_bg.png');
+            background-size: cover;
+            background-position: center;
+        }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .cyber-card {
+            background: rgba(10, 14, 22, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 240, 255, 0.15);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+        }
+        .cyber-input {
+            background: rgba(6, 8, 14, 0.9);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            color: #00f0ff;
+        }
+        .cyber-input:focus {
+            outline: none;
+            border-color: #00f0ff;
+            box-shadow: 0 0 15px -3px rgba(0, 240, 255, 0.3);
+        }
+        .cyber-btn {
+            background: #00f0ff;
+            color: #06080c;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+        .cyber-btn:hover {
+            background: #38bdf8;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 sm:p-6">
+
+    <!-- TOP TELEMETRY BAR -->
+    <header class="w-full max-w-4xl mx-auto flex items-center justify-between py-3 border-b border-cyan-500/10 mono text-xs">
+        <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+            <span class="text-white font-bold tracking-wider">NULLSEC // NODE-01</span>
+        </div>
+        <div class="text-slate-500 hidden sm:flex items-center gap-4">
+            <span>SYS: 3.14.3_LNX</span>
+            <span>CLUSTER: ONLINE</span>
+            <span class="text-cyan-400">OPERATOR: K3RNEL</span>
+        </div>
+    </header>
+
+    <!-- CENTER LOGIN CONSOLE -->
+    <main class="w-full max-w-md mx-auto my-auto py-8">
+        <div class="cyber-card rounded-2xl p-6 sm:p-8">
+            <!-- EMBLEM & HEADER -->
+            <div class="flex items-center gap-4 mb-6 pb-5 border-b border-white/5">
+                <img src="/static/nullsec_avatar.png" onerror="this.onerror=null; this.src='/static/logo.png'" class="w-12 h-12 rounded-xl border border-cyan-500/30 shadow-lg shadow-cyan-500/10 object-contain bg-black" alt="NullSec">
+                <div>
+                    <h1 class="text-lg font-bold text-white tracking-wide mono">CONTROL CENTER</h1>
+                    <p class="text-xs text-slate-400">Авторизация оператора системы</p>
+                </div>
+            </div>
+
+            <!-- SECURITY NOTICE -->
+            <div class="bg-black/40 border border-white/5 rounded-xl p-3.5 mb-6 mono text-[11px] text-slate-400 leading-relaxed">
+                <div class="text-cyan-400 font-bold mb-1 flex items-center gap-1.5">
+                    <i class="fa-solid fa-shield-halved"></i> ДОСТУП ОГРАНИЧЕН
+                </div>
+                Панель управления защищена Master Key. Вход разрешен исключительно владельцу ядра и со-разработчику.
+            </div>
+
+            <!-- FORM -->
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mono mb-1.5">
+                        MASTER ACCESS KEY
+                    </label>
+                    <div class="relative">
+                        <input type="password" id="login-key" placeholder="••••••••••••••••" required autocomplete="current-password"
+                            class="cyber-input w-full px-4 py-3 rounded-xl mono text-sm placeholder:text-slate-600 transition">
+                        <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-cyan-400 transition">
+                            <i class="fa-solid fa-eye text-xs" id="eye-icon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="login-error" class="hidden text-xs mono text-rose-400 bg-rose-500/10 border border-rose-500/20 p-2.5 rounded-xl flex items-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span id="login-error-text">Неверный Master Key</span>
+                </div>
+
+                <button type="submit" id="submit-btn" class="cyber-btn w-full py-3 rounded-xl mono text-xs flex items-center justify-center gap-2 active:scale-98">
+                    <i class="fa-solid fa-terminal text-xs"></i>
+                    <span>АВТОРИЗОВАТЬСЯ</span>
+                </button>
+            </form>
+
+            <div class="mt-6 pt-5 border-t border-white/5 flex items-center justify-between text-[11px] mono text-slate-500">
+                <a href="https://t.me/Pomoshotru_bot" target="_blank" class="hover:text-cyan-400 transition flex items-center gap-1.5">
+                    <i class="fa-brands fa-telegram"></i> Telegram Бот
+                </a>
+                <a href="https://github.com/AUser7742/pomoshotru_bot" target="_blank" class="hover:text-cyan-400 transition flex items-center gap-1.5">
+                    <i class="fa-brands fa-github"></i> GitHub Core
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="w-full max-w-4xl mx-auto py-3 border-t border-white/5 flex items-center justify-between mono text-[10px] text-slate-600">
+        <div>NULLSEC_AI // ALL RIGHTS RESERVED</div>
+        <div>VER 4.8_STABLE</div>
+    </footer>
+
+    <script>
+        function togglePasswordVisibility() {
+            const input = document.getElementById('login-key');
+            const icon = document.getElementById('eye-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const keyInput = document.getElementById('login-key');
+            const submitBtn = document.getElementById('submit-btn');
+            const errDiv = document.getElementById('login-error');
+            const errText = document.getElementById('login-error-text');
+            const key = (keyInput.value || '').trim();
+
+            if (!key) return;
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> <span>ПРОВЕРКА КЛЮЧА...</span>';
+            errDiv.classList.add('hidden');
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: key })
+                });
+
+                const data = await res.json();
+                if (res.ok && data.authenticated) {
+                    try { localStorage.setItem('nullsec_admin_key', key); } catch(e) {}
+                    window.location.href = '/admin?key=' + encodeURIComponent(key);
+                } else {
+                    errText.textContent = data.message || 'Доступ запрещен: неверный ключ';
+                    errDiv.classList.remove('hidden');
+                    keyInput.focus();
+                }
+            } catch (err) {
+                errText.textContent = 'Ошибка соединения с сервером';
+                errDiv.classList.remove('hidden');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fa-solid fa-terminal text-xs"></i> <span>АВТОРИЗОВАТЬСЯ</span>';
+            }
+        }
+    </script>
+</body>
+</html>

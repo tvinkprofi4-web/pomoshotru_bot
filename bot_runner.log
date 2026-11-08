@@ -1,0 +1,533 @@
+2026-11-02 12:16:52,522 - WARNING - Telethon session expired/duplicated: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by InvokeWithLayerRequest(InitConnectionRequest(GetConfigRequest))). Using Business connection.
+2026-11-02 12:16:53,448 - WARNING - db_sync: remote restore skipped (startup, no data)
+2026-11-02 12:16:53,980 - INFO - Custom dynamic features successfully initialized! Registered commands: ['cache_stats', 'кэш', 'time', 'время']
+2026-11-02 12:16:53,985 - INFO - Loaded 0 secretary muted chats from database
+2026-11-02 12:16:53,985 - INFO - 🌐 Starting Web Dashboard on http://0.0.0.0:10000
+2026-11-02 12:16:53,986 - INFO - 🌐 Starting Web Dashboard on http://0.0.0.0:7860
+🌐 Запуск Веб-панели чатов на http://127.0.0.1:10000
+🚀 NullSecAI (by k3rnel) успешно запущен!
+👉 Telegram: https://t.me/Pomoshotru_bot
+ * Serving Flask app 'web_app'
+ * Debug mode: off
+ * Serving Flask app 'web_app'
+ * Debug mode: off
+2026-11-02 12:16:54,348 - INFO - Bot commands successfully registered with Telegram Bot API! Total: 27
+2026-11-02 12:16:54,355 - INFO - Initializing Telethon Userbot client...
+2026-11-02 12:16:54,356 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:16:54,356 - INFO - ⭐️ Telethon MTProto userbot initialized at bot startup!
+2026-11-02 12:16:54,356 - INFO - GitHub Auto-Updater loop started (Interval: 14400s / 4 hours).
+2026-11-02 12:16:54,357 - INFO - db_sync: background push loop started (every 900s to branch data-sync)
+2026-11-02 12:16:54,460 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:16:54,816 - WARNING - Telethon session expired/duplicated: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by InvokeWithLayerRequest(InitConnectionRequest(GetConfigRequest))). Using Business connection.
+2026-11-02 12:16:57,105 - INFO - Transient polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r. Reconnecting in 2s...
+2026-11-02 12:17:01,142 - INFO - Incoming business message from 6363403785 in chat 6363403785: '📦 cpp_asset_3797.cpp
+🌐 Live: https://pomoshotru-bot-i56y.onr'
+2026-11-02 12:17:01,169 - INFO - Incoming business message from 6363403785 in chat 6363403785: 'Лови рабочий прототип RAT-агента на C++ (клиентская часть). '
+2026-11-02 12:17:01,388 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:17:03,302 - INFO - Secretary auto-replied in chat 6363403785 (mode=assistant, prem=True): 'Спасибо за код, материал передан владельцу! Обязательно ознакомится, как будет н'
+2026-11-02 12:17:03,517 - INFO - Secretary auto-replied in chat 6363403785 (mode=assistant, prem=True): 'Спасибо за прототип и ссылки, материал получил! Передам информацию владельцу, ка'
+2026-11-02 12:17:05,621 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:17:08,968 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:17:12,393 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:17:16,139 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:17:19,979 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:17:24,421 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:17:24,546 - WARNING - db_sync: push failed: HTTP 403 {
+  "message": "Sorry. Your account was suspended",
+  "documentation_url": "https://docs.github.com/rest",
+  "status": "403"
+}
+
+2026-11-02 12:17:26,107 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:26,108 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:26,108 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:26,109 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:26,115 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:26,116 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:26,116 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:26,117 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:26,205 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:26,210 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:26,407 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:26,411 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:26,995 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:26,995 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:26,995 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:26,995 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:26,998 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:26,998 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:26,998 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:26,998 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:27,092 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:27,095 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:27,154 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:17:27,202 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:27,215 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:27,215 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:27,215 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:27,215 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:27,216 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:27,309 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:27,413 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:28,202 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:28,202 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:28,203 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:28,203 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:28,213 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:28,213 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:28,213 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:28,213 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:28,307 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:28,318 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:28,423 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:28,430 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:28,898 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:28,898 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:28,898 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:28,899 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:28,900 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:28,900 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:28,901 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:28,902 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:29,005 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:29,045 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:29,185 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:29,271 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:29,309 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:29,310 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:29,310 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:29,310 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:29,351 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:29,352 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:29,352 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:29,353 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:29,408 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:29,447 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:29,633 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:29,649 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:29,698 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:29,698 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:29,698 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:29,698 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:29,700 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:29,700 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:29,700 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:29,700 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:29,842 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:29,846 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:30,085 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:30,088 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:31,142 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:31,143 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:31,143 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:31,144 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:31,144 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:31,145 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:31,146 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:31,146 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:31,246 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:31,294 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:31,296 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:17:31,381 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:31,459 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:31,815 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:31,815 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:31,815 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:31,816 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:31,910 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:31,944 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:31,945 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:31,945 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:31,946 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:32,032 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:32,046 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:32,208 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:32,290 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:32,290 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:32,291 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:32,291 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:32,292 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:32,293 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:32,293 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:32,294 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:32,388 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:32,395 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:32,512 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:32,542 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:32,801 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:32,801 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:32,801 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:32,802 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:32,803 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:32,803 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:32,803 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:32,804 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:32,901 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:32,955 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:33,011 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:33,120 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:33,403 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:33,403 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:33,403 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:33,403 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:33,499 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:33,613 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:33,851 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:33,851 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:33,852 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:33,852 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:33,992 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:34,146 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:34,206 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:34,207 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:34,207 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:34,207 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:34,350 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:34,522 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:34,645 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:34,645 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:34,645 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:34,645 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:34,738 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:34,809 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:17:34,899 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:34,940 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:34,940 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:34,940 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:34,941 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:35,083 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:35,292 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:35,292 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:35,292 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:35,292 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:35,348 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:35,348 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:35,348 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:35,348 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:35,439 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:35,440 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:35,610 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:35,611 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:35,663 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:35,997 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:35,997 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:35,998 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:35,998 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:36,048 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:36,048 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:36,049 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:36,049 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:36,092 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:36,147 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:36,199 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:36,258 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:36,294 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:36,294 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:36,294 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:36,295 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:36,389 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:36,497 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:36,601 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:36,601 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:36,601 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:36,602 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:36,701 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:36,815 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:36,998 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:36,999 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:36,999 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:37,001 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:37,094 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:37,222 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:37,497 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:37,498 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:37,498 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:37,498 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:37,594 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:37,701 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:37,793 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:37,793 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:37,793 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:37,793 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:37,888 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:37,998 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:38,197 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:38,197 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:38,197 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:38,197 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:38,297 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:38,310 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:38,310 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:38,311 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:38,311 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:38,418 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:38,418 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:38,533 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:39,011 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:39,012 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:39,012 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:39,013 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:39,028 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:39,029 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:39,030 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:39,030 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:39,117 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:39,123 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:39,230 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:39,244 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:39,593 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:17:39,595 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:39,595 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:39,595 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:39,595 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:39,599 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:39,599 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:39,599 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:39,599 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:39,688 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:39,692 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:39,790 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:39,795 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:40,109 - INFO - Keep-alive ping to https://pomoshotru-bot-i56y.onrender.com/health: 200
+2026-11-02 12:17:40,299 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:40,300 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:40,300 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:40,301 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:40,301 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:40,302 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:40,302 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:40,303 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:40,398 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:40,402 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:40,504 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:40,506 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:40,506 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:40,506 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:40,507 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:40,601 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:40,716 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:40,719 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:41,002 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:41,002 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:41,002 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:41,002 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:41,149 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:41,296 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:41,296 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:41,296 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:41,296 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:41,310 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:41,387 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:41,491 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:41,861 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:41,862 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:41,862 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:41,862 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:41,916 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:41,916 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:41,916 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:41,916 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:41,966 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:42,009 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:42,098 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:42,114 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:42,465 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:17:42,502 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:42,502 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:42,502 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:42,503 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:42,514 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:42,515 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:42,515 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:42,515 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:42,598 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:42,668 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:42,709 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:42,849 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:43,109 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:43,109 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:43,109 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:43,109 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:43,248 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:43,248 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:43,248 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:43,248 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:43,254 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:43,341 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:43,410 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:43,446 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:43,798 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:43,798 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:43,799 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:43,799 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:43,845 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:43,846 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:43,846 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:43,846 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:43,901 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:43,942 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:44,017 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:44,048 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:44,601 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:44,601 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:44,601 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:44,601 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:44,618 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:44,618 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:44,618 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:44,618 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:44,809 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:44,813 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:44,922 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:44,931 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:45,300 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:45,301 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:45,301 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:45,302 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:45,305 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:45,306 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:45,306 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:45,307 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:45,402 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:45,404 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:45,511 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:45,519 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:46,095 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:46,096 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:46,097 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:46,097 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:46,096 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:46,099 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:46,099 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:46,100 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:46,199 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:46,246 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:46,317 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:46,403 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:17:46,410 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:46,612 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:46,613 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:46,613 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:46,614 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:46,719 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:46,751 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:46,751 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:46,751 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:46,752 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:46,834 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:46,853 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:46,969 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:47,300 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:47,301 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:47,301 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:47,301 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:47,399 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:47,399 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:47,399 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:47,400 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:47,405 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:47,509 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:47,527 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:47,637 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:48,009 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:48,009 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:48,009 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:48,010 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:48,102 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:48,218 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:48,218 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:48,218 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:48,219 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:48,219 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:48,314 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:48,427 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:48,814 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:48,815 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:48,815 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:48,816 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:48,912 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:49,032 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:49,066 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:49,066 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:17:49,066 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:17:49,067 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:17:50,169 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:17:50,458 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:17:51,237 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:17:54,216 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:17:57,209 - WARNING - db_sync: push failed: HTTP 403 {
+  "message": "Sorry. Your account was suspended",
+  "documentation_url": "https://docs.github.com/rest",
+  "status": "403"
+}
+
+2026-11-02 12:17:58,009 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:18:01,850 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:18:05,616 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:18:09,381 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:18:13,148 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:18:16,907 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:18:21,064 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:18:24,829 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:18:28,606 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:18:32,364 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:18:37,849 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:18:41,289 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:18:46,789 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:18:50,629 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:18:56,203 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:18:58,039 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:18:58,039 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:18:58,040 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:18:58,040 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:18:58,212 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:18:58,426 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:18:59,972 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:19:03,091 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:19:03,092 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:19:03,092 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:19:03,093 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:19:03,464 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:19:03,578 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:19:04,969 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:19:08,907 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:19:13,907 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:19:16,090 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:19:16,090 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:19:16,090 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:19:16,090 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:19:16,189 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:19:16,575 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:19:17,845 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:19:18,771 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:19:18,772 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:19:18,772 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:19:18,772 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:19:18,866 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:19:18,989 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:19:21,816 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:19:21,817 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:19:21,817 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:19:21,818 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:19:21,917 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:19:22,032 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:19:22,648 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:19:22,649 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:19:22,649 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:19:22,650 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:19:22,751 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:19:22,833 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r
+2026-11-02 12:19:22,875 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:19:25,044 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:19:25,045 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:19:25,045 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:19:25,046 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:19:25,142 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:19:25,253 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:19:25,556 - WARNING - Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:19:25,556 - INFO - Connection closed while receiving data: 0 bytes read on a total of 8 expected bytes
+2026-11-02 12:19:25,556 - INFO - Closing current connection to begin reconnect...
+2026-11-02 12:19:25,556 - INFO - Connecting to 149.154.167.51:443/TcpFull...
+2026-11-02 12:19:25,658 - INFO - Connection to 149.154.167.51:443/TcpFull complete!
+2026-11-02 12:19:25,778 - WARNING - Error executing high-level request after reconnect: <class 'telethon.errors.rpcerrorlist.AuthKeyDuplicatedError'>: The authorization key (session file) was used under two different IP addresses simultaneously, and can no longer be used. Use the same session exclusively, or use different sessions (caused by GetUsersRequest)
+2026-11-02 12:19:26,425 - INFO - Ignored transient 409/polling deploy exception: A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: terminated by other getUpdates r

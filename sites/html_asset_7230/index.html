@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Учи.ру — Накрутка Яиц Edition</title>
+<style>
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+background-color: #f0f4f8;
+color: #333;
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
+padding: 20px;
+}
+.container {
+background: #fff;
+width: 100%;
+max-width: 650px;
+padding: 30px;
+border-radius: 16px;
+box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+h1, h2 {
+color: #1a73e8;
+margin-bottom: 20px;
+text-align: center;
+}
+.form-group {
+margin-bottom: 15px;
+}
+label {
+display: block;
+margin-bottom: 5px;
+font-weight: 600;
+color: #555;
+}
+input {
+width: 100%;
+padding: 12px;
+border: 2px solid #ddd;
+border-radius: 8px;
+font-size: 16px;
+transition: 0.3s;
+}
+input:focus {
+border-color: #1a73e8;
+outline: none;
+}
+button {
+background: #1a73e8;
+color: white;
+border: none;
+padding: 12px 20px;
+border-radius: 8px;
+font-size: 16px;
+cursor: pointer;
+width: 100%;
+font-weight: bold;
+transition: 0.3s;
+margin-top: 10px;
+}
+button:hover {
+background: #1557b0;
+}
+.hidden {
+display: none !important;
+}
+.dashboard {
+text-align: center;
+}
+.eggs-counter {
+font-size: 26px;
+font-weight: bold;
+color: #ff9800;
+background: #fff8e1;
+padding: 15px;
+border-radius: 12px;
+margin: 20px 0;
+border: 2px dashed #ffb300;
+}
+.top-list {
+text-align: left;
+background: #f8f9fa;
+padding: 15px;
+border-radius: 10px;
+margin-bottom: 20px;
+margin-top: 15px;
+}
+.top-list h3 {
+margin-bottom: 10px;
+color: #333;
+}
+.top-list ol {
+padding-left: 20px;
+}
+.top-list li {
+padding: 4px 0;
+font-weight: 500;
+}
+.games-section {
+text-align: left;
+margin-top: 20px;
+}
+.game-card {
+background: #e8f0fe;
+padding: 15px;
+border-radius: 10px;
+margin-bottom: 15px;
+}
+.game-card h4 {
+color: #1a73e8;
+margin-bottom: 10px;
+}
+.options {
+display: flex;
+flex-direction: column;
+gap: 8px;
+margin-top: 10px;
+}
+.option-btn {
+background: #fff;
+color: #1a73e8;
+border: 1px solid #1a73e8;
+padding: 8px 12px;
+border-radius: 6px;
+text-align: left;
+cursor: pointer;
+font-weight: normal;
+margin: 0;
+width: 100%;
+transition: 0.2s;
+}
+.option-btn:hover {
+background: #1a73e8;
+color: #fff;
+}
+.result-msg {
+margin-top: 12px;
+font-weight: bold;
+font-size: 14px;
+text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Экран авторизации -->
+    <div id="auth-screen">
+        <h1>Учи.ру (Вход)</h1>
+        <div class="form-group">
+            <label>Логин:</label>
+            <input type="text" id="login-input" placeholder="Введите логин (75)">
+        </div>
+        <div class="form-group">
+            <label>Пароль:</label>
+            <input type="password" id="password-input" placeholder="Введите пароль (912пляж2)">
+        </div>
+        <button onclick="login()">Войти в систему</button>
+        <p id="error-msg" style="color: red; text-align: center; margin-top: 10px;"></p>
+    </div>
+
+    <!-- Личный кабинет -->
+    <div id="dashboard-screen" class="dashboard hidden">
+        <h2>Личный кабинет</h2>
+        <div class="eggs-counter">
+            Яиц на счету: <span id="egg-count">999</span>
+        </div>
+
+        <div class="top-list">
+            <h3>Тир-лист участников:</h3>
+            <ol>
+                <li>Александр</li>
+                <li>Иван</li>
+                <li>Кирилл</li>
+                <li>Платон</li>
+                <li>Дима</li>
+                <li>Вика</li>
+                <li>Клим</li>
+                <li>Андрей</li>
+            </ol>
+        </div>
+
+        <div class="games-section">
+            <div class="game-card">
+                <h4 id="math-title">Повторение математики (Вопрос 1/3)</h4>
+                <p id="math-q">Сколько будет 2 + 2?</p>
+                <div class="options" id="math-opts">
+                    <!-- Опции генерируются динамически через JS -->
+                </div>
+                <p id="result-msg" class="result-msg"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Учетные данные по умолчанию
+const CORRECT_LOGIN = "75";
+const CORRECT_PASSWORD = "912пляж2";
+
+let totalEggs = 999;
+let currentQuestionIndex = 0;
+
+// Список вопросов для мини-игры
+const questions = [
+    {
+        q: "Сколько будет 2 + 2?",
+        opts: ["А) 3", "Б) 4", "В) 5", "Г) 22"],
+        correct: 1,
+        bonus: 50
+    },
+    {
+        q: "Чему равен корень из 81?",
+        opts: ["А) 7", "Б) 8", "В) 9", "Г) 10"],
+        correct: 2,
+        bonus: 100
+    },
+    {
+        q: "Сколько градусов в развернутом угле?",
+        opts: ["А) 90°", "Б) 180°", "В) 360°", "Г) 45°"],
+        correct: 1,
+        bonus: 150
+    }
+];
+
+// Функция входа
+function login() {
+    const loginInp = document.getElementById('login-input').value.trim();
+    const passInp = document.getElementById('password-input').value.trim();
+
+    if (loginInp === CORRECT_LOGIN && passInp === CORRECT_PASSWORD) {
+        document.getElementById('auth-screen').classList.add('hidden');
+        document.getElementById('dashboard-screen').classList.remove('hidden');
+        loadQuestion();
+    } else {
+        document.getElementById('error-msg').innerText = "Неверный логин или пароль!";
+    }
+}
+
+// Загрузка текущего вопроса
+function loadQuestion() {
+    const optsContainer = document.getElementById('math-opts');
+    const msgEl = document.getElementById('result-msg');
+    msgEl.innerText = "";
+
+    if (currentQuestionIndex >= questions.length) {
+        document.getElementById('math-title').innerText = "Все задания выполнены.";
+        document.getElementById('math-q').innerText = "Вы успешно повторили математику и накрутили яйца.";
+        optsContainer.innerHTML = "";
+        msgEl.innerText = "";
+        return;
+    }
+
+    const currentQ = questions[currentQuestionIndex];
+    document.getElementById('math-title').innerText = `Повторение математики (Вопрос ${currentQuestionIndex + 1}/${questions.length})`;
+    document.getElementById('math-q').innerText = currentQ.q;
+    optsContainer.innerHTML = "";
+
+    currentQ.opts.forEach((opt, index) => {
+        const btn = document.createElement('button');
+        btn.className = "option-btn";
+        btn.innerText = opt;
+        btn.onclick = () => checkMath(index);
+        optsContainer.appendChild(btn);
+    });
+}
+
+// Проверка ответа
+function checkMath(selectedIndex) {
+    const currentQ = questions[currentQuestionIndex];
+    const msgEl = document.getElementById('result-msg');
+
+    if (selectedIndex === currentQ.correct) {
+        totalEggs += currentQ.bonus;
+        document.getElementById('egg-count').innerText = totalEggs;
+        msgEl.style.color = "green";
+        msgEl.innerText = `Правильно! +${currentQ.bonus} яиц.`;
+
+        currentQuestionIndex++;
+        setTimeout(loadQuestion, 1500);
+    } else {
+        msgEl.style.color = "red";
+        msgEl.innerText = "Неправильно. Попробуй еще раз.";
+    }
+}
+</script>
+
+</body>
+</html>

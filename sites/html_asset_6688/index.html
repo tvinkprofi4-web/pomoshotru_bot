@@ -1,0 +1,142 @@
+<.DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Учи.ру — Накрутка Яиц (Extreme Edition)</title>
+<style>
+border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+.container { background: #1e293b; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 100%; max-width: 600px; }
+h1, h2 { text-align: center; margin-bottom: 20px; color: #38bdf8; }
+.form-group { margin-bottom: 15px; }
+label { display: block; margin-bottom: 5px; color: #cbd5e1; }
+input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #475569; background: #0f172a; color: #fff; font-size: 16px; }
+button { width: 100%; padding: 12px; background: #0284c7; border: none; border-radius: 8px; color: #fff; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; margin-top: 10px; }
+button:hover { background: #0369a1; }
+.hidden { display: none .important; }
+.dashboard { text-align: center; }
+.eggs-counter { font-size: 28px; color: #facc15; font-weight: bold; margin: 15px 0; background: #334155; padding: 15px; border-radius: 12px; }
+.tier-list { margin-top: 20px; text-align: left; background: #0f172a; padding: 15px; border-radius: 8px; }
+.tier-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #334155; }
+.tier-item:last-child { border-bottom: none; }
+.games-menu { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 20px; }
+.game-btn { background: #10b981; margin: 0; }
+.game-btn:hover { background: #059669; }
+.question-box { background: #0f172a; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: left; }
+.option-btn { background: #475569; margin: 5px 0; text-align: left; }
+.option-btn:hover { background: #64748b; }
+.back-btn { background: #ef4444; margin-top: 15px; }
+.back-btn:hover { background: #dc2626; }
+.error { color: #f87171; text-align: center; margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+-->
+<div id="auth-screen">
+<h1>Учи.ру — Вход в систему</h1>
+<div class="form-group">
+<label>Логин:</label>
+<input type="text" id="login-input" placeholder="Введите логин (например, 75)">
+</div>
+<div class="form-group">
+<label>Пароль:</label>
+<input type="password" id="pass-input" placeholder="Введите пароль">
+</div>
+<button onclick="login()">Войти</button>
+<div id="error-msg" class="error"></div>
+
+-->
+<div id="dashboard-screen" class="dashboard hidden">
+<h1>Личный кабинет Учи.ру</h1>
+
+<div class="eggs-counter">
+яиц: <span id="egg-count">999</span>
+
+<div class="games-menu">
+<h2>Мини-игры</h2>
+<button class="game-btn" onclick="openGame('math')">Повторение математики</button>
+<button class="game-btn" onclick="openGame('russian')">Повторение русского языка</button>
+<button class="game-btn" onclick="openGame('history')">Повторение истории</button>
+
+<div class="tier-list">
+<h2> Тир-лист участников (ТОП)</h2>
+<div class="tier-item"><span>1. Александр</span><span> 999 яиц</span></div>
+<div class="tier-item"><span>2. Иван</span><span> 850 яиц</span></div>
+<div class="tier-item"><span>3. Кирилл</span><span> 720 яиц</span></div>
+<div class="tier-item"><span>4. Платон</span><span> 610 яиц</span></div>
+<div class="tier-item"><span>5. Дима</span><span> 500 яиц</span></div>
+<div class="tier-item"><span>6. Вика</span><span> 430 яиц</span></div>
+<div class="tier-item"><span>7. Клим</span><span> 350 яиц</span></div>
+<div class="tier-item"><span>8. Андрей</span><span> 200 яиц</span></div>
+</div>
+
+ЭКРАН -->
+<div id="game-screen" class="hidden">
+<h2 id="game-title">Мини-игра</h2>
+<div id="question-container" class="question-box"></div>
+<button class="back-btn" onclick="closeGame()">Назад в меню</button>
+</div>
+
+<script>
+const correctLogin = "75";
+
+function login() {
+const loginVal = document.getElementById('login-input').value;
+const passVal = document.getElementById('pass-input').value;
+
+if (loginVal === correctLogin && passVal === correctPass) {
+document.getElementById('auth-screen').classList.add('hidden');
+document.getElementById('dashboard-screen').classList.remove('hidden');
+
+const questions = {
+math: [
+Сколько будет 2 + 2?", options: ["3", "4", "5", "22"], answer: 1 },
+Сколько будет 156 - 38?", options: ["118", "124", "108", "132"], answer: 0 },
+Сколько будет 872 - 635?", options: ["247", "237", "227", "257"], answer: 1 }
+],
+russian: [
+Что такое корень?", options: ["Главная значимая часть слова", "Часть речи", "Знак препинания", "Окончание слова"], answer: 0 },
+Что такое приставка?", options: ["Часть слова после корня", "Значимая часть слова перед корнем", "Самостоятельная часть речи", "Вид суффикса"], answer: 1 },
+Что такое морфемный разбор слова?", options: ["Разбор слова по частям речи", "Разбор слова по составу (по морфемам)", "Фонетический разбор", "Синтаксический разбор предложения"], answer: 1 }
+],
+history: [
+Когда произошло крещение Руси?", options: ["882 год", "988 год", "1054 год", "1147 год"], answer: 1 },
+
+function openGame(type) {
+currentGameType = type;
+currentQIndex = 0;
+document.getElementById('dashboard-screen').classList.add('hidden');
+
+if(type === 'math') document.getElementById('game-title').textContent = "Математика";
+if(type === 'russian') document.getElementById('game-title').textContent = "Русский язык";
+
+function loadQuestion() {
+const container = document.getElementById('question-container');
+
+if (currentQIndex >= qList.length) {
+container.innerHTML = `<h3> Ура. Ты прошел все вопросы этой мини-игры.</h3><button onclick="closeGame()">В меню</button>`;
+return;
+
+currentObj.options.forEach((opt, index) => {
+html += `<button class="option-btn" onclick="checkAnswer(${index})">${opt}</button>`;
+
+function checkAnswer(selectedIndex) {
+const qList = questions[currentGameType];
+if (selectedIndex === qList[currentQIndex].answer) {
+alert("Верно. Красава.");
+{
+alert("Ошибка. Неправильный ответ.");
+}
+currentQIndex++;
+loadQuestion();
+
+function closeGame() {
+document.getElementById('game-screen').classList.add('hidden');
+document.getElementById('dashboard-screen').classList.remove('hidden');
+}
+</script>
+</body>
+</html>

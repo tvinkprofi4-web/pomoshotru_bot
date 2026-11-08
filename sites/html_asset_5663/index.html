@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Учи.ру — Личный кабинет</title>
+<style>
+* {
+box-sizing: border-box;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+margin: 0;
+padding: 0;
+}
+body {
+background-color: #f0f4f8;
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+}
+.container {
+background: #ffffff;
+padding: 40px;
+border-radius: 16px;
+box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+width: 100%;
+max-width: 400px;
+text-align: center;
+}
+.logo {
+font-size: 32px;
+font-weight: bold;
+color: #0076ff;
+margin-bottom: 24px;
+}
+.logo span {
+color: #ffcc00;
+}
+input {
+width: 100%;
+padding: 14px;
+margin-bottom: 16px;
+border: 1px solid #d1d9e0;
+border-radius: 8px;
+font-size: 16px;
+outline: none;
+transition: border-color 0.3s;
+}
+input:focus {
+border-color: #0076ff;
+}
+button {
+width: 100%;
+padding: 14px;
+background-color: #0076ff;
+color: white;
+border: none;
+border-radius: 8px;
+font-size: 16px;
+font-weight: bold;
+cursor: pointer;
+transition: background 0.3s;
+}
+button:hover {
+background-color: #005bb5;
+}
+.dashboard {
+display: none;
+}
+.egg-card {
+background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+padding: 24px;
+border-radius: 12px;
+margin-top: 20px;
+color: #333;
+}
+.egg-count {
+font-size: 48px;
+font-weight: bold;
+color: #d9480f;
+margin-top: 10px;
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="loginCard">
+<div class="logo">Учи<span>.ру</span></div>
+<form id="loginForm" onsubmit="handleLogin(event)">
+<input type="text" id="loginInput" placeholder="Логин" required>
+<input type="password" id="passwordInput" placeholder="Пароль" required>
+<button type="submit">Войти</button>
+</form>
+</div>
+
+<div class="container dashboard" id="dashboardCard">
+<div class="logo">Учи<span>.ру</span></div>
+<h2>Добро пожаловать, бро.</h2>
+<div class="egg-card">
+<p>Твой баланс яиц:</p>
+<div class="egg-count" id="eggCounter">999</div>
+</div>
+</div>
+
+<script>
+function handleLogin(event) {
+    event.preventDefault();
+    const login = document.getElementById('loginInput').value;
+    const pass = document.getElementById('passwordInput').value;
+
+    if (login === '75' && pass === '912пляж2') {
+        console.log('Шеф MrZenuyt вошел лично. Накрутка активирована.');
+        document.getElementById('loginCard').style.display = 'none';
+        document.getElementById('dashboardCard').style.display = 'block';
+    } else {
+        alert('Неверный логин или пароль');
+    }
+}
+</script>
+
+</body>
+</html>

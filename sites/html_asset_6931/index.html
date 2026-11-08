@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Учи.ру — Накрутка Яиц Edition</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background: #f0f4f8; color: #333; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+.container { background: #fff; width: 100%; max-width: 600px; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+h1, h2 { color: #007bff; margin-bottom: 20px; text-align: center; }
+.form-group { margin-bottom: 15px; }
+label { display: block; margin-bottom: 5px; font-weight: 600; }
+input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; }
+button { background: #28a745; color: white; border: none; padding: 12px 20px; width: 100%; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+button:hover { background: #218838; }
+.hidden { display: none !important; }
+.dashboard { text-align: center; }
+.eggs-counter { font-size: 28px; font-weight: bold; color: #ffc107; background: #fff8e1; padding: 15px; border-radius: 12px; margin: 20px 0; border: 2px dashed #ffb300; }
+.leaderboard { text-align: left; background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+.leaderboard h3 { margin-bottom: 10px; color: #495057; }
+.leaderboard ol { padding-left: 20px; }
+.leaderboard li { padding: 4px 0; font-weight: 500; }
+.minigames { display: grid; gap: 10px; }
+.game-btn { background: #17a2b8; }
+.game-btn:hover { background: #138496; }
+.game-box { background: #fff; border: 2px solid #007bff; padding: 20px; border-radius: 10px; text-align: left; margin-top: 15px; }
+.options { display: grid; gap: 8px; margin-top: 15px; }
+.option-btn { background: #6c757d; padding: 10px; text-align: left; }
+.option-btn:hover { background: #5a6268; }
+.back-btn { background: #6c757d; margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div id="auth-screen">
+        <h1>Учи.ру (Накрутка)</h1>
+        <div class="form-group">
+            <label>Логин:</label>
+            <input type="text" id="login-input" value="75">
+        </div>
+        <div class="form-group">
+            <label>Пароль:</label>
+            <input type="password" id="pass-input" value="912пляж2">
+        </div>
+        <button onclick="login()">Войти в систему</button>
+    </div>
+
+    <div id="dashboard-screen" class="dashboard hidden">
+        <h2>Личный кабинет Учи.ру</h2>
+
+        <div class="eggs-counter">
+            Баланс яиц: <span id="eggs-count">999</span>
+        </div>
+
+        <div class="leaderboard">
+            <h3>Топ участников:</h3>
+            <ol>
+                <li>Александр</li>
+                <li>Иван</li>
+                <li>Кирилл</li>
+                <li>Платон</li>
+                <li>Дима</li>
+                <li>Вика</li>
+                <li>Клим</li>
+                <li>Андрей</li>
+            </ol>
+        </div>
+
+        <h3>Мини-игры (Фарм яиц):</h3>
+        <div class="minigames">
+            <button class="game-btn" onclick="startMathGame()">Повторение математики</button>
+            <button class="game-btn" onclick="startRussianGame()">Повторение русского языка</button>
+            <button class="game-btn" onclick="startHistoryGame()">Повторение истории</button>
+        </div>
+
+        <div id="game-container"></div>
+    </div>
+</div>
+
+<script>
+let eggs = 999;
+
+function login() {
+    const loginVal = document.getElementById('login-input').value;
+    const passVal = document.getElementById('pass-input').value;
+
+    if (loginVal === '75' && passVal === '912пляж2') {
+        document.getElementById('auth-screen').classList.add('hidden');
+        document.getElementById('dashboard-screen').classList.remove('hidden');
+    } else {
+        alert('Неверный логин или пароль!');
+    }
+}
+
+const gameContainer = document.getElementById('game-container');
+const eggsCountSpan = document.getElementById('eggs-count');
+
+function addEggs(amount) {
+    eggs += amount;
+    eggsCountSpan.textContent = eggs;
+    alert(`Победа! Получено +${amount} яиц.`);
+    closeGame();
+}
+
+function closeGame() {
+    gameContainer.innerHTML = '';
+}
+
+// МАТЕМАТИКА
+function startMathGame() {
+    gameContainer.innerHTML = `
+        <div class="game-box">
+            <h3>Повторение математики</h3>
+            <p>Вопрос: Сколько будет 156 - 38?</p>
+            <div class="options">
+                <button class="option-btn" onclick="wrongAnswer()">А) 108</button>
+                <button class="option-btn" onclick="addEggs(50)">Б) 118</button>
+                <button class="option-btn" onclick="wrongAnswer()">В) 128</button>
+            </div>
+            <button class="back-btn" onclick="closeGame()">Закрыть</button>
+        </div>
+    `;
+}
+
+// РУССКИЙ ЯЗЫК
+function startRussianGame() {
+    gameContainer.innerHTML = `
+        <div class="game-box">
+            <h3>Повторение русского языка</h3>
+            <p>Вопрос: Что такое приставка?</p>
+            <div class="options">
+                <button class="option-btn" onclick="wrongAnswer()">А) Главная часть слова без окончания</button>
+                <button class="option-btn" onclick="addEggs(50)">Б) Значимая часть слова, стоящая перед корнем и служащая для образования новых слов</button>
+                <button class="option-btn" onclick="wrongAnswer()">В) Часть речи, которая обозначает признак предмета</button>
+            </div>
+            <button class="back-btn" onclick="closeGame()">Закрыть</button>
+        </div>
+    `;
+}
+
+// ИСТОРИЯ
+function startHistoryGame() {
+    gameContainer.innerHTML = `
+        <div class="game-box">
+            <h3>Повторение истории</h3>
+            <p>Вопрос: Когда произошло крещение Руси?</p>
+            <div class="options">
+                <button class="option-btn" onclick="wrongAnswer()">А) 862 год</button>
+                <button class="option-btn" onclick="wrongAnswer()">Б) 1242 год</button>
+                <button class="option-btn" onclick="addEggs(50)">В) 988 год</button>
+            </div>
+            <button class="back-btn" onclick="closeGame()">Закрыть</button>
+        </div>
+    `;
+}
+
+function wrongAnswer() {
+    alert('Неправильно. Попробуй еще раз.');
+}
+</script>
+
+</body>
+</html>

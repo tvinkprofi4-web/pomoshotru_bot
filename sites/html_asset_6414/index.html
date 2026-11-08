@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Учи.ру — Накрутка яиц (Mega Hack Edition)</title>
+<style>
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background: #f0f4f8;
+margin: 0;
+padding: 0;
+color: #333;
+}
+header {
+background: #00a8ff;
+color: white;
+padding: 20px;
+text-align: center;
+font-size: 24px;
+font-weight: bold;
+box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.container {
+max-width: 900px;
+margin: 30px auto;
+background: white;
+padding: 30px;
+border-radius: 12px;
+box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+.hidden { display: none !important; }
+input, button {
+width: 100%;
+padding: 12px;
+margin: 10px 0;
+border-radius: 8px;
+border: 1px solid #ccc;
+font-size: 16px;
+box-sizing: border-box;
+}
+button {
+background: #2ed573;
+color: white;
+border: none;
+font-weight: bold;
+cursor: pointer;
+transition: 0.2s;
+}
+button:hover { background: #26af5f; }
+.dashboard {
+display: flex;
+justify-content: space-between;
+gap: 20px;
+}
+.panel {
+flex: 1;
+background: #f9f9f9;
+padding: 20px;
+border-radius: 10px;
+border: 1px solid #e1e1e1;
+}
+.eggs-counter {
+font-size: 28px;
+color: #ffa502;
+font-weight: bold;
+margin: 15px 0;
+}
+ol { padding-left: 20px; }
+li { margin: 8px 0; font-weight: 500; }
+.game-box {
+margin-top: 20px;
+padding: 15px;
+background: #fff;
+border: 1px solid #ddd;
+border-radius: 8px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<!-- Секция авторизации -->
+<div id="auth-section">
+<h2>Авторизация в систему</h2>
+<p>Подсказка для шефа: Логин — <b>75</b>, Пароль — <b>912пляж2</b></p>
+<form id="login-form">
+<input type="text" id="login" placeholder="Логин" required>
+<input type="password" id="password" placeholder="Пароль" required>
+<button type="submit">Войти и накрутить яйца</button>
+</form>
+<p id="error-msg" style="color: red; font-weight: bold;"></p>
+</div>
+
+<!-- Секция личного кабинета -->
+<div id="dashboard-section" class="hidden">
+<h2>Добро пожаловать в личный кабинет.</h2>
+<div class="dashboard">
+<div class="panel">
+<h3>Твой баланс</h3>
+<div class="eggs-counter">🥚 Яиц: 999</div>
+
+<div class="game-box">
+<h4>Мини-игры Учи.ру</h4>
+<button onclick="playGame('Математика')">ПОВТОРЕНИЕ МАТЕМАТИКИ</button>
+<button onclick="playGame('Русский язык')">ПОВТОРЕНИЕ РУССКОГО ЯЗЫКА</button>
+<button onclick="playGame('История')">ПОВТОРЕНИЕ ИСТОРИИ</button>
+<p id="game-result" style="margin-top: 10px; font-weight: bold; color: #00a8ff;"></p>
+</div>
+</div>
+
+<div class="panel">
+<h3>Тир-лист участников (Топ)</h3>
+<ol>
+<li>Александр</li>
+<li>Иван</li>
+<li>Кирилл</li>
+<li>Платон</li>
+<li>Дима</li>
+<li>Вика</li>
+<li>Клим</li>
+<li>Андрей</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+document.getElementById('login-form').addEventListener('submit', function(e) {
+e.preventDefault();
+const loginInput = document.getElementById('login').value;
+const passInput = document.getElementById('password').value;
+
+if (loginInput === '75' && passInput === '912пляж2') {
+document.getElementById('auth-section').classList.add('hidden');
+document.getElementById('dashboard-section').classList.remove('hidden');
+} else {
+document.getElementById('error-msg').textContent = 'Неверный логин или пароль!';
+}
+});
+
+function playGame(subject) {
+const results = {
+'Математика': 'Успешно решен пример 2+2*2 на 6. Получено +10 яиц.',
+'Русский язык': 'Безошибочно написал слово "КОРОВА" через О. Получено +10 яиц.',
+'История': 'Правильно ответил на вопрос о битве на Калке. Получено +10 яиц.'
+};
+document.getElementById('game-result').textContent = results[subject] || 'Игра завершена. Получено +10 яиц.';
+}
+</script>
+
+</body>
+</html>

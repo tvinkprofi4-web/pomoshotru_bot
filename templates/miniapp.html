@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>NullSecAI</title>
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <!-- Google Fonts: Google Sans / Inter / Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            gemini: {
+              bg: '#0e121a',
+              card: '#161d2b',
+              sheet: '#1b2334',
+              input: '#1a2233',
+              hover: '#222d42',
+              blue: '#3b82f6',
+              accent: '#06b6d4',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            display: ['Outfit', 'Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+    html, body {
+      height: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      background-color: #0b0f17;
+      color: #f1f5f9;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      overscroll-behavior: none;
+      -webkit-text-size-adjust: 100%;
+    }
+    #chat-container {
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-y;
+      overscroll-behavior-y: contain;
+      scroll-behavior: smooth;
+    }
+    #sessions-list {
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-y;
+      overscroll-behavior-y: contain;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* NullSec 4-point Diamond Star */
+    .nullsec-star {
+      width: 44px;
+      height: 44px;
+      background: radial-gradient(circle, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+      clip-path: polygon(50% 0%, 63% 37%, 100% 50%, 63% 63%, 50% 100%, 37% 63%, 0% 50%, 37% 37%);
+      filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.65));
+      animation: pulse-glow 3s ease-in-out infinite alternate;
+    }
+    @keyframes pulse-glow {
+      0% { transform: scale(0.96) rotate(0deg); filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.5)); }
+      100% { transform: scale(1.05) rotate(4deg); filter: drop-shadow(0 0 22px rgba(129, 140, 248, 0.8)); }
+    }
+    /* Equalizer wave bars */
+    .eq-bar {
+      display: inline-block;
+      width: 2px;
+      background-color: #38bdf8;
+      border-radius: 1px;
+      animation: eqBounce 1.2s ease-in-out infinite alternate;
+    }
+    .eq-1 { height: 8px; animation-delay: 0.1s; }
+    .eq-2 { height: 14px; animation-delay: 0.3s; }
+    .eq-3 { height: 10px; animation-delay: 0.2s; }
+    @keyframes eqBounce {
+      0% { height: 4px; }
+      100% { height: 14px; }
+    }
+    .code-block {
+      background: #0a0f18;
+      color: #e2e8f0;
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 11px;
+      line-height: 1.45;
+      overflow-x: auto;
+      max-width: 100%;
+      white-space: pre;
+      word-break: normal;
+    }
+    .code-wrapper {
+      max-width: 100%;
+      min-width: 0;
+    }
+  </style>
+</head>
+<body class="h-full flex justify-center items-center bg-[#0b0f17]">
+
+
+  <!-- APP SHELL CONTAINER (TAILORED FOR TELEGRAM MINI APP) -->
+  <div class="w-full h-full max-w-lg flex flex-col overflow-hidden bg-[#0e131d] relative">
+
+    <!-- 1. TOP BAR (GEMINI STYLE) -->
+    <header class="h-12 px-3.5 flex items-center justify-between border-b border-slate-800/80 bg-[#0e131d]/95 backdrop-blur-md z-30 flex-shrink-0">
+      
+        <!-- Left: Hamburger (Saved sessions) & Model Title -->
+        <div class="flex items-center gap-2">
+          <button onclick="toggleSidebar()" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-800/60 active:scale-95 transition" title="Сохраненные сессии">
+            <i class="fa-solid fa-bars text-sm"></i>
+          </button>
+          <div class="flex items-center gap-2 cursor-pointer" onclick="toggleSidebar()">
+            <img src="/static/nullsec_symbol.png?v=6" alt="NullSecAI" class="w-6 h-6 object-contain drop-shadow-[0_0_6px_rgba(56,189,248,0.5)]">
+            <span class="text-sm font-bold font-display tracking-tight text-white">NullSecAI</span>
+            <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
+          </div>
+        </div>
+
+      <!-- Right Controls: Music Toggle, New Chat, Close -->
+      <div class="flex items-center gap-2">
+
+
+
+
+        <!-- Close Button (Calls tg.close) -->
+        <button onclick="closeApp()" class="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-400 hover:bg-slate-800/60 active:scale-95 transition" title="Закрыть">
+          <i class="fa-solid fa-xmark text-xs"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- 2. MAIN CHAT / CONTENT AREA -->
+    <main id="chat-container" class="flex-1 overflow-y-auto overflow-x-hidden px-3 py-3 space-y-3 no-scrollbar relative flex flex-col w-full max-w-full min-w-0">
+      
+      <!-- HERO SCREEN (Shown when session is empty) -->
+      <div id="hero-screen" class="my-auto flex flex-col items-center justify-center text-center px-4 py-6 space-y-4">
+        <!-- Official NullSecAI Symbol (100% Transparent Background, Zero Text) -->
+        <div class="relative mb-2 group flex items-center justify-center">
+          <div class="absolute w-20 h-20 bg-gradient-to-tr from-cyan-500/20 via-indigo-500/25 to-purple-500/20 rounded-full blur-xl pointer-events-none"></div>
+          <img src="/static/nullsec_symbol.png?v=6" alt="NullSecAI" class="relative w-20 h-20 md:w-24 md:h-24 object-contain drop-shadow-[0_0_16px_rgba(56,189,248,0.55)] hover:scale-105 transition-transform duration-300">
+        </div>
+        
+        <div>
+          <h1 class="text-xl md:text-2xl font-bold font-display text-white tracking-tight">Привет! Что вас интересует?</h1>
+          <p class="text-xs text-slate-400 mt-1 max-w-xs leading-relaxed">
+            Я легендарный <strong>NullSecAI</strong>. Спрашивайте любые вопросы, прикрепляйте файлы (ZIP, 7Z, C++, HPP, фото, аудио) или пишите код.
+          </p>
+        </div>
+
+        <!-- Mode Pills -->
+        <div class="flex items-center gap-2 pt-2">
+          <button type="button" onclick="selectHeroMode('chat')" id="hero-pill-chat" class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md shadow-cyan-500/20 active:scale-95 transition cursor-pointer">⚡ Чат</button>
+          <button type="button" onclick="selectHeroMode('code')" id="hero-pill-code" class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-slate-800/90 text-slate-300 hover:bg-slate-700/80 active:scale-95 transition cursor-pointer">💻 Архитектура &amp; Код</button>
+          <button type="button" onclick="selectHeroMode('task')" id="hero-pill-task" class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-slate-800/90 text-slate-300 hover:bg-slate-700/80 active:scale-95 transition cursor-pointer">🧪 Стресс-тест &amp; Диагностика</button>
+        </div>
+
+        <!-- Dynamic Hero Prompt Cards (Mini App Quick Actions) -->
+        <div id="hero-prompt-cards" class="w-full max-w-sm pt-2 space-y-2 text-left"></div>
+      </div>
+
+      <!-- MESSAGES STREAM (Hidden initially if empty, populated dynamically) -->
+      <div id="messages-list" class="space-y-3 hidden pb-2 w-full max-w-full min-w-0"></div>
+    </main>
+
+    <!-- 3. ATTACHED FILES TRAY (Preview chips before sending) -->
+    <div id="attached-tray" class="hidden px-3 py-1.5 bg-[#121824] border-t border-slate-800 flex items-center gap-1.5 overflow-x-auto no-scrollbar flex-shrink-0"></div>
+
+    <!-- 4. FLOATING INPUT CAPSULE (COMPACT MINI APP PROPORTIONS) -->
+    <div class="p-1.5 px-2 bg-[#0e131d] flex-shrink-0 z-20">
+      <form id="chat-form" onsubmit="event.preventDefault(); sendChatMessage();" class="flex items-center gap-1.5 bg-[#161f30] border border-slate-700/60 rounded-full px-1.5 py-1 shadow-md">
+        
+        <!-- Plus (+) Attachment Button (Opens Slide-up Sheet) -->
+        <button type="button" onclick="openAttachSheet()" class="w-7 h-7 rounded-full bg-slate-800/90 text-slate-200 hover:text-white hover:bg-slate-700 flex items-center justify-center text-xs flex-shrink-0 transition active:scale-95 cursor-pointer" title="Прикрепить (Файлы, Фото, Код, Архивы)">
+          <i class="fa-solid fa-plus text-[11px] pointer-events-none"></i>
+        </button>
+
+        <!-- Message Input -->
+        <input type="text" id="chat-input" placeholder="Спросить NullSecAI..." autocomplete="off" class="flex-1 bg-transparent border-0 text-[11.5px] text-white placeholder-slate-400 focus:outline-none px-1 py-0.5" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMessage();}">
+
+        <!-- Send Button -->
+        <button type="button" onclick="sendChatMessage()" id="btn-send-chat" class="w-7 h-7 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center text-xs flex-shrink-0 shadow-md shadow-blue-600/30 active:scale-95 transition cursor-pointer" title="Отправить">
+          <i class="fa-solid fa-arrow-up text-[11px] pointer-events-none"></i>
+        </button>
+      </form>
+    </div>
+
+    <!-- HIDDEN FILE INPUTS FOR ATTACHMENTS (30 MB limit, max 5 photos) -->
+    <input type="file" id="file-input-any" multiple class="hidden" onchange="handleFilesSelected(this.files, 'any')">
+    <input type="file" id="file-input-photo" multiple accept="image/*" class="hidden" onchange="handleFilesSelected(this.files, 'photo')">
+
+    <!-- 5. ATTACHMENT BOTTOM SHEET MODAL (SLIDE UP - AS IN USER SCREENSHOT) -->
+    <div id="attach-sheet-backdrop" onclick="closeAttachSheet()" class="fixed inset-0 bg-black/60 z-40 hidden transition-opacity opacity-0 backdrop-blur-2xs"></div>
+    <div id="attach-sheet" class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-[#171f2e] border-t border-slate-700/80 rounded-t-3xl z-50 transform translate-y-full transition-transform duration-250 p-4 space-y-4 shadow-2xl">
+      
+      <!-- Top Handle Bar -->
+      <div class="w-10 h-1 bg-slate-600 rounded-full mx-auto cursor-pointer" onclick="closeAttachSheet()"></div>
+
+      <!-- Horizontal Circular Actions (Image 2 style) -->
+      <div class="flex items-center justify-around pt-1 pb-2 border-b border-slate-700/50">
+        <button onclick="triggerPhotoPick()" class="flex flex-col items-center gap-1.5 group">
+          <div class="w-12 h-12 rounded-full bg-[#202b3f] group-hover:bg-blue-600/30 text-blue-400 flex items-center justify-center text-lg transition active:scale-95">
+            <i class="fa-solid fa-image"></i>
+          </div>
+          <span class="text-[11px] font-medium text-slate-300">Фото (до 5)</span>
+        </button>
+
+        <button onclick="triggerFilePick()" class="flex flex-col items-center gap-1.5 group">
+          <div class="w-12 h-12 rounded-full bg-[#202b3f] group-hover:bg-cyan-600/30 text-cyan-400 flex items-center justify-center text-lg transition active:scale-95">
+            <i class="fa-solid fa-paperclip"></i>
+          </div>
+          <span class="text-[11px] font-medium text-slate-300">Файлы (до 30 МБ)</span>
+        </button>
+
+        <button onclick="triggerFilePick()" class="flex flex-col items-center gap-1.5 group">
+          <div class="w-12 h-12 rounded-full bg-[#202b3f] group-hover:bg-indigo-600/30 text-indigo-400 flex items-center justify-center text-lg transition active:scale-95">
+            <i class="fa-solid fa-box-archive"></i>
+          </div>
+          <span class="text-[11px] font-medium text-slate-300">ZIP / 7Z</span>
+        </button>
+
+        <button onclick="triggerFilePick()" class="flex flex-col items-center gap-1.5 group">
+          <div class="w-12 h-12 rounded-full bg-[#202b3f] group-hover:bg-emerald-600/30 text-emerald-400 flex items-center justify-center text-lg transition active:scale-95">
+            <i class="fa-solid fa-code"></i>
+          </div>
+          <span class="text-[11px] font-medium text-slate-300">C++ / HPP</span>
+        </button>
+      </div>
+
+      <!-- Capabilities List (Image 2 style) -->
+      <div class="space-y-1 text-xs">
+        <div onclick="quickPromptFromSheet('Помоги написать или оптимизировать код на C++/HPP')" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-800/60 cursor-pointer transition">
+          <i class="fa-solid fa-terminal text-base text-blue-400 w-5 text-center"></i>
+          <div class="flex-1">
+            <div class="font-semibold text-white">Разработка и Код (C++, HPP)</div>
+            <div class="text-[10px] text-slate-400">Пишите, исправляйте и оптимизируйте алгоритмы</div>
+          </div>
+        </div>
+
+        <div onclick="quickPromptFromSheet('Распакуй и проанализируй структуру архива')" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-800/60 cursor-pointer transition">
+          <i class="fa-solid fa-folder-tree text-base text-cyan-400 w-5 text-center"></i>
+          <div class="flex-1">
+            <div class="font-semibold text-white">Анализ проектов (ZIP, 7Z, TAR)</div>
+            <div class="text-[10px] text-slate-400">Поиск уязвимостей, проверка файлов и скриптов</div>
+          </div>
+        </div>
+
+        <div onclick="quickPromptFromSheet('Проведи глубокий технический анализ (Deep Research)')" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-800/60 cursor-pointer transition">
+          <i class="fa-solid fa-brain text-base text-purple-400 w-5 text-center"></i>
+          <div class="flex-1">
+            <div class="font-semibold text-white">Deep Research & Логика</div>
+            <div class="text-[10px] text-slate-400">Получайте подробные технические отчеты</div>
+          </div>
+        </div>
+
+        <!-- Personal AI Toggle Row -->
+        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/40">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-sparkles text-base text-amber-400 w-5 text-center"></i>
+            <div>
+              <div class="font-semibold text-white flex items-center gap-1.5">
+                <span>Персональный NullSecAI</span>
+                <span class="text-[9px] bg-blue-900/60 text-blue-300 px-1.5 py-0.2 rounded font-mono">Pro</span>
+              </div>
+              <div class="text-[10px] text-slate-400">Максимальная точность анализа</div>
+            </div>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" checked class="sr-only peer" id="toggle-pro">
+            <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. SIDEBAR DRAWER (SAVED CHAT SESSIONS) -->
+    <div id="sidebar-backdrop" onclick="toggleSidebar(false)" class="fixed inset-0 bg-black/60 z-40 hidden opacity-0 transition-opacity backdrop-blur-2xs"></div>
+    <div id="sidebar-drawer" class="fixed top-0 bottom-0 left-0 w-72 max-w-[80vw] bg-[#121927] border-r border-slate-800 z-50 transform -translate-x-full transition-transform duration-250 flex flex-col shadow-2xl">
+      
+      <!-- Drawer Header -->
+      <div class="p-3.5 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <img src="/static/nullsec_symbol.png?v=6" alt="Logo" class="w-6 h-6 object-contain drop-shadow-[0_0_6px_rgba(56,189,248,0.5)]">
+          <span class="text-xs font-bold text-white font-display">Сохраненные сессии</span>
+        </div>
+        <button onclick="toggleSidebar(false)" class="text-slate-400 hover:text-white text-sm p-1">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- New Chat Button inside Drawer -->
+      <div class="p-3">
+        <button onclick="startNewSession(); toggleSidebar(false);" class="w-full py-2 px-3 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 hover:text-blue-300 border border-blue-500/30 text-xs font-semibold flex items-center justify-center gap-2 transition active:scale-95">
+          <i class="fa-solid fa-plus"></i>
+          <span>Новый чат</span>
+        </button>
+      </div>
+
+      <!-- Sessions List -->
+      <div class="flex-1 overflow-y-auto px-3 py-1 space-y-1.5 no-scrollbar" id="sessions-list">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Drawer Footer Link to Admin / Info -->
+      <div class="p-3 border-t border-slate-800 text-[10px] text-slate-500 flex items-center justify-between">
+        <span>NullSecAI v3.5</span>
+        <span class="text-slate-600 font-mono">Quantum Core</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CLIENT LOGIC -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      loadSessionsFromStorage();
+      selectHeroMode('chat', false);
+    });
+
+    // Telegram WebApp setup
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+      try {
+        if (typeof tg.disableVerticalSwipes === 'function') {
+          tg.disableVerticalSwipes();
+        }
+        if (typeof tg.enableClosingConfirmation === 'function') {
+          tg.enableClosingConfirmation();
+        }
+      } catch(e) {}
+      try {
+        tg.setHeaderColor('#0e131d');
+        tg.setBackgroundColor('#0e131d');
+      } catch(e) {}
+      try {
+        tg.onEvent('viewportChanged', () => {
+          const container = document.getElementById('chat-container');
+          if (container) {
+            container.scrollTop = container.scrollHeight;
+          }
+        });
+      } catch(e) {}
+    }
+
+    function closeApp() {
+      if (tg && typeof tg.close === 'function') {
+        try { tg.close(); return; } catch(e) {}
+      }
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.close();
+      }
+    }
+
+    // ==========================================
+    // SAVED CHAT SESSIONS ENGINE (LOCALSTORAGE)
+    // ==========================================
+    let sessions = [];
+    let currentSessionId = null;
+    let selectedFiles = []; // Array of File objects to attach
+
+    function generateId() {
+      return 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+    }
+
+    function loadSessionsFromStorage() {
+      try {
+        const stored = localStorage.getItem('nullsec_sessions');
+        if (stored) {
+          sessions = JSON.parse(stored);
+        }
+      } catch(e) {
+        sessions = [];
+      }
+      if (sessions.length > 0) {
+        switchSession(sessions[0].id);
+      } else {
+        startNewSession();
+      }
+      renderSessionsList();
+    }
+
+    function saveSessionsToStorage() {
+      try {
+        localStorage.setItem('nullsec_sessions', JSON.stringify(sessions));
+      } catch(e) {}
+      renderSessionsList();
+    }
+
+    function getCurrentSession() {
+      return sessions.find(s => s.id === currentSessionId);
+    }
+
+    function startNewSession() {
+      const newSess = {
+        id: generateId(),
+        title: 'Новый диалог',
+        createdAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        messages: []
+      };
+      sessions.unshift(newSess);
+      currentSessionId = newSess.id;
+      saveSessionsToStorage();
+      renderCurrentMessages();
+    }
+
+    function switchSession(sessId) {
+      currentSessionId = sessId;
+      renderCurrentMessages();
+      renderSessionsList();
+      toggleSidebar(false);
+    }
+
+    function deleteSession(sessId, ev) {
+      if (ev) ev.stopPropagation();
+      sessions = sessions.filter(s => s.id !== sessId);
+      if (currentSessionId === sessId) {
+        if (sessions.length > 0) {
+          currentSessionId = sessions[0].id;
+        } else {
+          startNewSession();
+          return;
+        }
+      }
+      saveSessionsToStorage();
+      renderCurrentMessages();
+    }
+
+    function renderSessionsList() {
+      const container = document.getElementById('sessions-list');
+      if (!container) return;
+      container.innerHTML = '';
+
+      sessions.forEach(s => {
+        const isActive = s.id === currentSessionId;
+        const item = document.createElement('div');
+        item.className = `p-2.5 rounded-xl cursor-pointer flex items-center justify-between group transition ${isActive ? 'bg-blue-600/20 text-white border border-blue-500/40' : 'hover:bg-slate-800/50 text-slate-300'}`;
+        item.onclick = () => switchSession(s.id);
+        item.innerHTML = `
+          <div class="flex items-center gap-2 overflow-hidden flex-1 mr-2">
+            <i class="fa-solid fa-message text-xs ${isActive ? 'text-blue-400' : 'text-slate-500'} flex-shrink-0"></i>
+            <span class="text-xs truncate font-medium">${s.title}</span>
+          </div>
+          <button onclick="deleteSession('${s.id}', event)" class="opacity-0 group-hover:opacity-100 hover:text-rose-400 p-1 text-slate-500 transition">
+            <i class="fa-solid fa-trash-can text-[11px]"></i>
+          </button>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function toggleSidebar(show) {
+      const drawer = document.getElementById('sidebar-drawer');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const shouldOpen = show !== undefined ? show : drawer.classList.contains('-translate-x-full');
+
+      if (shouldOpen) {
+        backdrop.classList.remove('hidden');
+        setTimeout(() => backdrop.classList.remove('opacity-0'), 10);
+        drawer.classList.remove('-translate-x-full');
+      } else {
+        backdrop.classList.add('opacity-0');
+        drawer.classList.add('-translate-x-full');
+        setTimeout(() => backdrop.classList.add('hidden'), 250);
+      }
+    }
+
+    // ==========================================
+    // ATTACHMENT BOTTOM SHEET & FILE LIMITS
+    // MAX FILE: 30 MB, MAX PHOTOS: 5
+    // ==========================================
+    const MAX_FILE_SIZE = 30 * 1024 * 1024; // 30 MB
+    const MAX_PHOTO_COUNT = 5;
+
+    function openAttachSheet() {
+      const sheet = document.getElementById('attach-sheet');
+      const backdrop = document.getElementById('attach-sheet-backdrop');
+      backdrop.classList.remove('hidden');
+      setTimeout(() => backdrop.classList.remove('opacity-0'), 10);
+      sheet.classList.remove('translate-y-full');
+    }
+
+    function closeAttachSheet() {
+      const sheet = document.getElementById('attach-sheet');
+      const backdrop = document.getElementById('attach-sheet-backdrop');
+      backdrop.classList.add('opacity-0');
+      sheet.classList.add('translate-y-full');
+      setTimeout(() => backdrop.classList.add('hidden'), 250);
+    }
+
+    function triggerFilePick() {
+      closeAttachSheet();
+      document.getElementById('file-input-any').click();
+    }
+
+    function triggerPhotoPick() {
+      closeAttachSheet();
+      document.getElementById('file-input-photo').click();
+    }
+
+    function quickPromptFromSheet(prompt) {
+      closeAttachSheet();
+      const input = document.getElementById('chat-input');
+      if (input) {
+        input.value = prompt;
+        sendChatMessage();
+      }
+    }
+
+    function handleFilesSelected(fileList, kind) {
+      if (!fileList || fileList.length === 0) return;
+
+      let photoCount = selectedFiles.filter(f => f.type.startsWith('image/')).length;
+
+      for (let i = 0; i < fileList.length; i++) {
+        const file = fileList[i];
+
+        // 30 MB Size limit check
+        if (file.size > MAX_FILE_SIZE) {
+          alert(`⚠️ Файл "${file.name}" превышает максимальный лимит 30 МБ!`);
+          continue;
+        }
+
+        // Photo count check
+        const isPhoto = file.type.startsWith('image/') || /\.(png|jpe?g|webp|gif|bmp)$/i.test(file.name);
+        if (isPhoto) {
+          if (photoCount >= MAX_PHOTO_COUNT) {
+            alert(`⚠️ Максимум можно прикрепить 5 фотографий одновременно.`);
+            continue;
+          }
+          photoCount++;
+        }
+
+        selectedFiles.push(file);
+      }
+
+      renderAttachedTray();
+    }
+
+    function removeAttachedFile(idx) {
+      selectedFiles.splice(idx, 1);
+      renderAttachedTray();
+    }
+
+    function renderAttachedTray() {
+      const tray = document.getElementById('attached-tray');
+      if (!tray) return;
+
+      if (selectedFiles.length === 0) {
+        tray.classList.add('hidden');
+        tray.innerHTML = '';
+        return;
+      }
+
+      tray.classList.remove('hidden');
+      tray.innerHTML = '';
+
+      selectedFiles.forEach((file, idx) => {
+        const chip = document.createElement('div');
+        chip.className = 'px-2 py-1 rounded-lg bg-slate-800 border border-slate-700/80 text-[11px] text-slate-200 flex items-center gap-1.5 flex-shrink-0';
+        
+        let icon = 'fa-paperclip text-slate-400';
+        if (file.type.startsWith('image/')) icon = 'fa-image text-blue-400';
+        else if (/\.(zip|7z|tar|gz|rar)$/i.test(file.name)) icon = 'fa-box-archive text-amber-400';
+        else if (/\.(cpp|hpp|c|h|py|js|ts)$/i.test(file.name)) icon = 'fa-code text-cyan-400';
+
+        const sizeKb = (file.size / 1024).toFixed(0);
+        chip.innerHTML = `
+          <i class="fa-solid ${icon}"></i>
+          <span class="truncate max-w-[110px] font-mono">${file.name}</span>
+          <span class="text-[9px] text-slate-500">${sizeKb}KB</span>
+          <button type="button" onclick="removeAttachedFile(${idx})" class="hover:text-rose-400 p-0.5">
+            <i class="fa-solid fa-xmark text-[10px]"></i>
+          </button>
+        `;
+        tray.appendChild(chip);
+      });
+    }
+
+    // ==========================================
+    // CHAT RENDERING & MARKDOWN FORMATTER
+    // ==========================================
+        function copyCodeSnippet(btn) {
+      try {
+        const wrapper = btn.closest('.code-wrapper');
+        const codeEl = wrapper ? wrapper.querySelector('code') : null;
+        if (!codeEl) return;
+        const text = codeEl.innerText || codeEl.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+          const original = btn.innerHTML;
+          btn.innerHTML = '<i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> <span class="text-emerald-400">Скопировано!</span>';
+          setTimeout(() => { btn.innerHTML = original; }, 2000);
+        });
+      } catch (e) {
+        console.error("Copy failed:", e);
+      }
+    }
+
+    function formatTextToHtml(rawText) {
+      if (!rawText) return '';
+
+      // 0. Изолируем блоки размышлений/диагностики :::thinking ... ::: или <thinking>...</thinking>
+      const thinkingBlocks = [];
+      let text = rawText.replace(/(?::::thinking|<thinking>)\s*([\s\S]*?)(?::::|<\/thinking>)/gi, (match, body) => {
+        const id = thinkingBlocks.length;
+        const cleanBody = body.trim()
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/\n/g, '<br>');
+        
+        const html = `
+          <details class="my-2.5 rounded-xl border border-cyan-500/30 bg-[#0d1424] overflow-hidden shadow-lg group" open>
+            <summary class="flex items-center justify-between px-3 py-2 bg-gradient-to-r from-cyan-950/60 to-slate-900 border-b border-cyan-500/20 cursor-pointer select-none text-xs font-semibold text-cyan-300 hover:text-cyan-200 transition">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                <i class="fa-solid fa-brain text-cyan-400"></i>
+                <span>TITAN ARCHITECTURE &amp; STRESS DIAGNOSTICS</span>
+                <span class="px-1.5 py-0.2 bg-cyan-500/20 text-cyan-300 text-[9px] rounded font-mono uppercase tracking-wider">Zero-Defect</span>
+              </div>
+              <i class="fa-solid fa-chevron-down text-[10px] text-cyan-400/80 transition-transform duration-200 group-open:rotate-180"></i>
+            </summary>
+            <div class="p-3 text-[11px] font-mono leading-relaxed text-slate-300 space-y-1.5 bg-[#090e17]/80">
+              ${cleanBody}
+            </div>
+          </details>
+        `;
+        thinkingBlocks.push(html);
+        return `%%%THINKINGBLOCK_${id}%%%`;
+      });
+
+      // 1. Изолируем блоки кода ```lang ... ```
+      const codeBlocks = [];
+      text = text.replace(/```([a-zA-Z0-9_-]*)\s*([\s\S]*?)\s*```/g, (match, lang, code) => {
+        const id = codeBlocks.length;
+        const cleanLang = (lang || 'code').toUpperCase();
+        const safeCode = code
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+        
+        const html = `
+          <div class="code-wrapper my-2 rounded-xl border border-cyan-500/20 bg-[#0a0f18] overflow-hidden shadow-md">
+            <div class="flex items-center justify-between px-3 py-1 bg-[#121824] border-b border-slate-800 text-[10px] font-mono text-cyan-400">
+              <span class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-code text-[9px]"></i> ${cleanLang}</span>
+              <button type="button" onclick="copyCodeSnippet(this)" class="text-slate-400 hover:text-white transition flex items-center gap-1 active:scale-95">
+                <i class="fa-regular fa-copy text-[10px]"></i>
+                <span>Копировать</span>
+              </button>
+            </div>
+            <pre class="code-block p-2.5 text-[10.5px] leading-relaxed font-mono overflow-x-auto text-slate-200 no-scrollbar select-text"><code>${safeCode}</code></pre>
+          </div>
+        `;
+        codeBlocks.push(html);
+        return `%%%CODEBLOCK_${id}%%%`;
+      });
+
+      // 2. Изолируем инлайн-код `code`
+      const inlineCodes = [];
+      text = text.replace(/`([^`\n]+)`/g, (match, inline) => {
+        const id = inlineCodes.length;
+        const safeInline = inline
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+        const html = `<code class="bg-[#1b2333] text-cyan-300 px-1.5 py-0.5 rounded text-[10.5px] font-mono border border-cyan-500/20">${safeInline}</code>`;
+        inlineCodes.push(html);
+        return `%%%INLINECODE_${id}%%%`;
+      });
+
+      // 3. Экранируем символы в основном тексте
+      text = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+
+      // 4. Заголовки (###, ##, #)
+      text = text.replace(/^### (.*$)/gim, '<div class="font-bold text-cyan-400 text-[12px] mt-2 mb-1">$1</div>');
+      text = text.replace(/^## (.*$)/gim, '<div class="font-bold text-cyan-300 text-[13px] mt-2.5 mb-1">$1</div>');
+      text = text.replace(/^# (.*$)/gim, '<div class="font-bold text-white text-[14px] mt-3 mb-1.5">$1</div>');
+
+      // 5. Жирный текст (**text**)
+      text = text.replace(/\*\*([^*]+)\*\*/g, '<strong class="text-white font-semibold">$1</strong>');
+
+      // 6. Курсив (*text*)
+      text = text.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em class="text-slate-300">$1</em>');
+
+      // 7. Списки (* или - в начале строки)
+      text = text.replace(/^\s*[\*\-]\s+(.*$)/gim, '<div class="flex items-start gap-1.5 pl-1 my-0.5"><span class="text-cyan-400 font-bold">•</span><span class="flex-1">$1</span></div>');
+
+      // 8. Переводы строк (только для обычного текста)
+      text = text.replace(/\n/g, '<br>');
+
+      // 9. Восстанавливаем инлайн-код
+      text = text.replace(/%%%INLINECODE_(\d+)%%%/g, (match, id) => {
+        return inlineCodes[parseInt(id)] || '';
+      });
+
+      // 10. Восстанавливаем блоки кода (чистый код без лишних <br>)
+      text = text.replace(/%%%CODEBLOCK_(\d+)%%%/g, (match, id) => {
+        return codeBlocks[parseInt(id)] || '';
+      });
+
+      // 11. Восстанавливаем блоки размышлений/диагностики
+      text = text.replace(/%%%THINKINGBLOCK_(\d+)%%%/g, (match, id) => {
+        return thinkingBlocks[parseInt(id)] || '';
+      });
+
+      return text;
+    }
+
+    function renderCurrentMessages() {
+      const sess = getCurrentSession();
+      const hero = document.getElementById('hero-screen');
+      const list = document.getElementById('messages-list');
+      if (!sess) return;
+
+      if (sess.messages.length === 0) {
+        hero.classList.remove('hidden');
+        list.classList.add('hidden');
+        list.innerHTML = '';
+        renderHeroCards(currentHeroMode);
+      } else {
+        hero.classList.add('hidden');
+        list.classList.remove('hidden');
+        list.innerHTML = '';
+        sess.messages.forEach(msg => appendMessageDom(msg.text, msg.isUser, msg.time, msg.files, msg.retryPrompt));
+        const container = document.getElementById('chat-container');
+        container.scrollTop = container.scrollHeight;
+      }
+    }
+
+    function appendMessageDom(text, isUser, timeStr, files = [], retryPrompt = '') {
+      const list = document.getElementById('messages-list');
+      const el = document.createElement('div');
+
+      if (isUser) {
+        el.className = 'flex justify-end';
+        let filesHtml = '';
+        if (files && files.length > 0) {
+          filesHtml = '<div class="flex flex-wrap gap-1 pt-1">' + files.map(f => `<span class="px-1.5 py-0.5 rounded bg-blue-700/60 text-[9.5px] text-blue-100 font-mono">📎 ${f}</span>`).join('') + '</div>';
+        }
+        el.innerHTML = `
+          <div class="max-w-[85%] bg-blue-600 text-white rounded-xl rounded-br-xs p-2 px-2.5 text-[11px] leading-[1.38] space-y-0.5 shadow-sm">
+            <div class="break-words">${text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>')}</div>
+            ${filesHtml}
+            <div class="text-[8.5px] text-blue-200 text-right mt-0.5">${timeStr || ''}</div>
+          </div>
+        `;
+      } else {
+        el.className = 'flex items-start gap-1.5 w-full max-w-full min-w-0';
+        let retryHtml = '';
+        if (retryPrompt) {
+          const safePrompt = encodeURIComponent(retryPrompt);
+          retryHtml = `
+            <div class="mt-2 pt-1.5 border-t border-slate-700/50 flex items-center justify-between">
+              <span class="text-[9.5px] text-rose-400">Сбой передачи</span>
+              <button type="button" onclick="retryMessagePrompt('${safePrompt}')" class="px-2.5 py-1 rounded-full bg-cyan-600/30 hover:bg-cyan-600/50 text-cyan-200 border border-cyan-500/30 text-[10px] font-semibold flex items-center gap-1.5 active:scale-95 transition">
+                <i class="fa-solid fa-rotate-right text-[9px]"></i>
+                <span>Повторить запрос</span>
+              </button>
+            </div>
+          `;
+        }
+        el.innerHTML = `
+          <img src="/static/nullsec_symbol.png?v=6" alt="AI" class="w-5 h-5 flex-shrink-0 object-contain drop-shadow-[0_0_5px_rgba(56,189,248,0.6)] mt-0.5">
+          <div class="bg-[#161f30] border border-slate-700/60 text-slate-100 rounded-xl rounded-tl-xs p-2.5 px-3 text-[11px] leading-[1.4] space-y-1 shadow-sm flex-1 min-w-0 overflow-hidden">
+            <div class="flex items-center justify-between border-b border-slate-700/40 pb-0.5 mb-1">
+              <span class="font-bold text-[10px] text-cyan-400 tracking-tight">NullSecAI</span>
+              <span class="text-[8.5px] text-slate-400">${timeStr || ''}</span>
+            </div>
+            <div class="space-y-1 break-words">${formatTextToHtml(text)}</div>
+            ${retryHtml}
+          </div>
+        `;
+      }
+
+      list.appendChild(el);
+      const container = document.getElementById('chat-container');
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function retryMessagePrompt(encodedPrompt) {
+      const input = document.getElementById('chat-input');
+      if (input && encodedPrompt) {
+        input.value = decodeURIComponent(encodedPrompt);
+        sendChatMessage();
+      }
+    }
+
+    async function sendChatMessage() {
+      const input = document.getElementById('chat-input');
+      const btn = document.getElementById('btn-send-chat');
+      if (!input) return;
+      const text = input.value.trim();
+      const filesToSend = [...selectedFiles];
+
+      if (!text && filesToSend.length === 0) return;
+
+      input.value = '';
+      selectedFiles = [];
+      renderAttachedTray();
+
+      const sess = getCurrentSession();
+      if (!sess) return;
+
+      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const fileNames = filesToSend.map(f => f.name);
+
+      // Add user message
+      sess.messages.push({ text: text || `[Отправлено файлов: ${filesToSend.length}]`, isUser: true, time: timeStr, files: fileNames });
+      if (sess.title === 'Новый диалог' && text) {
+        sess.title = text.length > 25 ? text.substring(0, 25) + '...' : text;
+      }
+      saveSessionsToStorage();
+      renderCurrentMessages();
+
+      // Typing loader
+      const list = document.getElementById('messages-list');
+      const typingEl = document.createElement('div');
+      typingEl.id = 'typing-indicator';
+      typingEl.className = 'flex items-center gap-2 text-cyan-400 text-xs pl-8 animate-pulse';
+      typingEl.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span> <span>NullSecAI анализирует...</span>`;
+      list.appendChild(typingEl);
+      const container = document.getElementById('chat-container');
+      container.scrollTop = container.scrollHeight;
+
+      if (btn) btn.disabled = true;
+
+      const controller = new AbortController();
+      const fetchTimer = setTimeout(() => controller.abort(), 60000);
+
+      try {
+        const formData = new FormData();
+        formData.append('message', text);
+        formData.append('history', JSON.stringify(sess.messages.slice(-8).map(m => ({
+          role: m.isUser ? 'user' : 'model',
+          content: m.text
+        }))));
+
+        filesToSend.forEach(f => {
+          formData.append('files', f);
+        });
+
+        const res = await fetch('/api/miniapp/chat', {
+          method: 'POST',
+          body: formData,
+          signal: controller.signal
+        });
+        clearTimeout(fetchTimer);
+
+        if (!res.ok) {
+          throw new Error('HTTP ' + res.status);
+        }
+
+        const data = await res.json();
+        typingEl.remove();
+
+        const reply = data.reply || 'Ответ сформирован NullSecAI.';
+        sess.messages.push({ text: reply, isUser: false, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
+        saveSessionsToStorage();
+        renderCurrentMessages();
+
+        if (tg?.HapticFeedback) {
+          tg.HapticFeedback.notificationOccurred('success');
+        }
+      } catch (err) {
+        clearTimeout(fetchTimer);
+        typingEl.remove();
+        console.error("Chat error:", err);
+        sess.messages.push({
+          text: 'Временный сбой связи с сервером. Пожалуйста, повторите запрос к NullSecAI.',
+          isUser: false,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          retryPrompt: text
+        });
+        saveSessionsToStorage();
+        renderCurrentMessages();
+      } finally {
+        if (btn) btn.disabled = false;
+        container.scrollTop = container.scrollHeight;
+      }
+    }
+
+    const HERO_MODES = {
+      chat: {
+        placeholder: 'Спросить NullSecAI...',
+        defaultPrompt: '',
+        cards: [
+          {
+            icon: 'fa-solid fa-sparkles',
+            bg: 'bg-blue-950/70',
+            border: 'border-blue-500/30',
+            iconColor: 'text-blue-400',
+            title: 'Возможности NullSecAI',
+            desc: 'Что умеет бот, команды и форматы файлов',
+            prompt: 'Расскажи подробно обо всех своих возможностях, поддерживаемых языках и командах.'
+          },
+          {
+            icon: 'fa-solid fa-box-archive',
+            bg: 'bg-cyan-950/70',
+            border: 'border-cyan-500/30',
+            iconColor: 'text-cyan-400',
+            title: 'Анализ архивов (ZIP, 7Z)',
+            desc: 'Как прикрепить проект для глубокого аудита',
+            prompt: 'Как правильно загрузить тебе архив (ZIP, 7Z, C++, HPP) для полного аудита?'
+          },
+          {
+            icon: 'fa-solid fa-shield-halved',
+            bg: 'bg-purple-950/70',
+            border: 'border-purple-500/30',
+            iconColor: 'text-purple-400',
+            title: 'Безопасность и приватность',
+            desc: 'Алгоритмы защиты и антидетект',
+            prompt: 'Расскажи о своих алгоритмах защиты, безопасности и антидетект технологиях.'
+          }
+        ]
+      },
+      code: {
+        placeholder: 'Спроектируй production-код (Luau, C++, Rust, Go, Python)...',
+        defaultPrompt: 'Спроектируй архитектуру и напиши production-код для: ',
+        cards: [
+          {
+            icon: 'fa-solid fa-code',
+            bg: 'bg-cyan-950/70',
+            border: 'border-cyan-500/30',
+            iconColor: 'text-cyan-400',
+            title: 'Lua / Luau Скрипт для Roblox',
+            desc: 'Модульный чистый код, ESP, Aim и защита',
+            prompt: 'Напиши надежный Lua / Luau скрипт для Roblox с чистой модульной архитектурой.'
+          },
+          {
+            icon: 'fa-solid fa-microchip',
+            bg: 'bg-indigo-950/70',
+            border: 'border-indigo-500/30',
+            iconColor: 'text-indigo-400',
+            title: 'C++ / Reverse & Memory Hook',
+            desc: 'Хуки памяти, инъекции и сигнатуры',
+            prompt: 'Покажи пример безопасного C++ хука функций и чтения/записи структур памяти.'
+          },
+          {
+            icon: 'fa-brands fa-python',
+            bg: 'bg-emerald-950/70',
+            border: 'border-emerald-500/30',
+            iconColor: 'text-emerald-400',
+            title: 'FastAPI / Python Асинхронный API',
+            desc: 'REST API микросервис с валидацией',
+            prompt: 'Спроектируй production-ready асинхронный REST API микросервис на FastAPI и Python.'
+          }
+        ]
+      },
+      task: {
+        placeholder: 'Стресс-тест, аудит уязвимостей, устойчивость кода...',
+        defaultPrompt: 'Проведи стресс-тест и диагностику уязвимостей для: ',
+        cards: [
+          {
+            icon: 'fa-solid fa-bolt',
+            bg: 'bg-amber-950/70',
+            border: 'border-amber-500/30',
+            iconColor: 'text-amber-400',
+            title: 'Стресс-тест и нагрузка',
+            desc: 'Поиск узких мест при высоких нагрузках',
+            prompt: 'Проведи стресс-тест архитектуры и найди слабые места при высокой нагрузке.'
+          },
+          {
+            icon: 'fa-solid fa-shield-virus',
+            bg: 'bg-rose-950/70',
+            border: 'border-rose-500/30',
+            iconColor: 'text-rose-400',
+            title: 'Аудит безопасности и уязвимостей',
+            desc: 'Поиск переполнений, race condition и инъекций',
+            prompt: 'Проведи аудит безопасности: найди уязвимости, race conditions и ошибки переполнения.'
+          },
+          {
+            icon: 'fa-solid fa-server',
+            bg: 'bg-emerald-950/70',
+            border: 'border-emerald-500/30',
+            iconColor: 'text-emerald-400',
+            title: 'Диагностика бота и серверов',
+            desc: 'Проверка кэша, базы SQLite, лимитов и сети',
+            prompt: 'Проведи комплексную диагностику состояния серверов, базы данных, кэша и лимитов бота.'
+          }
+        ]
+      }
+    };
+
+    let currentHeroMode = 'chat';
+
+    function selectHeroMode(mode, userInitiated = true) {
+      currentHeroMode = mode;
+      if (tg?.HapticFeedback) {
+        try { tg.HapticFeedback.impactOccurred('light'); } catch(e) {}
+      }
+
+      const pills = ['chat', 'code', 'task'];
+      pills.forEach(p => {
+        const el = document.getElementById(`hero-pill-${p}`);
+        if (el) {
+          if (p === mode) {
+            el.className = 'px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md shadow-cyan-500/20 active:scale-95 transition cursor-pointer';
+          } else {
+            el.className = 'px-3.5 py-1.5 rounded-full text-xs font-semibold bg-slate-800/90 text-slate-300 hover:bg-slate-700/80 active:scale-95 transition cursor-pointer';
+          }
+        }
+      });
+
+      const config = HERO_MODES[mode] || HERO_MODES.chat;
+      const input = document.getElementById('chat-input');
+      if (input) {
+        input.placeholder = config.placeholder;
+        if (userInitiated) {
+          if (config.defaultPrompt) {
+            input.value = config.defaultPrompt;
+          } else if (input.value.startsWith('Спроектируй архитектуру') || input.value.startsWith('Проведи стресс-тест')) {
+            input.value = '';
+          }
+          input.focus();
+          // Помещаем курсор в конец поля ввода
+          const len = input.value.length;
+          input.setSelectionRange(len, len);
+        }
+      }
+
+      renderHeroCards(mode);
+    }
+
+    function renderHeroCards(mode) {
+      const container = document.getElementById('hero-prompt-cards');
+      if (!container) return;
+      const config = HERO_MODES[mode] || HERO_MODES.chat;
+      
+      container.innerHTML = config.cards.map((card, idx) => `
+        <div onclick="quickPromptFromHero(${idx})" class="p-2.5 bg-[#141b29]/90 border border-slate-700/60 hover:border-cyan-500/60 rounded-xl cursor-pointer transition hover:bg-[#1a2334] active:scale-[0.98] group flex items-center justify-between gap-2.5 shadow-sm">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-7 h-7 rounded-lg ${card.bg} border ${card.border} flex items-center justify-center ${card.iconColor} text-xs flex-shrink-0">
+              <i class="${card.icon}"></i>
+            </div>
+            <div class="min-w-0">
+              <div class="text-[11.5px] font-bold text-white group-hover:text-cyan-300 truncate">${card.title}</div>
+              <div class="text-[9.5px] text-slate-400 truncate">${card.desc}</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-arrow-right text-[10px] text-slate-500 group-hover:text-cyan-400 group-hover:translate-x-0.5 transition flex-shrink-0 pr-1"></i>
+        </div>
+      `).join('');
+    }
+
+    function quickPromptFromHero(cardIndex) {
+      if (tg?.HapticFeedback) {
+        try { tg.HapticFeedback.impactOccurred('medium'); } catch(e) {}
+      }
+      const config = HERO_MODES[currentHeroMode] || HERO_MODES.chat;
+      const card = config.cards[cardIndex];
+      if (!card) return;
+      const input = document.getElementById('chat-input');
+      if (input) {
+        input.value = card.prompt;
+        sendChatMessage();
+      }
+    }
+  </script>
+</body>
+</html>

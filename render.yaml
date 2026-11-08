@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: pomoshotru-bot
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot.py
+    envVars:
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: PORT
+        value: 8080
+      - key: TELEGRAM_API_ID
+        value: "6"
+      - key: TELEGRAM_API_HASH
+        value: eb06d4abfb49dc3eeb1aeb98ae0f581e
+      - key: TELEGRAM_SESSION_STRING
+        value: 1ApWapzMBu3vr2HgjR-jeYmTZPI0-CnpqYrMRZg_eetW4DVLUZlOir-mmTdEvy8Zi3GGwCJA57jRTBDN5kB_wLClOVte_9ViRzv2Gncel_D6JD0JV7sccFzjTbky51I3uQqfdPTHOh6mPUQPgJv6pv5sMva1rptDgK0Id_I9wxb0IfvYhsVY8nnmyhSseOBb59OO1RQOxHytUUq98LV3mg4UjeGqvgSG5b_gpwe4jnHbBLBZP_HEBrJUHsnhws7XXiqsCdhVbRJxcHMxl7kmwpNaGCkRqFK7WUMJwtckRhtR7DouQrrRVrMMeuldX9ke60VkDSyOrRAX1viy-TgNH1w4ZqUJ_xqc=
+

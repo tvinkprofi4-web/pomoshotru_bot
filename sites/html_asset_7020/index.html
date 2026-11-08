@@ -1,0 +1,152 @@
+<.DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Учи.ру — Накрутка Яиц Edition</title>
+<style>
+border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background-color: #f0f4f8; color: #333; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+.container { background: #fff; width: 100%; max-width: 600px; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+h1, h2 { color: #1a73e8; margin-bottom: 20px; text-align: center; }
+.form-group { margin-bottom: 15px; }
+label { display: block; margin-bottom: 5px; font-weight: 600; color: #555; }
+input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; transition: 0.3s; }
+input:focus { border-color: #1a73e8; outline: none; }
+button { background: #1a73e8; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-size: 16px; cursor: pointer; width: 100%; font-weight: bold; transition: 0.3s; margin-top: 10px; }
+button:hover { background: #1557b0; }
+.hidden { display: none .important; }
+.dashboard { text-align: center; }
+.eggs-counter { font-size: 28px; font-weight: bold; color: #ff9800; background: #fff8e1; padding: 15px; border-radius: 12px; margin: 20px 0; border: 2px dashed #ffb300; }
+.top-list { text-align: left; background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+.top-list h3 { margin-bottom: 10px; color: #333; }
+.top-list ol { padding-left: 20px; }
+.top-list li { padding: 4px 0; font-weight: 500; }
+.games-section { text-align: left; margin-top: 20px; }
+.game-card { background: #e8f0fe; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+.game-card h4 { color: #1a73e8; margin-bottom: 10px; }
+.options { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.option-btn { background: #fff; color: #1a73e8; border: 1px solid #1a73e8; padding: 8px; border-radius: 6px; text-align: left; cursor: pointer; font-weight: normal; margin: 0; }
+.option-btn:hover { background: #1a73e8; color: #fff; }
+.result-msg { margin-top: 8px; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<div class="container">
+авторизации -->
+<div id="auth-screen">
+<h1>Учи.ру (Накрутка)</h1>
+<div class="form-group">
+<label>Логин:</label>
+<input type="text" id="login-input" placeholder="Введите логин.">
+</div>
+<div class="form-group">
+<label>Пароль:</label>
+<input type="password" id="password-input" placeholder="Введите пароль.">
+</div>
+<button onclick="login()">Войти</button>
+<p id="error-msg" style="color: red; text-align: center; margin-top: 10px;"></p>
+
+экран кабинета -->
+<div id="dashboard-screen" class="dashboard hidden">
+<h2>Личный кабинет Учи.ру</h2>
+
+<div class="eggs-counter">
+<span id="egg-count">999</span>
+
+<div class="top-list">
+<h3> Тир-лист участников (Топ):</h3>
+<ol>
+<li>Александр</li>
+<li>Иван</li>
+<li>Кирилл</li>
+<li>Платон</li>
+<li>Дима</li>
+<li>Вика</li>
+<li>Клим</li>
+<li>Андрей</li>
+</ol>
+
+-->
+<div class="game-card">
+<h4>Повторение математики</h4>
+<p id="math-q">Сколько будет 2 + 2?</p>
+<div class="options" id="math-opts">
+<button class="option-btn" onclick="checkAnswer('math', 4, this)">А) 3</button>
+<button class="option-btn" onclick="checkAnswer('math', 4, this)">Б) 4</button>
+<button class="option-btn" onclick="checkAnswer('math', 4, this)">В) 5</button>
+</div>
+<div id="math-res" class="result-msg"></div>
+
+язык -->
+<div class="game-card">
+<h4>Повторение русского языка</h4>
+<p>Что такое корень?</p>
+<div class="options">
+<button class="option-btn" onclick="checkAnswer('rus', true, this)">А) Главная значимая часть слова</button>
+<button class="option-btn" onclick="checkAnswer('rus', false, this)">Б) Часть речи перед сказуемым</button>
+<button class="option-btn" onclick="checkAnswer('rus', false, this)">В) Знак препинания в конце предложения</button>
+</div>
+<div id="rus-res" class="result-msg"></div>
+
+-->
+<div class="game-card">
+<h4>Повторение истории</h4>
+<p>Когда произошло крещение Руси?</p>
+<div class="options">
+<button class="option-btn" onclick="checkAnswer('hist', true, this)">А) 988 год</button>
+<button class="option-btn" onclick="checkAnswer('hist', false, this)">Б) 862 год</button>
+<button class="option-btn" onclick="checkAnswer('hist', false, this)">В) 1147 год</button>
+</div>
+<div id="hist-res" class="result-msg"></div>
+</div>
+
+<button onclick="logout()" style="background: #e53935; margin-топ: 20px;">Выйти</button>
+</div>
+
+<script>
+function login() {
+const loginVal = document.getElementById('login-input').value.trim();
+const passVal = document.getElementById('password-input').value.trim();
+
+if (loginVal === '75' && passVal === '912пляж2') {
+document.getElementById('auth-screen').classList.add('hidden');
+document.getElementById('dashboard-screen').classList.remove('hidden');
+
+let mathStep = 0;
+const mathQuestions = [
+Сколько будет 2 + 2?", opts: ["А) 3", "Б) 4", "В) 5"], correct: 1 },
+Сколько будет 156 - 38?", opts: ["А) 118", "Б) 128", "В) 108"], correct: 0 },
+Сколько будет 872 - 635?", opts: ["А) 247", "Б) 237", "В) 227"], correct: 1 }
+
+function checkAnswer(type, isCorrect, btn) {
+if (type === 'math') {
+логика проверки по текущему шагу
+const resBlock = document.getElementById('math-res');
+resBlock.textContent = "Правильно. Держи еще яйцо.";
+resBlock.style.color = "green";
+let eggs = parseInt(document.getElementById('egg-count').textContent);
+document.getElementById('egg-count').textContent = eggs + 1;
+{
+const resBlock = document.getElementById(type + '-res');
+if (isCorrect === true || isCorrect === 4) {
+resBlock.textContent = "Красавец, ответ верный. +1 яйцо.";
+resBlock.style.color = "green";
+let eggs = parseInt(document.getElementById('egg-count').textContent);
+document.getElementById('egg-count').textContent = eggs + 1;
+{
+resBlock.textContent = "Мимо, братан, думай еще.";
+resBlock.style.color = "red";
+}
+
+function logout() {
+document.getElementById('dashboard-screen').classList.add('hidden');
+document.getElementById('auth-screen').classList.remove('hidden');
+document.getElementById('login-input').value = '';
+document.getElementById('password-input').value = '';
+document.getElementById('error-msg').textContent = '';
+}
+</script>
+</body>
+</html>

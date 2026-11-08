@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NullSec Hub — Мини-игры и Накрутка</title>
+<style>
+body {
+background-color: #0f0f13;
+color: #00ff66;
+font-family: 'Courier New', Courier, monospace;
+margin: 0;
+padding: 20px;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+h1 {
+text-shadow: 0 0 10px #00ff66;
+}
+.container {
+background: #1a1a24;
+border: 2px solid #00ff66;
+padding: 20px;
+border-radius: 10px;
+width: 80%;
+max-width: 600px;
+box-shadow: 0 0 20px rgba(0, 255, 102, 0.2);
+margin-top: 20px;
+}
+button {
+background: #00ff66;
+color: #0f0f13;
+border: none;
+padding: 10px 15px;
+font-weight: bold;
+cursor: pointer;
+border-radius: 5px;
+margin-top: 10px;
+}
+button:hover {
+background: #00cc52;
+box-shadow: 0 0 10px #00ff66;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>Панель управления</h2>
+<p>Статус системы: <span style="color: #fff;">АКТИВНА</span></p>
+<p>Накручено яиц: <span id="eggs" style="color: #fff;">1337</span></p>
+<button onclick="boostEggs()">Накрутить ещё</button>
+</div>
+
+<script>
+function boostEggs() {
+let currentEggs = parseInt(document.getElementById('eggs').innerText);
+currentEggs += Math.floor(Math.random() * 100) + 50;
+document.getElementById('eggs').innerText = currentEggs;
+}
+</script>
+
+</body>
+</html>

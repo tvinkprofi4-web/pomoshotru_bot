@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Учи.ру — Накрутка Яиц Edition</title>
+<style>
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+background-color: #f0f4f8;
+color: #333;
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
+padding: 20px;
+}
+.container {
+background: #fff;
+width: 100%;
+max-width: 650px;
+padding: 30px;
+border-radius: 16px;
+box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+h1, h2 {
+color: #1a73e8;
+margin-bottom: 20px;
+text-align: center;
+}
+.form-group {
+margin-bottom: 15px;
+}
+label {
+display: block;
+margin-bottom: 5px;
+font-weight: 600;
+color: #555;
+}
+input {
+width: 100%;
+padding: 12px;
+border: 2px solid #ddd;
+border-radius: 8px;
+font-size: 16px;
+transition: 0.3s;
+}
+input:focus {
+border-color: #1a73e8;
+outline: none;
+}
+button {
+background: #1a73e8;
+color: white;
+border: none;
+padding: 12px 20px;
+border-radius: 8px;
+font-size: 16px;
+cursor: pointer;
+width: 100%;
+font-weight: bold;
+transition: 0.3s;
+margin-top: 10px;
+}
+button:hover {
+background: #1557b0;
+}
+.hidden {
+display: none !important;
+}
+.dashboard {
+text-align: center;
+}
+.eggs-counter {
+font-size: 26px;
+font-weight: bold;
+color: #ff9800;
+background: #fff8e1;
+padding: 15px;
+border-radius: 12px;
+margin: 20px 0;
+border: 2px dashed #ffb300;
+}
+.top-list {
+text-align: left;
+background: #f8f9fa;
+padding: 15px;
+border-radius: 10px;
+margin-bottom: 20px;
+}
+.top-list h3 {
+margin-bottom: 10px;
+color: #333;
+}
+.top-list ol {
+padding-left: 20px;
+}
+.top-list li {
+padding: 4px 0;
+font-weight: 500;
+}
+.games-section {
+text-align: left;
+margin-top: 20px;
+}
+.game-tabs {
+display: flex;
+gap: 10px;
+margin-bottom: 15px;
+}
+.game-tabs button {
+margin-top: 0;
+background: #e0e0e0;
+color: #333;
+font-size: 14px;
+padding: 8px;
+}
+.game-tabs button.active {
+background: #1a73e8;
+color: #fff;
+}
+.game-card {
+background: #e8f0fe;
+padding: 15px;
+border-radius: 10px;
+margin-bottom: 15px;
+}
+.game-card h4 {
+color: #1a73e8;
+margin-bottom: 10px;
+}
+.options {
+display: flex;
+flex-direction: column;
+gap: 8px;
+margin-top: 10px;
+}
+.option-btn {
+background: #fff;
+color: #1a73e8;
+border: 1px solid #1a73e8;
+padding: 10px 12px;
+border-radius: 6px;
+text-align: left;
+cursor: pointer;
+font-weight: normal;
+width: 100%;
+transition: 0.2s;
+}
+.option-btn:hover {
+background: #1a73e8;
+color: #fff;
+}
+.result-msg {
+margin-top: 12px;
+font-weight: bold;
+font-size: 14px;
+text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Экран авторизации -->
+  <div id="auth-screen">
+    <h1>Учи.ру (Вход)</h1>
+    <div class="form-group">
+      <label>Логин:</label>
+      <input type="text" id="login-input" placeholder="Введите логин (75)">
+    </div>
+    <div class="form-group">
+      <label>Пароль:</label>
+      <input type="password" id="password-input" placeholder="Введите пароль (912пляж2)">
+    </div>
+    <button onclick="login()">Войти в систему</button>
+    <p id="error-msg" style="color: red; text-align: center; margin-top: 10px;"></p>
+  </div>
+
+  <!-- Личный кабинет -->
+  <div id="dashboard-screen" class="dashboard hidden">
+    <h2>Личный кабинет Учи.ру</h2>
+    <div class="eggs-counter">
+      Яиц на счету: <span id="egg-count">999</span>
+    </div>
+
+    <div class="top-list">
+      <h3>Тир-лист участников:</h3>
+      <ol>
+        <li>Александр</li>
+        <li>Иван</li>
+        <li>Кирилл</li>
+        <li>Платон</li>
+        <li>Дима</li>
+        <li>Вика</li>
+        <li>Клим</li>
+        <li>Андрей</li>
+      </ol>
+    </div>
+
+    <div class="games-section">
+      <div class="game-tabs">
+        <button onclick="switchGame('math')" id="tab-math" class="active">Математика</button>
+        <button onclick="switchGame('russian')" id="tab-russian">Русский язык</button>
+        <button onclick="switchGame('history')" id="tab-history">История</button>
+      </div>
+
+      <div class="game-card">
+        <h4 id="game-title">Загрузка...</h4>
+        <p id="game-q">Загрузка вопроса.</p>
+        <div class="options" id="game-opts"></div>
+        <p id="result-msg" class="result-msg"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const CORRECT_LOGIN = "75";
+const CORRECT_PASS = "912пляж2";
+
+let currentGame = 'math';
+let currentIndex = 0;
+let totalEggs = 999;
+
+const games = {
+  math: [
+    { q: "Сколько будет 2 + 2?", opts: ["3", "4", "5", "22"], correct: 1, bonus: 50 },
+    { q: "Сколько будет 156 - 38?", opts: ["118", "128", "108", "120"], correct: 0, bonus: 100 },
+    { q: "Сколько будет 872 - 635?", opts: ["247", "237", "227", "257"], correct: 1, bonus: 150 }
+  ],
+  russian: [
+    { q: "Что такое корень?", opts: ["Главная значимая часть слова", "Часть речи", "Знак препинания", "Вид предложения"], correct: 0, bonus: 50 },
+    { q: "Что такое приставка?", opts: ["Часть речи после корня", "Значимая часть слова перед корнем", "Окончание слова", "Суффикс"], correct: 1, bonus: 100 },
+    { q: "Что такое морфемный разбор слова?", opts: ["Разбор по частям речи", "Разбор слова по составу (морфемам)", "Фонетический разбор", "Синтаксический разбор"], correct: 1, bonus: 150 }
+  ],
+  history: [
+    { q: "Когда произошло Крещение Руси?", opts: ["988 год", "862 год", "1147 год", "1242 год"], correct: 0, bonus: 70 },
+    { q: "В каком году основали Москву?", opts: ["1147 год", "1240 год", "988 год", "1380 год"], correct: 0, bonus: 100 }
+  ]
+};
+
+function login() {
+  const loginVal = document.getElementById('login-input').value.trim();
+  const passVal = document.getElementById('password-input').value.trim();
+  const errEl = document.getElementById('error-msg');
+
+  if (loginVal === CORRECT_LOGIN && passVal === CORRECT_PASS) {
+    document.getElementById('auth-screen').classList.add('hidden');
+    document.getElementById('dashboard-screen').classList.remove('hidden');
+    loadGame();
+  } else {
+    errEl.innerText = "Неверный логин или пароль!";
+  }
+}
+
+function switchGame(gameKey) {
+  currentGame = gameKey;
+  currentIndex = 0;
+
+  ['math', 'russian', 'history'].forEach(k => {
+    const btn = document.getElementById(`tab-${k}`);
+    if (btn) {
+      if (k === gameKey) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    }
+  });
+
+  loadGame();
+}
+
+function loadGame() {
+  const questions = games[currentGame];
+  const msgEl = document.getElementById('result-msg');
+  const optsContainer = document.getElementById('game-opts');
+  
+  msgEl.innerText = "";
+
+  if (currentIndex >= questions.length) {
+    document.getElementById('game-title').innerText = "Раздел пройден.";
+    document.getElementById('game-q').innerText = "Ты ответил на все вопросы в этом разделе. Накрути еще яиц в других вкладках.";
+    optsContainer.innerHTML = "";
+    return;
+  }
+
+  const currentQ = questions[currentIndex];
+  document.getElementById('game-title').innerText = `Задание ${currentIndex + 1} из ${questions.length}`;
+  document.getElementById('game-q').innerText = currentQ.q;
+  optsContainer.innerHTML = "";
+
+  currentQ.opts.forEach((optText, index) => {
+    const btn = document.createElement('button');
+    btn.className = "option-btn";
+    btn.innerText = optText;
+    btn.onclick = () => checkAnswer(index);
+    optsContainer.appendChild(btn);
+  });
+}
+
+function checkAnswer(selectedIndex) {
+  const questions = games[currentGame];
+  const currentQ = questions[currentIndex];
+  const msgEl = document.getElementById('result-msg');
+
+  if (selectedIndex === currentQ.correct) {
+    totalEggs += currentQ.bonus;
+    document.getElementById('egg-count').innerText = totalEggs;
+    msgEl.style.color = "green";
+    msgEl.innerText = `Правильно! +${currentQ.bonus} яиц`;
+
+    currentIndex++;
+    setTimeout(loadGame, 1500);
+  } else {
+    msgEl.style.color = "red";
+    msgEl.innerText = "Неправильно. Попробуй еще раз.";
+  }
+}
+</script>
+</body>
+</html>

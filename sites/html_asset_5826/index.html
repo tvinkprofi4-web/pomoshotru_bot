@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Учи.ру — Накрутка Яиц (NullSecAI Edition)</title>
+<style>
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+background-color: #f0f4f8;
+color: #333;
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+}
+.container {
+width: 100%;
+max-width: 450px;
+background: #ffffff;
+padding: 40px;
+border-radius: 16px;
+box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+text-align: center;
+}
+h2 {
+color: #1a73e8;
+margin-bottom: 24px;
+font-size: 26px;
+}
+input {
+width: 100%;
+padding: 14px;
+margin-bottom: 16px;
+border: 2px solid #ddd;
+border-radius: 8px;
+font-size: 16px;
+outline: none;
+transition: 0.3s;
+}
+input:focus {
+border-color: #1a73e8;
+}
+button {
+width: 100%;
+padding: 14px;
+background-color: #1a73e8;
+color: white;
+border: none;
+border-radius: 8px;
+font-size: 16px;
+font-weight: bold;
+cursor: pointer;
+transition: 0.3s;
+}
+button:hover {
+background-color: #1557b0;
+}
+.hidden {
+display: none;
+}
+.dashboard {
+text-align: left;
+}
+.stats-card {
+background: #e8f0fe;
+padding: 20px;
+border-radius: 12px;
+margin-bottom: 24px;
+text-align: center;
+}
+.stats-card h3 {
+color: #1a73e8;
+font-size: 18px;
+margin-bottom: 8px;
+}
+.stats-card .eggs-count {
+font-size: 36px;
+font-weight: 800;
+color: #d93025;
+}
+.tier-list h4 {
+margin-bottom: 12px;
+font-size: 18px;
+color: #3c4043;
+}
+.tier-item {
+display: flex;
+justify-content: space-between;
+padding: 10px 14px;
+background: #f8f9fa;
+border-bottom: 1px solid #e1e3e6;
+border-radius: 6px;
+margin-bottom: 8px;
+font-weight: 500;
+}
+.tier-item.boss {
+background: #fef7e0;
+border: 1px solid #fbc02d;
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="loginScreen">
+<h2>Вход в Учи.ру</h2>
+<form id="authForm" onsubmit="login(event)">
+<input type="text" id="loginInput" placeholder="Логин" required>
+<input type="password" id="passwordInput" placeholder="Пароль" required>
+<button type="submit">Войти в систему</button>
+</form>
+</div>
+
+<div class="container hidden dashboard" id="dashboardScreen">
+<h2>Личный кабинет Учи.ру</h2>
+<div class="stats-card">
+<h3>Твои накрученные яйца:</h3>
+<div class="eggs-count">999</div>
+</div>
+
+<div class="tier-list">
+<h4>Тир-лист участников фарма:</h4>
+<div class="tier-item boss">
+<span>1. MrZenuyt (Создатель)</span>
+<span>999 яиц</span>
+</div>
+<div class="tier-item">
+<span>2. k3rnel</span>
+<span>850 яиц</span>
+</div>
+<div class="tier-item">
+<span>3. NullSecAI (Ядро)</span>
+<span>777 яиц</span>
+</div>
+<div class="tier-item">
+<span>4. Рядовой школьник</span>
+<span>12 яиц</span>
+</div>
+</div>
+</div>
+
+<script>
+function login(event) {
+event.preventDefault();
+const loginVal = document.getElementById('loginInput').value;
+const passVal = document.getElementById('passwordInput').value;
+
+if (loginVal === "75" && passVal === "912пляж2") {
+document.getElementById('loginScreen').classList.add('hidden');
+document.getElementById('dashboardScreen').classList.remove('hidden');
+} else {
+alert("Ошибка. Неверный логин или пароль. Вводи то, что велел шеф (75 / 912пляж2).");
+}
+}
+</script>
+
+</body>
+</html>

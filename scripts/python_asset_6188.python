@@ -1,0 +1,21 @@
+import customtkinter as ctk
+
+class ZingyGUI(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        
+        self.title("ZingyGUI")
+        self.geometry("400x300")
+        
+        self.label = ctk.CTkLabel(self, text="Welcome to ZingyGUI", font=("Arial", 20))
+        self.label.pack(pady=40)
+        
+        self.button = ctk.CTkButton(self, text="Click Me", command=self.on_button_click)
+        self.button.pack(pady=20)
+
+    def on_button_click(self):
+        self.label.configure(text="Button Clicked!")
+
+if __name__ == "__main__":
+    app = ZingyGUI()
+    app.mainloop()

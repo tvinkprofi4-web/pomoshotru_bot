@@ -1,0 +1,3117 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NullSecAI — Web Control Center v4.5</title>
+        <!-- Google Fonts: Inter / Outfit / JetBrains Mono (Как в Mini App) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gemini: {
+                            bg: '#0b0f17',
+                            card: '#161d2b',
+                            sheet: '#1b2334',
+                            input: '#1a2233',
+                            hover: '#222d42',
+                            blue: '#3b82f6',
+                            accent: '#06b6d4',
+                        },
+                        darkbg: '#0b0f17',
+                        cardbg: '#161d2b',
+                        cardhover: '#222d42',
+                        panelbg: 'rgba(22, 29, 43, 0.85)',
+                        borderline: 'rgba(255, 255, 255, 0.08)',
+                        accentcyan: '#06b6d4',
+                        accentindigo: '#6366f1',
+                        accentemerald: '#10b981',
+                        accentamber: '#f59e0b',
+                        accentrose: '#f43f5e'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                        display: ['Outfit', 'Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Menlo', 'monospace']
+                    }
+                }
+            }
+        };
+    </script>
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; }
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+            background-color: #06090f;
+            color: #e2e8f0;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+        body {
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.04) 0%, transparent 60%),
+                linear-gradient(rgba(6, 9, 15, 0.90), rgba(6, 9, 15, 0.94)),
+                url('/static/dashboard_bg.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        @media (max-width: 768px) {
+            body {
+                background-image: 
+                    radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.05) 0%, transparent 50%),
+                    linear-gradient(rgba(6, 9, 15, 0.88), rgba(6, 9, 15, 0.92)),
+                    url('/static/miniapp_bg.png');
+                background-attachment: scroll;
+            }
+        }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .terminal-panel {
+            background: rgba(10, 14, 22, 0.82);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 240, 255, 0.12);
+        }
+        .terminal-panel-hover:hover {
+            border-color: rgba(0, 240, 255, 0.28);
+        }
+        .terminal-border { border-color: rgba(0, 240, 255, 0.12); }
+        .cyber-btn-cyan {
+            background: rgba(0, 240, 255, 0.10);
+            color: #00f0ff;
+            border: 1px solid rgba(0, 240, 255, 0.25);
+            transition: all 0.15s ease;
+        }
+        .cyber-btn-cyan:hover {
+            background: rgba(0, 240, 255, 0.20);
+            border-color: #00f0ff;
+            color: #ffffff;
+            box-shadow: 0 0 15px -3px rgba(0, 240, 255, 0.25);
+        }
+        .cyber-btn-rose {
+            background: rgba(244, 63, 94, 0.12);
+            color: #fda4af;
+            border: 1px solid rgba(244, 63, 94, 0.35);
+            transition: all 0.15s ease;
+        }
+        .cyber-btn-rose:hover {
+            background: rgba(244, 63, 94, 0.25);
+            border-color: #f43f5e;
+            color: #ffffff;
+            box-shadow: 0 0 15px -3px rgba(244, 63, 94, 0.3);
+        }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(0, 240, 255, 0.15); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(0, 240, 255, 0.3); }
+    
+        /* Mini App Design System Integration */
+        .font-display { font-family: 'Outfit', 'Inter', sans-serif; }
+        
+        /* 4-конечная звезда NullSec с сиянием */
+        .nullsec-star {
+            width: 38px;
+            height: 38px;
+            background: radial-gradient(circle, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+            clip-path: polygon(50% 0%, 63% 37%, 100% 50%, 63% 63%, 50% 100%, 37% 63%, 0% 50%, 37% 37%);
+            filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.65));
+            animation: pulse-glow 3s ease-in-out infinite alternate;
+        }
+        @keyframes pulse-glow {
+            0% { transform: scale(0.96) rotate(0deg); filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.5)); }
+            100% { transform: scale(1.05) rotate(4deg); filter: drop-shadow(0 0 22px rgba(129, 140, 248, 0.8)); }
+        }
+        
+        /* Эквалайзер волн Hello.mp3 */
+        .eq-bar {
+            display: inline-block;
+            width: 2.5px;
+            background-color: #38bdf8;
+            border-radius: 2px;
+            animation: eqBounce 1.2s ease-in-out infinite alternate;
+        }
+        .eq-1 { height: 8px; animation-delay: 0.1s; }
+        .eq-2 { height: 14px; animation-delay: 0.3s; }
+        .eq-3 { height: 10px; animation-delay: 0.2s; }
+        .eq-paused .eq-bar {
+            animation-play-state: paused !important;
+            height: 4px !important;
+        }
+        @keyframes eqBounce {
+            0% { height: 4px; }
+            100% { height: 14px; }
+        }
+        
+        /* Пузыри сообщений как в Mini App */
+        .bubble-out {
+            background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+            color: #ffffff;
+            border-radius: 18px 18px 4px 18px;
+            box-shadow: 0 4px 14px rgba(6, 182, 212, 0.22);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .bubble-in {
+            background: #161d2b;
+            color: #f1f5f9;
+            border-radius: 18px 18px 18px 4px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+        }
+        
+        /* Стеклянные карточки высокой четкости */
+        .glass-panel {
+            background: rgba(22, 29, 43, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+        .glass-card-hover {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card-hover:hover {
+            background: rgba(27, 35, 52, 0.95);
+            border-color: rgba(56, 189, 248, 0.3);
+            transform: translateY(-1px);
+        }
+
+    </style>
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        if (window.Telegram && window.Telegram.WebApp) {
+            try {
+                window.Telegram.WebApp.ready();
+                window.Telegram.WebApp.expand();
+                window.Telegram.WebApp.enableClosingConfirmation();
+                window.Telegram.WebApp.setHeaderColor('#06090f');
+                window.Telegram.WebApp.setBackgroundColor('#06090f');
+            } catch(e) {}
+        }
+    </script>
+</head>
+<body class="h-screen flex flex-col overflow-hidden select-none bg-darkbg text-slate-100">
+    <!-- BACKGROUND ENDLESS AUDIO PLAYER (Hello.mp3) -->
+    <audio id="bg-music" src="/audio/hello.mp3" loop preload="auto" playsinline></audio>
+
+    <!-- TOP NAVBAR -->
+    <header class="bg-slate-950/95 backdrop-blur-md border-b border-slate-800 flex flex-col md:flex-row md:items-center justify-between px-3.5 md:px-5 py-2 md:py-0 md:h-16 z-30 flex-shrink-0 gap-2 md:gap-4">
+        <!-- TOP ROW ON MOBILE: LOGO + QUICK ACTIONS -->
+        <div class="flex items-center justify-between w-full md:w-auto">
+            <!-- BRAND LOGO -->
+            <div class="flex items-center gap-3">
+                <div class="relative flex-shrink-0">
+                    <img src="/static/nullsec_circle.png" onerror="this.onerror=null; this.src='/static/logo.png'" class="w-9 h-9 md:w-10 md:h-10 rounded-xl object-contain border border-cyan-500/30 bg-black shadow-lg shadow-cyan-500/10" alt="NullSec">
+                    <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 border border-black rounded-full animate-pulse"></span>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-sm md:text-base tracking-wide text-white mono">NULLSEC // OPERATOR</span>
+                        <span class="bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-[9px] md:text-[10px] px-2 py-0.5 rounded mono font-semibold">ROOT</span>
+                    </div>
+                    <div class="text-[10px] md:text-[11px] text-slate-400 flex items-center gap-2 mono">
+                        <span class="text-emerald-400 flex items-center gap-1"><i class="fa-solid fa-circle text-[5px]"></i> 24/7 ONLINE</span>
+                        <span class="text-slate-600">|</span>
+                        <span id="header-stats-brief" class="text-slate-400 truncate max-w-[150px] md:max-w-none">Node Sync OK</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT QUICK ACTIONS -->
+            <div class="flex items-center gap-1.5 md:gap-2.5">
+                                <!-- Endless Music Player Toggle with Equalizer (Mini App Style) -->
+                <button onclick="toggleMusic()" id="btn-music" class="h-8 md:h-9 px-2.5 md:px-3 rounded-full bg-slate-900/90 hover:bg-slate-800 text-[11px] md:text-xs font-semibold text-slate-200 flex items-center gap-1.5 active:scale-95 transition border border-slate-700/60 shadow-sm" title="Музыка OMFG Hello (Вкл / Выкл)">
+                    <div id="eq-container" class="flex items-end gap-0.5 h-3.5 eq-paused">
+                        <span class="eq-bar eq-1"></span>
+                        <span class="eq-bar eq-2"></span>
+                        <span class="eq-bar eq-3"></span>
+                    </div>
+                    <span class="text-[11px] font-mono text-cyan-400 font-bold" id="music-label">Hello</span>
+                </button>
+                <button onclick="openIntroModal()" class="bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 border border-indigo-500/30 font-bold px-2.5 md:px-3 py-1.5 md:py-2 rounded-xl text-[11px] md:text-xs flex items-center gap-1.5 transition transform active:scale-95 shadow-sm" title="Смотреть интро NullSecAI">
+                    <i class="fa-solid fa-play text-indigo-400"></i>
+                    <span class="hidden sm:inline">Интро</span>
+                </button>
+
+                <button onclick="toggleAlwaysOnline()" id="btn-always-online" class="bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 font-bold px-2.5 md:px-3 py-1.5 md:py-2 rounded-xl text-[11px] md:text-xs flex items-center gap-1.5 transition transform active:scale-95 shadow-sm" title="Переключить Вечный Онлайн 24/7">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="hidden sm:inline">Онлайн</span> 24/7
+                </button>
+                <button onclick="openPremiumModal(null, 'Пользователь / Группа')" class="bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-950 font-bold px-2.5 md:px-3.5 py-1.5 md:py-2 rounded-xl text-[11px] md:text-xs flex items-center gap-1 shadow-lg shadow-amber-500/20 transition transform active:scale-95">
+                    <i class="fa-solid fa-star text-[10px]"></i>
+                    <span class="hidden sm:inline">Выдать </span><span>VIP</span>
+                </button>
+                <a href="https://github.com/AUser7742/pomoshotru_bot" target="_blank" class="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800 flex items-center justify-center transition" title="GitHub Репозиторий">
+                    <i class="fa-brands fa-github text-xs md:text-sm"></i>
+                </a>
+                <button onclick="refreshAllData(true)" id="refresh-btn" class="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800 flex items-center justify-center transition" title="Обновить все данные">
+                    <i class="fa-solid fa-rotate-right text-xs"></i>
+                </button>
+                <button onclick="logoutAdmin()" class="px-2.5 md:px-3.5 py-1.5 md:py-2 rounded-xl bg-rose-500/15 border border-rose-500/40 text-rose-300 hover:text-white hover:bg-rose-600/30 flex items-center gap-1.5 transition text-[11px] md:text-xs font-bold shadow-md shadow-rose-950/40 transform active:scale-95" title="Выйти из Панели Управления">
+                    <i class="fa-solid fa-right-from-bracket text-xs text-rose-400"></i>
+                    <span>Выйти</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- NAVIGATION TABS (SMOOTH HORIZONTAL TOUCH SCROLL ON MOBILE) -->
+        <nav class="flex items-center gap-1 bg-slate-900/80 p-1 md:p-1.5 rounded-2xl border border-slate-800 shadow-inner overflow-x-auto no-scrollbar flex-nowrap w-full md:w-auto -mx-1 px-1 md:mx-0">
+            
+            <!-- DIRECT AI CHAT TAB -->
+            <button onclick="switchTab('aichat')" id="tab-btn-aichat" class="px-3 md:px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 md:gap-2 text-slate-400 hover:text-white hover:bg-slate-800 whitespace-nowrap flex-shrink-0">
+                <i class="fa-solid fa-brain text-cyan-400"></i>
+                <span>💬 Чат с ИИ</span>
+            </button>
+            <button onclick="switchTab('chats')" id="tab-btn-chats" class="px-3 md:px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 md:gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-500/20 whitespace-nowrap flex-shrink-0">
+                <i class="fa-solid fa-comments text-cyan-200"></i>
+                <span>Диалоги</span>
+                <span id="badge-chats-count" class="bg-white/20 text-white text-[10px] px-1.5 py-0.2 rounded-full font-mono">0</span>
+            </button>
+            <button onclick="switchTab('users')" id="tab-btn-users" class="px-3 md:px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 md:gap-2 text-slate-400 hover:text-white hover:bg-slate-800 whitespace-nowrap flex-shrink-0">
+                <i class="fa-solid fa-users text-indigo-400"></i>
+                <span>Пользователи</span>
+                <span id="badge-users-count" class="bg-slate-800 text-slate-300 text-[10px] px-1.5 py-0.2 rounded-full font-mono">0</span>
+            </button>
+            <button onclick="switchTab('scripts')" id="tab-btn-scripts" class="px-3 md:px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 md:gap-2 text-slate-400 hover:text-white hover:bg-slate-800 whitespace-nowrap flex-shrink-0">
+                <i class="fa-solid fa-code text-cyan-400"></i>
+                <span>Скрипты & Git</span>
+                <span id="badge-scripts-count" class="bg-cyan-500/20 text-cyan-300 text-[10px] px-1.5 py-0.2 rounded-full font-mono">0</span>
+            </button>
+            <button onclick="switchTab('studio')" id="tab-btn-studio" class="px-3 md:px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 md:gap-2 text-slate-400 hover:text-white hover:bg-slate-800 whitespace-nowrap flex-shrink-0">
+                <i class="fa-solid fa-wand-magic-sparkles text-purple-400"></i>
+                <span>UI Studio</span>
+            </button>
+            <button onclick="switchTab('premium')" id="tab-btn-premium" class="px-3 md:px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 md:gap-2 text-slate-400 hover:text-white hover:bg-slate-800 whitespace-nowrap flex-shrink-0">
+                <i class="fa-solid fa-crown text-amber-400"></i>
+                <span>VIP & Премиум</span>
+            </button>
+            <button onclick="switchTab('broadcast')" id="tab-btn-broadcast" class="px-3 md:px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 md:gap-2 text-slate-400 hover:text-white hover:bg-slate-800 whitespace-nowrap flex-shrink-0">
+                <i class="fa-solid fa-bullhorn text-rose-400"></i>
+                <span>Рассылка</span>
+            </button>
+            <button onclick="switchTab('analytics')" id="tab-btn-analytics" class="px-3 md:px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 md:gap-2 text-slate-400 hover:text-white hover:bg-slate-800 whitespace-nowrap flex-shrink-0">
+                <i class="fa-solid fa-chart-line text-emerald-400"></i>
+                <span>Диагностика</span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT PANE -->
+    <main class="flex-1 flex overflow-hidden relative">
+        <!-- TAB: DEDICATED DIRECT AI CHAT (MINI APP HERO STYLE) -->
+        <div id="tab-aichat" class="flex-1 flex flex-col h-full bg-[#0b0f17] overflow-hidden hidden relative">
+            <!-- AI CHAT HEADER -->
+            <div class="px-4 py-3 bg-[#0e131d]/90 backdrop-blur-md border-b border-slate-800 flex items-center justify-between z-10 flex-shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="relative flex items-center justify-center">
+                        <div class="nullsec-star !w-7 !h-7"></div>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold font-display text-white flex items-center gap-2">
+                            <span>NullSecAI Core // Direct Link</span>
+                            <span class="text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-500/40 px-2 py-0.5 rounded-full font-mono font-semibold">AI v4.5</span>
+                            <span class="text-[10px] bg-emerald-950/80 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full font-mono">ONLINE</span>
+                        </div>
+                        <div class="text-[11px] text-slate-400 font-sans">Прямой диалог оператора с нейросетевым ядром бота</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="clearAIChatHistory()" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-rose-400 hover:border-rose-500/30 text-xs font-medium transition active:scale-95" title="Очистить историю диалога">
+                        <i class="fa-solid fa-trash-can mr-1.5 text-xs"></i> Очистить диалог
+                    </button>
+                </div>
+            </div>
+
+            <!-- AI CHAT MESSAGES STREAM & HERO SCREEN -->
+            <div id="ai-chat-messages" class="flex-1 overflow-y-auto px-4 py-6 space-y-4 font-sans text-sm no-scrollbar">
+                <!-- HERO WELCOME SCREEN (Как в Telegram Mini App) -->
+                <div id="ai-hero-welcome" class="max-w-2xl mx-auto flex flex-col items-center justify-center text-center py-8 space-y-4">
+                    <div class="relative group flex items-center justify-center">
+                        <div class="absolute w-24 h-24 bg-gradient-to-tr from-cyan-500/20 via-indigo-500/25 to-purple-500/20 rounded-full blur-2xl pointer-events-none"></div>
+                        <div class="nullsec-star !w-16 !h-16"></div>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold font-display text-white tracking-tight">Привет, Оператор! Что вас интересует?</h2>
+                        <p class="text-xs text-slate-400 mt-1.5 max-w-md leading-relaxed">
+                            Прямая консоль <strong>NullSecAI Core</strong>. Вы можете задавать сложные вопросы по архитектуре, просить сгенерировать скрипты (Lua, Python, JS, C++), диагностировать базу данных или составить ответ пользователю.
+                        </p>
+                    </div>
+
+                    <!-- Mode Pills (Как в Mini App) -->
+                    <div class="flex items-center gap-2 pt-1">
+                        <button type="button" onclick="selectHeroModeWeb('chat')" id="web-pill-chat" class="px-4 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md shadow-cyan-500/25 active:scale-95 transition cursor-pointer">⚡ Чат</button>
+                        <button type="button" onclick="selectHeroModeWeb('code')" id="web-pill-code" class="px-4 py-1.5 rounded-full text-xs font-semibold bg-slate-800/90 text-slate-300 hover:bg-slate-700/80 active:scale-95 transition cursor-pointer">💻 Архитектура &amp; Код</button>
+                        <button type="button" onclick="selectHeroModeWeb('task')" id="web-pill-task" class="px-4 py-1.5 rounded-full text-xs font-semibold bg-slate-800/90 text-slate-300 hover:bg-slate-700/80 active:scale-95 transition cursor-pointer">🧪 Стресс-тест &amp; Диагностика</button>
+                    </div>
+
+                    <!-- Quick Prompt Cards (Dynamic) -->
+                    <div id="web-hero-cards" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full pt-3 text-left"></div>
+                </div>
+            </div>
+
+            <!-- AI CHAT FLOATING CAPSULE INPUT (Mini App Style) -->
+            <div class="p-3 md:p-4 bg-[#0e131d]/90 backdrop-blur-md border-t border-slate-800/80 z-20 flex-shrink-0">
+                <div class="max-w-3xl mx-auto flex flex-col gap-2">
+                    <form onsubmit="event.preventDefault(); sendDirectAIMessage();" class="flex items-center gap-2 bg-[#161f30] border border-slate-700/60 rounded-full px-3 py-1.5 shadow-xl transition focus-within:border-cyan-500/70">
+                        <div class="w-8 h-8 rounded-full bg-slate-800/90 text-cyan-400 flex items-center justify-center text-xs flex-shrink-0">
+                            <i class="fa-solid fa-sparkles"></i>
+                        </div>
+                        <input type="text" id="ai-chat-input" placeholder="Спросить NullSecAI Core... (или выберите подсказку выше)" autocomplete="off" class="flex-1 bg-transparent border-0 text-xs md:text-sm text-white placeholder-slate-400 focus:outline-none px-2 py-1">
+                        <button type="submit" id="btn-send-ai" class="w-9 h-9 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white flex items-center justify-center text-xs flex-shrink-0 shadow-lg shadow-cyan-500/25 active:scale-95 transition">
+                            <i class="fa-solid fa-arrow-up text-xs"></i>
+                        </button>
+                    </form>
+                    <div class="flex items-center justify-between text-[11px] text-slate-500 px-3">
+                        <span>Нажмите <kbd class="px-1 py-0.5 rounded bg-slate-800 text-slate-300 text-[10px] font-mono">Enter</kbd> для быстрой отправки</span>
+                        <span class="text-cyan-400/80 font-mono">NullSec Model: Gemini 2.5 Flash / Pro Hybrid</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 1: LIVE CHATS & TELEGRAM MESSENGER -->
+        <div id="tab-chats" class="flex-1 flex w-full h-full relative overflow-hidden">
+            <!-- CHATS SIDEBAR -->
+            <div id="chats-sidebar" class="w-full md:w-80 lg:w-96 bg-slate-950 border-r border-slate-800/80 flex flex-col h-full flex-shrink-0 transition-all duration-200">
+                <!-- Search & Filters -->
+                <div class="p-3 md:p-3.5 border-b border-slate-800/80 flex flex-col gap-2 md:gap-2.5">
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+                        <input type="text" id="chats-search-input" oninput="filterChatsList()" placeholder="Поиск по чатам, группам, никам..." class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition">
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 px-1">
+                        <span id="chats-count-label">Загрузка...</span>
+                        <div class="flex items-center gap-1">
+                            <button onclick="setChatFilter('private')" id="filter-chat-private" class="px-2.5 py-0.5 rounded-lg bg-cyan-600 text-white text-[10px] font-semibold">👤 Пользователи бота</button>
+                            <button onclick="setChatFilter('group')" id="filter-chat-group" class="px-2.5 py-0.5 rounded-lg bg-slate-900 text-slate-400 hover:text-white text-[10px] font-semibold">👥 Группы</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chats List Container -->
+                <div id="chats-list-container" class="flex-1 overflow-y-auto divide-y divide-slate-800/40">
+                    <div class="flex flex-col items-center justify-center p-8 text-slate-400 gap-3">
+                        <i class="fa-solid fa-spinner fa-spin text-2xl text-cyan-400"></i>
+                        <span class="text-xs">Синхронизация чатов...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHAT VIEW CONTAINER -->
+            <div id="chat-view-container" class="hidden md:flex flex-1 flex-col h-full bg-darkbg relative w-full">
+                <!-- ACTIVE CHAT HEADER -->
+                <div id="active-chat-header" class="h-16 bg-slate-950/90 backdrop-blur border-b border-slate-800 flex items-center justify-between px-3 md:px-5 z-10 flex-shrink-0 hidden">
+                    <div class="flex items-center gap-2 md:gap-3 min-w-0">
+                        <!-- Mobile Back Button -->
+                        <button onclick="closeMobileChat()" class="md:hidden w-8 h-8 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center flex-shrink-0 transition active:scale-95" title="Назад к списку чатов">
+                            <i class="fa-solid fa-arrow-left text-xs"></i>
+                        </button>
+                        <img id="active-chat-avatar" class="w-9 h-9 md:w-10 md:h-10 rounded-full object-cover ring-2 ring-slate-800 flex-shrink-0" src="" alt="Avatar">
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-1.5 truncate">
+                                <span id="active-chat-title" class="font-bold text-xs md:text-sm text-white truncate">Чат</span>
+                                <span id="active-chat-badge-creator" class="hidden bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[9px] md:text-[10px] px-1.5 md:px-2 py-0.5 rounded-md font-bold flex-shrink-0"><i class="fa-solid fa-crown text-[8px] mr-0.5"></i>Создатель</span>
+                                <span id="active-chat-badge-premium" class="hidden bg-yellow-400/20 text-yellow-300 border border-yellow-400/30 text-[9px] md:text-[10px] px-1.5 md:px-2 py-0.5 rounded-md font-bold flex-shrink-0"><i class="fa-solid fa-star text-[8px] mr-0.5"></i>VIP</span>
+                            </div>
+                            <div class="text-[10px] md:text-[11px] text-slate-400 flex items-center gap-1.5 truncate">
+                                <span id="active-chat-subinfo" class="truncate font-mono">ID: ...</span>
+                                <span class="hidden sm:inline">•</span>
+                                <span class="hidden sm:flex text-emerald-400 items-center gap-1"><i class="fa-solid fa-bolt text-[7px]"></i> Live</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-1 md:gap-2 flex-shrink-0">
+                        <button onclick="requestAiReplyForActiveChat()" id="btn-ai-auto-reply" class="bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 px-2 md:px-3 py-1.5 rounded-xl text-[11px] md:text-xs font-semibold flex items-center gap-1 transition" title="Сгенерировать и отправить ответ ИИ">
+                            <i class="fa-solid fa-wand-magic-sparkles text-[10px] md:text-xs"></i>
+                            <span class="hidden sm:inline">ИИ Ответ</span>
+                        </button>
+                        <button onclick="openPremiumForActiveChat()" id="btn-active-chat-prem" class="bg-amber-500/15 border border-amber-500/40 text-amber-300 hover:bg-amber-500/25 px-2 md:px-3 py-1.5 rounded-xl text-[11px] md:text-xs font-semibold flex items-center gap-1 transition">
+                            <i class="fa-solid fa-crown text-[10px]"></i>
+                            <span class="hidden sm:inline">VIP</span>
+                        </button>
+                        <a id="btn-export-chat" href="#" target="_blank" class="w-7 h-7 md:w-8 md:h-8 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition" title="Экспорт диалога в TXT">
+                            <i class="fa-solid fa-download text-[10px] md:text-xs"></i>
+                        </a>
+                        <button onclick="clearActiveChatMessages()" class="w-7 h-7 md:w-8 md:h-8 rounded-xl bg-slate-900 border border-slate-800 text-rose-400 hover:bg-rose-500/20 flex items-center justify-center transition" title="Очистить историю сообщений">
+                            <i class="fa-solid fa-trash-can text-[10px] md:text-xs"></i>
+                        </button>
+                        <button id="btn-leave-group-chat" onclick="leaveActiveGroupChat()" class="hidden bg-rose-500/15 border border-rose-500/40 text-rose-300 hover:bg-rose-500/30 px-2 md:px-3 py-1.5 rounded-xl text-[11px] md:text-xs font-semibold flex items-center gap-1 transition" title="Выйти из группы (бот покинет чат)">
+                            <i class="fa-solid fa-right-from-bracket text-[10px]"></i>
+                            <span class="hidden sm:inline">Выйти из группы</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- MESSAGES FEED -->
+                <div id="messages-feed-container" class="flex-1 chat-pattern-bg overflow-y-auto p-3 md:p-5 flex flex-col gap-3">
+                    <div id="empty-chat-placeholder" class="flex-1 flex flex-col items-center justify-center text-slate-400 gap-3 p-4">
+                        <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-2xl md:text-3xl text-cyan-400/60 shadow-lg">
+                            <i class="fa-regular fa-comment-dots"></i>
+                        </div>
+                        <span class="text-sm font-semibold text-slate-300 text-center">Выберите диалог из списка слева</span>
+                        <p class="text-xs text-slate-500 max-w-sm text-center">Вы можете читать диалоги пользователей и мгновенно отправлять им текстовые или голосовые ответы прямо в Telegram.</p>
+                    </div>
+                </div>
+
+                <!-- QUICK REPLIES CHIPS BAR -->
+                <div id="quick-replies-bar" class="px-3 md:px-4 py-2 bg-slate-950/90 border-t border-slate-800/80 flex items-center gap-2 overflow-x-auto no-scrollbar hidden flex-shrink-0">
+                    <span class="text-[10px] text-slate-500 uppercase tracking-wider font-bold mr-1 flex-shrink-0">Быстрый:</span>
+                    <button onclick="insertQuickReply('Привет! Чем могу помочь?')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 text-[11px] border border-slate-800 whitespace-nowrap flex-shrink-0 transition">Привет! Чем помочь?</button>
+                    <button onclick="insertQuickReply('Скрипт успешно сгенерирован и опубликован в Git!')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 text-[11px] border border-slate-800 whitespace-nowrap flex-shrink-0 transition">Скрипт в Git готов 🚀</button>
+                    <button onclick="insertQuickReply('Администратор активировал вам подписку NullSecAI Premium! ⭐️')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-amber-300 text-[11px] border border-amber-500/20 whitespace-nowrap flex-shrink-0 transition">Выдал VIP ⭐️</button>
+                    <button onclick="insertQuickReply('Уточни, пожалуйста, подробнее свой запрос.')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 text-[11px] border border-slate-800 whitespace-nowrap flex-shrink-0 transition">Уточни запрос</button>
+                </div>
+
+                <!-- CHAT REPLY INPUT BAR (MINI APP PILL CAPSULE) -->
+                <div id="chat-reply-bar" class="p-2.5 md:p-3.5 bg-[#0e131d]/95 backdrop-blur-md border-t border-slate-800/80 flex items-center gap-2 hidden flex-shrink-0">
+                    <button id="voice-toggle-btn" onclick="toggleVoiceReplyMode()" class="px-3 py-2 rounded-full bg-slate-900 border border-slate-700/60 text-slate-300 hover:text-cyan-400 hover:border-cyan-500/40 text-xs font-semibold flex items-center gap-1.5 flex-shrink-0 transition active:scale-95" title="Отправить сообщение как живое голосовое (TTS)">
+                        <i class="fa-solid fa-microphone text-xs"></i>
+                        <span id="voice-toggle-label" class="hidden sm:inline">Текст</span>
+                    </button>
+                    <div class="flex-1 flex items-center gap-2 bg-[#161f30] border border-slate-700/60 rounded-full px-3.5 py-1 shadow-inner focus-within:border-cyan-500/60 transition">
+                        <input type="text" id="admin-reply-input" onkeydown="if(event.key==='Enter') sendAdminReply()" placeholder="Написать сообщение пользователю в Telegram..." class="flex-1 min-w-0 bg-transparent border-0 text-xs md:text-sm text-white placeholder-slate-400 focus:outline-none px-1 py-1">
+                        <button onclick="sendAdminReply()" id="btn-admin-send" class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white flex items-center justify-center text-xs flex-shrink-0 shadow-md shadow-cyan-500/25 active:scale-95 transition">
+                            <i class="fa-solid fa-arrow-up text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: USERS DIRECTORY -->
+        <div id="tab-users" class="flex-1 flex flex-col h-full bg-darkbg p-6 overflow-y-auto hidden">
+            <div class="max-w-7xl w-full mx-auto flex flex-col gap-6">
+                <!-- Directory Header Card -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 glass-panel p-6 rounded-3xl">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-white tracking-wide flex items-center gap-2.5">
+                            <i class="fa-solid fa-users-gear text-cyan-400"></i>
+                            <span>Управление пользователями и экономикой</span>
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1">Просмотр профилей, выдача Premium статусов, модификация баланса монет и лимитов.</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <div class="relative">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                            <input type="text" id="users-search-input" oninput="filterUsersDirectory()" placeholder="Поиск по нику, ID или имени..." class="bg-slate-900/90 border border-slate-800 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition w-64">
+                        </div>
+                        <div class="flex items-center gap-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800">
+                            <button onclick="setUserFilter('all')" id="ufilter-all" class="px-3 py-1 rounded-lg bg-cyan-600 text-white text-xs font-bold shadow-sm">Все (<span id="count-ufilter-all">0</span>)</button>
+                            <button onclick="setUserFilter('creator')" id="ufilter-creator" class="px-3 py-1 rounded-lg text-slate-400 hover:text-white text-xs font-medium">Создатель (<span id="count-ufilter-creator">0</span>)</button>
+                            <button onclick="setUserFilter('admin')" id="ufilter-admin" class="px-3 py-1 rounded-lg text-slate-400 hover:text-white text-xs font-medium">Админы (<span id="count-ufilter-admin">0</span>)</button>
+                            <button onclick="setUserFilter('premium')" id="ufilter-premium" class="px-3 py-1 rounded-lg text-slate-400 hover:text-white text-xs font-medium">VIP (<span id="count-ufilter-premium">0</span>)</button>
+                            <button onclick="setUserFilter('blocked')" id="ufilter-blocked" class="px-3 py-1 rounded-lg text-slate-400 hover:text-white text-xs font-medium">Бан (<span id="count-ufilter-blocked">0</span>)</button>
+                            <button onclick="setUserFilter('free')" id="ufilter-free" class="px-3 py-1 rounded-lg text-slate-400 hover:text-white text-xs font-medium">Free (<span id="count-ufilter-free">0</span>)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Table -->
+                <div class="glass-panel rounded-3xl overflow-hidden shadow-xl">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-800 bg-slate-950/60 text-slate-400 text-[11px] uppercase tracking-wider font-semibold">
+                                    <th class="px-4 py-3.5">Пользователь</th>
+                                    <th class="px-4 py-3.5">Telegram ID / Ник</th>
+                                    <th class="px-4 py-3.5">Статус / Роль</th>
+                                    <th class="px-4 py-3.5">Режим ИИ</th>
+                                    <th class="px-4 py-3.5">Баланс & Репутация</th>
+                                    <th class="px-4 py-3.5">Лимиты сегодня</th>
+                                    <th class="px-4 py-3.5">Сообщений</th>
+                                    <th class="px-4 py-3.5">Последний вход</th>
+                                    <th class="px-4 py-3.5 text-right">Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body" class="divide-y divide-slate-800/50">
+                                <tr>
+                                    <td colspan="9" class="text-center py-8 text-slate-400">
+                                        <i class="fa-solid fa-spinner fa-spin text-lg text-cyan-400 mr-2"></i> Загрузка пользователей...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: SCRIPTS & GITHUB HUB -->
+        <div id="tab-scripts" class="flex-1 flex flex-col h-full bg-darkbg p-6 overflow-y-auto hidden">
+            <div class="max-w-7xl w-full mx-auto flex flex-col gap-6">
+                <!-- GitHub Hub Header -->
+                <div class="glass-panel p-6 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-3">
+                            <span class="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center text-xl">
+                                <i class="fa-brands fa-github"></i>
+                            </span>
+                            <div>
+                                <h2 class="text-xl font-extrabold text-white tracking-wide">Git Hub & Репозиторий скриптов</h2>
+                                <p class="text-xs text-slate-400">Автоматическая генерация, хостинг сырого кода и готовые Roblox Loadstrings.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2.5">
+                        <button onclick="togglePublishForm()" class="bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-cyan-500/20 transition">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span>Опубликовать скрипт</span>
+                        </button>
+                        <a href="https://github.com/AUser7742/pomoshotru_bot" target="_blank" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                            <span>GitHub Репо</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PUBLISH SCRIPT FORM (COLLAPSIBLE) -->
+                <div id="publish-form-card" class="glass-panel p-6 rounded-3xl border-2 border-cyan-500/30 hidden flex flex-col gap-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-code text-cyan-400"></i>
+                            <span>Публикация нового скрипта / веб-сайта в Git Raw</span>
+                        </h3>
+                        <button onclick="togglePublishForm()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Название скрипта</label>
+                            <input type="text" id="script-pub-title" placeholder="Например: Roblox Bedwars Aimbot GUI" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Язык программирования</label>
+                            <select id="script-pub-lang" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                                <option value="lua">Roblox Lua / Luau (.lua)</option>
+                                <option value="html">HTML5 Web Page (.html)</option>
+                                <option value="cpp">C++ 20/23 (.cpp)</option>
+                                <option value="python">Python 3 (.py)</option>
+                                <option value="javascript">JavaScript / TypeScript (.js)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-300 mb-1">Исходный код</label>
+                        <textarea id="script-pub-code" rows="6" placeholder="Вставьте полный рабочий код..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3.5 text-xs text-cyan-300 font-mono focus:outline-none focus:border-cyan-500 leading-relaxed"></textarea>
+                    </div>
+
+                    <div class="flex justify-end gap-2">
+                        <button onclick="togglePublishForm()" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 text-xs font-semibold">Отмена</button>
+                        <button onclick="submitPublishScript()" id="btn-publish-submit" class="px-5 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-indigo-600 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-cyan-500/20">
+                            <i class="fa-solid fa-upload"></i>
+                            <span>Опубликовать в Git Raw</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- FILTER AND SEARCH -->
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
+                        <button onclick="setScriptFilter('all')" id="sfilter-all" class="px-3.5 py-1.5 rounded-xl bg-cyan-600 text-slate-950 font-bold text-xs shadow-sm">Все (<span id="count-sfilter-all">0</span>)</button>
+                        <button onclick="setScriptFilter('lua')" id="sfilter-lua" class="px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white text-xs font-semibold">Roblox Lua (<span id="count-sfilter-lua">0</span>)</button>
+                        <button onclick="setScriptFilter('html')" id="sfilter-html" class="px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white text-xs font-semibold">HTML Сайты (<span id="count-sfilter-html">0</span>)</button>
+                        <button onclick="setScriptFilter('cpp')" id="sfilter-cpp" class="px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white text-xs font-semibold">C++ (<span id="count-sfilter-cpp">0</span>)</button>
+                        <button onclick="setScriptFilter('python')" id="sfilter-python" class="px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white text-xs font-semibold">Python (<span id="count-sfilter-python">0</span>)</button>
+                        <button onclick="setScriptFilter('javascript')" id="sfilter-javascript" class="px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white text-xs font-semibold">JS (<span id="count-sfilter-javascript">0</span>)</button>
+                    </div>
+
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-slate-400 text-xs"></i>
+                        <input type="text" id="scripts-search-input" oninput="filterScriptsList()" placeholder="Поиск по скриптам и сайтам..." class="bg-slate-900 border border-slate-800 rounded-xl pl-9 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 w-64">
+                    </div>
+                </div>
+
+                <!-- SCRIPTS CARDS GRID -->
+                <div id="scripts-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Dynamic cards -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: FRONTEND STUDIO & INTERACTIVE UI KIT (NEW DESIGN AS REQUESTED) -->
+        <div id="tab-studio" class="flex-1 flex flex-col h-full bg-darkbg p-6 overflow-y-auto hidden">
+            <div class="max-w-7xl w-full mx-auto flex flex-col gap-6">
+                <!-- Studio Header -->
+                <div class="glass-panel p-6 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-white tracking-wide flex items-center gap-2.5">
+                            <i class="fa-solid fa-wand-magic-sparkles text-purple-400"></i>
+                            <span>Frontend Studio & Live AI Code Sandbox</span>
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-1">Интерактивная песочница, библиотека UI-компонентов и генерация кода в реальном времени.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="runSandboxCode()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Запустить просмотр</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- AI GENERATOR PROMPT BAR -->
+                <div class="glass-panel p-5 rounded-3xl flex flex-col md:flex-row items-center gap-3">
+                    <div class="flex-1 w-full relative">
+                        <i class="fa-solid fa-robot absolute left-3.5 top-3 text-purple-400 text-xs"></i>
+                        <input type="text" id="ai-generator-prompt" placeholder="Опишите желаемый UI-компонент, сайт или скрипт (например: Неоновый киберпанк профиль с анимациями)..." class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-9 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500 transition">
+                    </div>
+                    <select id="ai-generator-lang" class="bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                        <option value="html">HTML5 + Tailwind CSS</option>
+                        <option value="lua">Roblox Luau Script</option>
+                    </select>
+                    <button onclick="generateAiStudioCode()" id="btn-generate-ai-studio" class="w-full md:w-auto bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-purple-500/25 transition">
+                        <i class="fa-solid fa-sparkles"></i>
+                        <span>Сгенерировать ИИ</span>
+                    </button>
+                </div>
+
+                <!-- SPLIT PANE: CODE EDITOR & LIVE PREVIEW -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 min-h-[480px]">
+                    <!-- Code Editor Pane -->
+                    <div class="glass-panel p-4 rounded-3xl flex flex-col gap-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                                <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                                <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                                <span class="text-xs font-mono font-bold text-slate-300 ml-2">code_sandbox.html</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="copySandboxCode()" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 text-[11px] font-semibold border border-slate-800 transition">
+                                    <i class="fa-solid fa-copy mr-1"></i> Копировать
+                                </button>
+                            </div>
+                        </div>
+                        <textarea id="sandbox-code-editor" class="flex-1 w-full bg-slate-950 border border-slate-800 rounded-2xl p-4 text-xs font-mono text-cyan-300 focus:outline-none focus:border-cyan-500 resize-none leading-relaxed" spellcheck="false">&lt;!DOCTYPE html&gt;
+&lt;html lang="ru" class="dark"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;NullSecAI UI Showcase&lt;/title&gt;
+  &lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;
+  &lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"&gt;
+  &lt;style&gt;
+    body { background: #080d16; color: #fff; font-family: system-ui, sans-serif; }
+    .glow { box-shadow: 0 0 25px rgba(6, 182, 212, 0.3); }
+    .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.1); }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body class="p-8 flex items-center justify-center min-h-screen"&gt;
+  &lt;div class="glass max-w-md w-full p-6 rounded-3xl text-center space-y-4 glow"&gt;
+    &lt;div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-3xl shadow-lg shadow-cyan-500/30"&gt;
+      &lt;i class="fa-solid fa-microchip"&gt;&lt;/i&gt;
+    &lt;/div&gt;
+    &lt;h2 class="text-2xl font-black bg-gradient-to-r from-cyan-400 to-indigo-400 bg-clip-text text-transparent"&gt;NullSecAI Core&lt;/h2&gt;
+    &lt;p class="text-xs text-slate-400"&gt;Ультрасовременный интерактивный интерфейс с поддержкой Glassmorphism и темной эстетики.&lt;/p&gt;
+    &lt;div class="pt-2 flex justify-center gap-2"&gt;
+      &lt;button class="px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition"&gt;Подробнее&lt;/button&gt;
+      &lt;button class="px-5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs transition"&gt;Демо&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+                    </div>
+
+                    <!-- Live Interactive Preview Pane -->
+                    <div class="glass-panel p-4 rounded-3xl flex flex-col gap-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-300 flex items-center gap-2">
+                                <i class="fa-solid fa-display text-emerald-400"></i>
+                                <span>Интерактивный Live Preview</span>
+                            </span>
+                            <span class="text-[10px] text-slate-500 font-mono">100% Sandbox Iframe</span>
+                        </div>
+                        <iframe id="sandbox-preview-frame" class="flex-1 w-full bg-slate-950 rounded-2xl border border-slate-800 min-h-[400px]"></iframe>
+                    </div>
+                </div>
+
+                <!-- UI KIT REFERENCE GALLERY (Images 1-13 patterns) -->
+                <div class="glass-panel p-6 rounded-3xl flex flex-col gap-5">
+                    <div>
+                        <h3 class="text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-palette text-cyan-400"></i>
+                            <span>Галерея UI-компонентов (Design System Reference)</span>
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Элементы дизайна, стилизованные кнопки, инпуты, карточки и бейджи.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Variant 1: Buttons -->
+                        <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800 flex flex-col gap-3">
+                            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Button Variants</span>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold text-xs shadow-md shadow-cyan-500/20 hover:opacity-90">Primary Glow</button>
+                                <button class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700">Glass Neutral</button>
+                                <button class="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-bold text-xs shadow-md shadow-amber-500/20">Gold VIP</button>
+                                <button class="px-4 py-2 rounded-xl bg-rose-600/20 text-rose-300 border border-rose-500/30 text-xs font-semibold">Destructive</button>
+                            </div>
+                        </div>
+
+                        <!-- Variant 2: Badges & Tags -->
+                        <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800 flex flex-col gap-3">
+                            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Status Badges</span>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs px-2.5 py-1 rounded-lg font-bold"><i class="fa-solid fa-check mr-1"></i> Active</span>
+                                <span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs px-2.5 py-1 rounded-lg font-bold"><i class="fa-solid fa-crown mr-1"></i> Creator</span>
+                                <span class="bg-purple-500/20 text-purple-300 border border-purple-500/30 text-xs px-2.5 py-1 rounded-lg font-bold"><i class="fa-solid fa-bolt mr-1"></i> Luau 5.1</span>
+                                <span class="bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs px-2.5 py-1 rounded-lg font-bold"><i class="fa-solid fa-skull mr-1"></i> Evil Mode</span>
+                            </div>
+                        </div>
+
+                        <!-- Variant 3: Interactive Inputs -->
+                        <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800 flex flex-col gap-3">
+                            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Interactive Inputs</span>
+                            <div class="relative">
+                                <i class="fa-solid fa-sliders absolute left-3 top-2.5 text-cyan-400 text-xs"></i>
+                                <input type="text" placeholder="Custom styled input..." class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-9 pr-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: PREMIUM & SUBSCRIPTIONS -->
+        <div id="tab-premium" class="flex-1 flex flex-col h-full bg-darkbg p-6 overflow-y-auto hidden">
+            <div class="max-w-7xl w-full mx-auto flex flex-col gap-6">
+                <!-- Premium Header -->
+                <div class="glass-panel p-6 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="flex items-center gap-3.5">
+                        <span class="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-400 flex items-center justify-center text-2xl shadow-lg shadow-amber-500/20">
+                            <i class="fa-solid fa-crown"></i>
+                        </span>
+                        <div>
+                            <h2 class="text-xl font-extrabold text-white tracking-wide">Управление Premium подписками (VIP)</h2>
+                            <p class="text-xs text-slate-400">Продление доступа, выдача бессрочных привилегий и отзыв прав.</p>
+                        </div>
+                    </div>
+
+                    <button onclick="openPremiumModal(null, 'Новый подписчик')" class="bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-950 font-bold px-4 py-2.5 rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 transition">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Выдать Premium</span>
+                    </button>
+                </div>
+
+                <!-- Subscribers Table -->
+                <div class="glass-panel rounded-3xl overflow-hidden shadow-xl">
+                    <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+                        <span class="font-bold text-xs text-white">Список активных VIP-пользователей</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-800 bg-slate-950/60 text-slate-400 text-[11px] uppercase tracking-wider font-semibold">
+                                    <th class="px-5 py-3.5">Пользователь / Группа</th>
+                                    <th class="px-5 py-3.5">Telegram ID</th>
+                                    <th class="px-5 py-3.5">Дата окончания</th>
+                                    <th class="px-5 py-3.5">Осталось дней</th>
+                                    <th class="px-5 py-3.5 text-right">Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subscribers-table-body" class="divide-y divide-slate-800/50">
+                                <tr>
+                                    <td colspan="5" class="text-center py-8 text-slate-400">Загрузка подписчиков...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 6: BROADCAST SYSTEM -->
+        <div id="tab-broadcast" class="flex-1 flex flex-col h-full bg-darkbg p-6 overflow-y-auto hidden">
+            <div class="max-w-4xl w-full mx-auto flex flex-col gap-6">
+                <!-- Header -->
+                <div class="glass-panel p-6 rounded-3xl flex items-center gap-3.5">
+                    <span class="w-12 h-12 rounded-2xl bg-rose-500/15 border border-rose-500/30 text-rose-400 flex items-center justify-center text-2xl shadow-lg shadow-rose-500/20">
+                        <i class="fa-solid fa-bullhorn"></i>
+                    </span>
+                    <div>
+                        <h2 class="text-xl font-extrabold text-white tracking-wide">Массовая рассылка в Telegram</h2>
+                        <p class="text-xs text-slate-400">Мгновенное оповещение всех зарегистрированных пользователей и групп с поддержкой HTML и голосового синтеза.</p>
+                    </div>
+                </div>
+
+                <!-- Form Card -->
+                <div class="glass-panel p-6 rounded-3xl flex flex-col gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Целевая аудитория</label>
+                            <select id="broadcast-target" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-rose-500">
+                                <option value="all">Всем пользователям и группам (100% охват)</option>
+                                <option value="users">Только в личные сообщения (ЛС)</option>
+                                <option value="groups">Только в Telegram группы и беседы</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Формат сообщения</label>
+                            <select id="broadcast-voice-mode" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-rose-500">
+                                <option value="false">Текстовое HTML сообщение</option>
+                                <option value="true">🎙 Голосовое аудио-сообщение (Edge-TTS)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Текст объявления</label>
+                        <textarea id="broadcast-text" rows="8" placeholder="Введите текст рассылки (поддерживаются HTML теги: <b>жирный</b>, <code>код</code>, <i>курсив</i>)..." class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-4 text-xs text-white font-mono focus:outline-none focus:border-rose-500 leading-relaxed"></textarea>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-2">
+                        <span class="text-[11px] text-slate-500">⚠️ Рассылка отправляется с интервалами для защиты от лимитов Telegram.</span>
+                        <button onclick="sendBroadcast()" id="btn-send-broadcast" class="bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-bold px-6 py-2.5 rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-rose-500/25 transition transform active:scale-95">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span>Запустить рассылку</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 7: METRICS & DIAGNOSTICS -->
+        <div id="tab-analytics" class="flex-1 flex flex-col h-full bg-darkbg p-6 overflow-y-auto hidden">
+            <div class="max-w-7xl w-full mx-auto flex flex-col gap-6">
+                <!-- Header -->
+                <div class="glass-panel p-6 rounded-3xl flex items-center justify-between">
+                    <div class="flex items-center gap-3.5">
+                        <span class="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-2xl">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </span>
+                        <div>
+                            <h2 class="text-xl font-extrabold text-white tracking-wide">Метрики и диагностика сервера</h2>
+                            <p class="text-xs text-slate-400">Мониторинг базы данных SQLite, аптайма и производительности бота в реальном времени.</p>
+                        </div>
+                    </div>
+                    <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs px-3 py-1.5 rounded-xl font-bold font-mono">
+                        <i class="fa-solid fa-circle text-[8px] mr-1.5 animate-pulse"></i> 100% HEALTHY
+                    </span>
+                </div>
+
+                <!-- METRICS CARDS -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="glass-card p-5 rounded-2xl">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Всего сообщений</span>
+                        <div id="stat-total-messages" class="text-2xl font-black text-white mt-1 font-mono">0</div>
+                        <span class="text-[10px] text-cyan-400 mt-1 block"><i class="fa-solid fa-database mr-1"></i> Сохранено в БД</span>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-2xl">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Пользователей в базе</span>
+                        <div id="stat-total-users" class="text-2xl font-black text-white mt-1 font-mono">0</div>
+                        <span class="text-[10px] text-indigo-400 mt-1 block"><i class="fa-solid fa-users mr-1"></i> Регистраций</span>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-2xl">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Опубликовано скриптов</span>
+                        <div id="stat-total-scripts" class="text-2xl font-black text-white mt-1 font-mono">0</div>
+                        <span class="text-[10px] text-purple-400 mt-1 block"><i class="fa-solid fa-code mr-1"></i> В Git & Hub</span>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-2xl">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Аптайм сервера</span>
+                        <div id="stat-server-uptime" class="text-2xl font-black text-white mt-1 font-mono">0ч 0м</div>
+                        <span class="text-[10px] text-emerald-400 mt-1 block"><i class="fa-solid fa-bolt mr-1"></i> Render Cloud</span>
+                    </div>
+                </div>
+
+                <!-- DIAGNOSTICS SPECS TABLE -->
+                <div class="glass-panel p-6 rounded-3xl flex flex-col gap-4">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-server text-cyan-400"></i>
+                        <span>Системные параметры хостинга</span>
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+                        <div class="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800 flex justify-between">
+                            <span class="text-slate-400">Архитектура ИИ:</span>
+                            <span class="text-cyan-300 font-bold">NullSecAI v5.0 (by k3rnel)</span>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800 flex justify-between">
+                            <span class="text-slate-400">Git Commit:</span>
+                            <span id="diag-git-commit" class="text-emerald-300 font-bold">Загрузка...</span>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800 flex justify-between">
+                            <span class="text-slate-400">Python среда:</span>
+                            <span id="diag-python-ver" class="text-indigo-300 font-bold">Python 3.x</span>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800 flex justify-between">
+                            <span class="text-slate-400">GitHub Repo:</span>
+                            <span class="text-amber-300 font-bold">AUser7742/pomoshotru_bot</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL: GRANT / REVOKE PREMIUM -->
+    <div id="modal-premium" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="glass-panel max-w-md w-full p-6 rounded-3xl border border-amber-500/30 shadow-2xl flex flex-col gap-4 animate-in">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm">
+                        <i class="fa-solid fa-crown"></i>
+                    </span>
+                    <h3 class="text-base font-extrabold text-white">Управление VIP статусом</h3>
+                </div>
+                <button onclick="closePremiumModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-sm"></i></button>
+            </div>
+
+            <p id="modal-prem-name-label" class="text-xs text-amber-300 font-semibold"></p>
+
+            <div>
+                <label class="block text-[11px] font-semibold text-slate-300 mb-1">Telegram User ID / Chat ID</label>
+                <input type="text" id="modal-prem-uid" placeholder="Например: 6363403785" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white font-mono focus:outline-none focus:border-amber-500">
+            </div>
+
+            <div>
+                <label class="block text-[11px] font-semibold text-slate-300 mb-1">Срок подписки (в днях)</label>
+                <div class="grid grid-cols-4 gap-1.5 mb-2">
+                    <button type="button" onclick="setModalDaysPreset(7)" class="prem-preset-btn py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-300 hover:text-white">7 дн</button>
+                    <button type="button" onclick="setModalDaysPreset(30)" class="prem-preset-btn py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-300 hover:text-white">30 дн</button>
+                    <button type="button" onclick="setModalDaysPreset(90)" class="prem-preset-btn py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-300 hover:text-white">90 дн</button>
+                    <button type="button" onclick="setModalDaysPreset('infinite')" class="prem-preset-btn py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-300 hover:text-white">Навсегда</button>
+                </div>
+                <input type="text" id="modal-prem-days" value="30" placeholder="Количество дней или Бесконечно" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white font-mono focus:outline-none focus:border-amber-500">
+            </div>
+
+            <div class="flex items-center justify-between pt-2 border-t border-slate-800/80">
+                <button onclick="submitRevokePremium()" class="px-3.5 py-2 rounded-xl bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 text-xs font-semibold transition">
+                    Отозвать VIP
+                </button>
+                <div class="flex items-center gap-2">
+                    <button onclick="closePremiumModal()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 text-xs font-semibold">Отмена</button>
+                    <button onclick="submitGrantPremium()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20 transition">
+                        Выдать VIP
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: MODIFY ECONOMY (COINS & REP) -->
+    <div id="modal-economy" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="glass-panel max-w-sm w-full p-6 rounded-3xl border border-emerald-500/30 shadow-2xl flex flex-col gap-4 animate-in">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm">
+                        <i class="fa-solid fa-coins"></i>
+                    </span>
+                    <h3 class="text-base font-extrabold text-white">Баланс монет и Репутация</h3>
+                </div>
+                <button onclick="closeEconomyModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-sm"></i></button>
+            </div>
+
+            <input type="hidden" id="modal-eco-uid">
+
+            <div>
+                <label class="block text-[11px] font-semibold text-slate-300 mb-1">Баланс монет (🪙)</label>
+                <input type="number" id="modal-eco-coins" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-amber-300 font-mono focus:outline-none focus:border-emerald-500">
+            </div>
+
+            <div>
+                <label class="block text-[11px] font-semibold text-slate-300 mb-1">Репутация (⭐)</label>
+                <input type="number" id="modal-eco-rep" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white font-mono focus:outline-none focus:border-emerald-500">
+                <div class="flex items-center gap-1.5 mt-2">
+                    <button type="button" onclick="adjustEcoRep(10)" class="px-2 py-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 rounded-lg text-[10px] font-bold">+10 ⭐</button>
+                    <button type="button" onclick="adjustEcoRep(50)" class="px-2 py-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 rounded-lg text-[10px] font-bold">+50 ⭐</button>
+                    <button type="button" onclick="adjustEcoRep(100)" class="px-2 py-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 rounded-lg text-[10px] font-bold">+100 ⭐</button>
+                    <button type="button" onclick="adjustEcoRep(-10)" class="px-2 py-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 rounded-lg text-[10px] font-bold">-10 ⭐</button>
+                    <button type="button" onclick="setEcoRep(0)" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-400 rounded-lg text-[10px] font-bold">0</button>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-800/80">
+                <button onclick="closeEconomyModal()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 text-xs font-semibold">Отмена</button>
+                <button onclick="submitEconomyEdit()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold text-xs shadow-lg shadow-emerald-500/20 transition">
+                    Сохранить
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATIONS CONTAINER -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- JAVASCRIPT APPLICATION CORE -->
+    <script>
+        // ==========================================
+        // NULLSEC MASTER KEY AUTO-AUTH & FETCH INTERCEPTOR
+        // ==========================================
+        (function() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const k = urlParams.get('key');
+                if (k) localStorage.setItem('nullsec_admin_key', k);
+            } catch(e) {}
+        })();
+
+        function getAdminMasterKey() {
+            try {
+                const fromUrl = (new URLSearchParams(window.location.search)).get('key');
+                return fromUrl || localStorage.getItem('nullsec_admin_key') || 'kerneltop';
+            } catch(e) {
+                return 'kerneltop';
+            }
+        }
+
+        // Intercept all fetch() calls to /api/ to automatically attach authentication credentials
+        const _origFetch = window.fetch;
+        window.fetch = function(resource, init) {
+            let url = typeof resource === 'string' ? resource : (resource && resource.url ? resource.url : '');
+            init = init || {};
+
+            if (typeof url === 'string' && url.startsWith('/api/')) {
+                const masterKey = getAdminMasterKey();
+                // Append key query param if absent
+                if (!url.includes('key=')) {
+                    const sep = url.includes('?') ? '&' : '?';
+                    url = url + sep + 'key=' + encodeURIComponent(masterKey);
+                }
+                init.credentials = 'include';
+                if (!init.headers) {
+                    init.headers = { 'X-Admin-Key': masterKey };
+                } else if (init.headers instanceof Headers) {
+                    init.headers.set('X-Admin-Key', masterKey);
+                } else if (typeof init.headers === 'object') {
+                    init.headers['X-Admin-Key'] = masterKey;
+                }
+            }
+            return _origFetch.call(this, url, init);
+        };
+
+        function promptMasterKey() {
+            const currentKey = getAdminMasterKey();
+            const key = prompt('Введите Master Key для авторизации в Control Center:', currentKey);
+            if (key && key.trim()) {
+                localStorage.setItem('nullsec_admin_key', key.trim());
+                showToast('Ключ сохранен! Обновление данных...', 'info');
+                refreshAllData(true);
+            }
+        }
+
+        const appState = {
+            currentTab: 'chats',
+            chats: [],
+            users: [],
+            scripts: [],
+            stats: {},
+            activeChatId: null,
+            chatFilter: 'private',
+            userFilter: 'all',
+            scriptFilter: 'all',
+            sendAsVoice: false
+        };
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            let bgClass = 'bg-slate-900 border-slate-700 text-slate-200';
+            let icon = '<i class="fa-solid fa-circle-info text-cyan-400"></i>';
+
+            if (type === 'success') {
+                bgClass = 'bg-slate-900 border-emerald-500/50 text-emerald-200';
+                icon = '<i class="fa-solid fa-circle-check text-emerald-400"></i>';
+            } else if (type === 'error') {
+                bgClass = 'bg-slate-900 border-rose-500/50 text-rose-200';
+                icon = '<i class="fa-solid fa-circle-exclamation text-rose-400"></i>';
+            }
+
+            toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-2xl border shadow-2xl text-xs font-medium backdrop-blur-lg ${bgClass} transition-all duration-300 transform translate-y-2 opacity-0`;
+            toast.innerHTML = `${icon} <span>${escapeHtml(message)}</span>`;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        function switchTab(tabId) {
+            appState.currentTab = tabId;
+            const tabs = ['chats', 'aichat', 'users', 'scripts', 'studio', 'premium', 'broadcast', 'analytics'];
+
+            tabs.forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                const btn = document.getElementById(`tab-btn-${t}`);
+                if (el) {
+                    if (t === tabId) {
+                        el.classList.remove('hidden');
+                    } else {
+                        el.classList.add('hidden');
+                    }
+                }
+                if (btn) {
+                    if (t === tabId) {
+                        btn.className = 'px-3 md:px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 md:gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-500/20 whitespace-nowrap flex-shrink-0';
+                    } else {
+                        btn.className = 'px-3 md:px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 md:gap-2 text-slate-400 hover:text-white hover:bg-slate-800 whitespace-nowrap flex-shrink-0';
+                    }
+                }
+            });
+
+            if (tabId === 'chats') {
+                const sidebar = document.getElementById('chats-sidebar');
+                const chatContainer = document.getElementById('chat-view-container');
+                if (sidebar && chatContainer) {
+                    if (window.innerWidth < 768) {
+                        if (appState.activeChatId) {
+                            sidebar.classList.add('hidden');
+                            chatContainer.classList.remove('hidden');
+                            chatContainer.classList.add('flex');
+                        } else {
+                            sidebar.classList.remove('hidden');
+                            chatContainer.classList.add('hidden');
+                            chatContainer.classList.remove('flex');
+                        }
+                    } else {
+                        sidebar.classList.remove('hidden');
+                        chatContainer.classList.remove('hidden');
+                        chatContainer.classList.add('flex');
+                    }
+                }
+            }
+
+            if (tabId === 'studio') {
+                runSandboxCode();
+            }
+        }
+
+        function closeMobileChat() {
+            const sidebar = document.getElementById('chats-sidebar');
+            const chatContainer = document.getElementById('chat-view-container');
+            if (sidebar && chatContainer) {
+                sidebar.classList.remove('hidden');
+                if (window.innerWidth < 768) {
+                    chatContainer.classList.add('hidden');
+                    chatContainer.classList.remove('flex');
+                }
+            }
+            appState.activeChatId = null;
+            renderChatsList();
+        }
+
+        async function fetchStats() {
+            try {
+                const res = await fetch('/api/stats');
+                if (res.ok) {
+                    appState.stats = await res.json();
+                    document.getElementById('stat-total-messages').textContent = (appState.stats.total_messages || 0).toLocaleString();
+                    document.getElementById('stat-total-users').textContent = (appState.stats.total_users || 0).toLocaleString();
+                    document.getElementById('stat-total-scripts').textContent = (appState.stats.total_scripts || 0).toLocaleString();
+                    document.getElementById('header-stats-brief').textContent = `${appState.stats.total_users || 0} юзеров • ${appState.stats.total_messages || 0} сообщений`;
+                }
+
+                // System status
+                const sysRes = await fetch('/api/system/status');
+                if (sysRes.ok) {
+                    const sysData = await sysRes.json();
+                    document.getElementById('stat-server-uptime').textContent = sysData.uptime || '0ч';
+                    document.getElementById('diag-git-commit').textContent = sysData.git_commit || 'main';
+                    document.getElementById('diag-python-ver').textContent = `Python ${sysData.python_version || '3.11'}`;
+                }
+
+                // Always Online status
+                const onlineRes = await fetch('/api/always_online');
+                if (onlineRes.ok) {
+                    const onlineData = await onlineRes.json();
+                    updateAlwaysOnlineUI(onlineData.always_online);
+                }
+            } catch (e) {
+                console.error('Stats fetch error:', e);
+            }
+        }
+
+        function updateAlwaysOnlineUI(isActive) {
+            const btn = document.getElementById('btn-always-online');
+            if (!btn) return;
+            btn.dataset.active = isActive ? "true" : "false";
+            if (isActive) {
+                btn.className = "bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 font-bold px-2.5 md:px-3 py-1.5 md:py-2 rounded-xl text-[11px] md:text-xs flex items-center gap-1.5 transition transform active:scale-95 shadow-sm";
+                btn.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span class="hidden sm:inline">Онлайн</span> 24/7: Вкл`;
+            } else {
+                btn.className = "bg-slate-800 hover:bg-slate-700 text-slate-400 border border-slate-700 font-semibold px-2.5 md:px-3 py-1.5 md:py-2 rounded-xl text-[11px] md:text-xs flex items-center gap-1.5 transition transform active:scale-95 shadow-sm";
+                btn.innerHTML = `<span class="w-2 h-2 rounded-full bg-slate-500"></span><span class="hidden sm:inline">Онлайн</span> 24/7: Выкл`;
+            }
+        }
+
+        async function toggleAlwaysOnline() {
+            const btn = document.getElementById('btn-always-online');
+            const currentlyActive = btn?.dataset.active === "true";
+            const nextState = !currentlyActive;
+            try {
+                const res = await fetch('/api/always_online', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ enabled: nextState })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    updateAlwaysOnlineUI(data.always_online);
+                    showToast(data.message || (nextState ? "Вечный онлайн 24/7 активирован" : "Вечный онлайн выключен"), "success");
+                } else {
+                    showToast(data.error || "Ошибка переключения онлайн-статуса", "error");
+                }
+            } catch (e) {
+                showToast("Ошибка: " + e.message, "error");
+            }
+        }
+
+        async function toggleUserAdmin(userId, action) {
+            const actionLabel = action === 'grant' ? "назначить администратором бота" : "отозвать права администратора";
+            if (!confirm(`Вы действительно хотите ${actionLabel} для пользователя ID ${userId}?`)) return;
+            try {
+                const res = await fetch(`/api/users/${userId}/admin`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: action })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showToast(data.message || "Статус администратора обновлен", "success");
+                    await fetchUsers();
+                } else {
+                    showToast(data.error || "Ошибка изменения статуса админа", "error");
+                }
+            } catch (e) {
+                showToast("Ошибка: " + e.message, "error");
+            }
+        }
+
+        async function toggleUserBlock(userId, block) {
+            const actionLabel = block ? "заблокировать" : "разблокировать";
+            if (!confirm(`Вы действительно хотите ${actionLabel} пользователя ID ${userId}?`)) return;
+            try {
+                const res = await fetch(`/api/users/${userId}/block`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ blocked: block })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showToast(data.message || `Пользователь успешно ${block ? 'заблокирован' : 'разблокирован'}!`, "success");
+                    await fetchUsers();
+                } else {
+                    showToast(data.error || "Ошибка изменения статуса блокировки", "error");
+                }
+            } catch (e) {
+                showToast("Ошибка: " + e.message, "error");
+            }
+        }
+
+        async function leaveGroupById(chatId, chatTitle) {
+            if (!confirm(`Вы действительно хотите, чтобы бот вышел из группы «${chatTitle}»?`)) return;
+            try {
+                const res = await fetch(`/api/chats/${chatId}/leave`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showToast(data.message || 'Бот покинул группу!', 'success');
+                    if (appState.activeChatId === chatId) {
+                        appState.activeChatId = null;
+                        document.getElementById('active-chat-header')?.classList.add('hidden');
+                        document.getElementById('chat-reply-bar')?.classList.add('hidden');
+                        document.getElementById('quick-replies-bar')?.classList.add('hidden');
+                        document.getElementById('empty-chat-placeholder')?.classList.remove('hidden');
+                        const feed = document.getElementById('messages-feed-container');
+                        if (feed) feed.innerHTML = '';
+                    }
+                    await fetchChats();
+                } else {
+                    showToast(data.error || 'Ошибка при выходе из группы', 'error');
+                }
+            } catch (e) {
+                showToast('Ошибка сети при выходе из группы: ' + e.message, 'error');
+            }
+        }
+
+        async function leaveActiveGroupChat() {
+            if (!appState.activeChatId || appState.activeChatId > 0) return;
+            const chat = appState.chats.find(c => c.chat_id === appState.activeChatId);
+            await leaveGroupById(appState.activeChatId, chat ? chat.chat_title : `ID ${appState.activeChatId}`);
+        }
+
+        async function changeUserMode(userId, mode) {
+            try {
+                const res = await fetch(`/api/users/${userId}/mode`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mode: mode })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showToast(`Режим изменен на '${mode}' для пользователя ${userId}!`, "success");
+                    const user = (appState.users || []).find(u => u.user_id === userId);
+                    if (user) user.mode = mode;
+                } else {
+                    showToast(data.error || "Ошибка изменения режима", "error");
+                    await fetchUsers();
+                }
+            } catch (e) {
+                showToast("Ошибка: " + e.message, "error");
+            }
+        }
+
+        async function fetchChats() {
+            const container = document.getElementById('chats-list-container');
+            try {
+                const res = await fetch('/api/chats');
+                if (res.ok) {
+                    appState.chats = await res.json();
+                    renderChatsList();
+                    const badge = document.getElementById('badge-chats-count');
+                    if (badge) badge.textContent = appState.chats.length;
+                } else if (res.status === 401) {
+                    console.error('Chats fetch 401 Unauthorized');
+                    if (container) {
+                        container.innerHTML = `
+                            <div class="p-6 text-center text-xs text-rose-400 flex flex-col items-center gap-2">
+                                <i class="fa-solid fa-lock text-2xl text-rose-500"></i>
+                                <span class="font-bold">Доступ ограничен (401)</span>
+                                <span class="text-slate-400 text-[11px]">Master Key не авторизован в Control Center.</span>
+                                <button onclick="promptMasterKey()" class="mt-2 px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl text-xs font-semibold transition">
+                                    Ввести Master Key
+                                </button>
+                            </div>
+                        `;
+                    }
+                } else {
+                    console.error('Chats fetch error status:', res.status);
+                    if (container && (!appState.chats || appState.chats.length === 0)) {
+                        container.innerHTML = `
+                            <div class="p-6 text-center text-xs text-amber-400 flex flex-col items-center gap-2">
+                                <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+                                <span>Синхронизация недоступна (${res.status})</span>
+                                <button onclick="fetchChats()" class="mt-2 px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-[11px] transition">Повторить</button>
+                            </div>
+                        `;
+                    }
+                }
+            } catch (e) {
+                console.error('Chats fetch error:', e);
+                if (container && (!appState.chats || appState.chats.length === 0)) {
+                    container.innerHTML = `
+                        <div class="p-6 text-center text-xs text-rose-400 flex flex-col items-center gap-2">
+                            <i class="fa-solid fa-circle-exclamation text-xl"></i>
+                            <span>Ошибка соединения: ${escapeHtml(e.message)}</span>
+                            <button onclick="fetchChats()" class="mt-2 px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-[11px] transition">Повторить</button>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function setChatFilter(filter) {
+            appState.chatFilter = filter;
+            ['private', 'group'].forEach(f => {
+                const btn = document.getElementById(`filter-chat-${f}`);
+                if (btn) {
+                    if (f === filter) {
+                        btn.className = 'px-2.5 py-0.5 rounded-lg bg-cyan-600 text-white text-[10px] font-semibold';
+                    } else {
+                        btn.className = 'px-2.5 py-0.5 rounded-lg bg-slate-900 text-slate-400 hover:text-white text-[10px] font-semibold';
+                    }
+                }
+            });
+            renderChatsList();
+        }
+
+        function filterChatsList() {
+            renderChatsList();
+        }
+
+        function renderChatsList() {
+            const container = document.getElementById('chats-list-container');
+            const search = (document.getElementById('chats-search-input')?.value || '').toLowerCase().trim();
+            let chats = appState.chats || [];
+
+            // Completely filter out any business connection / secretary chats
+            chats = chats.filter(c => !c.is_business && c.chat_type !== 'business' && !(c.chat_title || '').startsWith('Business:'));
+
+            if (appState.chatFilter === 'group') {
+                chats = chats.filter(c => c.chat_type !== 'private' || c.chat_id < 0);
+            } else {
+                // Strictly private dialogs with real bot users (chat_id > 0)
+                chats = chats.filter(c => c.chat_type === 'private' && c.chat_id > 0);
+                chats.sort((a, b) => (b.last_activity || '').localeCompare(a.last_activity || ''));
+            }
+
+            if (search) {
+                chats = chats.filter(c =>
+                    (c.chat_title || '').toLowerCase().includes(search) ||
+                    (c.username || '').toLowerCase().includes(search) ||
+                    String(c.chat_id).includes(search)
+                );
+            }
+
+            document.getElementById('chats-count-label').textContent = (appState.chatFilter === 'group' ? 'Групп: ' : 'Пользователей: ') + chats.length;
+
+            if (chats.length === 0) {
+                container.innerHTML = `
+                    <div class="p-8 text-center text-xs text-slate-500 flex flex-col items-center gap-2.5">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-xl text-cyan-400/60 shadow-inner">
+                            <i class="fa-regular fa-comments"></i>
+                        </div>
+                        <span class="font-semibold text-slate-300 text-sm">Нет активных диалогов</span>
+                        <p class="text-[11px] text-slate-500 max-w-xs leading-relaxed">
+                            Когда пользователи напишут боту в Telegram или откроют Mini App, диалоги мгновенно появятся здесь в реальном времени.
+                        </p>
+                        <a href="https://t.me/pomoshotru_bot" target="_blank" class="mt-1 px-3 py-1.5 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i class="fa-brands fa-telegram"></i>
+                            <span>Открыть бота</span>
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = chats.map(c => {
+                const isActive = appState.activeChatId === c.chat_id;
+                const activeClass = isActive ? 'bg-cyan-950/50 border-l-4 border-cyan-400 text-white' : 'hover:bg-slate-900/80 text-slate-300';
+                const isGroup = c.chat_type !== 'private' || c.chat_id < 0;
+                const isBiz = Boolean(c.is_business || c.chat_type === 'business');
+                const bizBadge = isBiz ? `<span class="bg-blue-500/20 text-blue-300 border border-blue-500/30 text-[9px] px-1 rounded mr-1" title="От имени: ${escapeHtml(c.business_owner_name || 'Бизнес')}">💼 ${escapeHtml(c.business_owner_name || 'Бизнес')}</span>` : '';
+                const groupBadge = isGroup ? '<span class="bg-purple-500/20 text-purple-300 text-[9px] px-1 rounded mr-1">Группа</span>' : '';
+                const premBadge = c.is_creator ? '<i class="fa-solid fa-crown text-amber-400 text-[10px] ml-1" title="Создатель"></i>' : (c.is_premium ? '<i class="fa-solid fa-star text-yellow-400 text-[10px] ml-1" title="VIP"></i>' : '');
+                
+                const lastMsg = c.last_message || {};
+                const lastSender = lastMsg.sender_type === 'bot' ? '🤖 Бот: ' : (lastMsg.sender_name ? `${lastMsg.sender_name}: ` : '');
+                const previewText = (lastMsg.text || 'Нет сообщений').substring(0, 42);
+
+                return `
+                    <div onclick="selectChat(${c.chat_id})" class="p-3.5 flex items-center gap-3 cursor-pointer transition ${activeClass}">
+                        <div class="relative flex-shrink-0">
+                            <img src="/api/avatar/${c.chat_id}" class="w-11 h-11 rounded-full object-cover ring-2 ring-slate-800" alt="Avatar">
+                            ${c.is_creator ? '<span class="absolute -top-1 -right-1 w-4 h-4 bg-amber-500 text-slate-950 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-crown"></i></span>' : ''}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between mb-0.5">
+                                <div class="font-bold text-xs truncate flex items-center gap-1">
+                                    ${bizBadge}${groupBadge}
+                                    <span class="truncate">${escapeHtml(c.chat_title)}</span>
+                                    ${premBadge}
+                                </div>
+                                <div class="flex items-center gap-1.5 flex-shrink-0 ml-1">
+                                    ${isGroup ? `<button onclick="event.stopPropagation(); leaveGroupById(${c.chat_id}, '${escapeHtml(c.chat_title)}')" class="text-slate-500 hover:text-rose-400 p-0.5 rounded transition text-[11px]" title="Покинуть группу"><i class="fa-solid fa-right-from-bracket"></i></button>` : ''}
+                                    <span class="text-[10px] text-slate-500 font-mono">${(c.last_activity || '').slice(11, 16)}</span>
+                                </div>
+                            </div>
+                            <div class="text-[11px] text-slate-400 truncate">
+                                <span class="text-cyan-400 font-medium">${escapeHtml(lastSender)}</span>${escapeHtml(previewText)}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function selectChat(chatId) {
+            appState.activeChatId = chatId;
+            renderChatsList();
+
+            const chat = appState.chats.find(c => c.chat_id === chatId);
+            if (!chat) return;
+
+            // Handle Mobile Master-Detail toggle
+            const sidebar = document.getElementById('chats-sidebar');
+            const chatContainer = document.getElementById('chat-view-container');
+            if (sidebar && chatContainer) {
+                if (window.innerWidth < 768) {
+                    sidebar.classList.add('hidden');
+                    chatContainer.classList.remove('hidden');
+                    chatContainer.classList.add('flex');
+                } else {
+                    sidebar.classList.remove('hidden');
+                    chatContainer.classList.remove('hidden');
+                    chatContainer.classList.add('flex');
+                }
+            }
+
+            const header = document.getElementById('active-chat-header');
+            const replyBar = document.getElementById('chat-reply-bar');
+            const quickBar = document.getElementById('quick-replies-bar');
+            const placeholder = document.getElementById('empty-chat-placeholder');
+
+            if (placeholder) placeholder.classList.add('hidden');
+            if (header) header.classList.remove('hidden');
+            if (replyBar) replyBar.classList.remove('hidden');
+            if (quickBar) quickBar.classList.remove('hidden');
+
+            document.getElementById('active-chat-avatar').src = `/api/avatar/${chat.chat_id}`;
+            document.getElementById('active-chat-title').textContent = chat.chat_title;
+            document.getElementById('active-chat-subinfo').textContent = `ID: ${chat.chat_id} ${chat.username ? '@' + chat.username : ''}`;
+            document.getElementById('btn-export-chat').href = `/export/${chat.chat_id}`;
+            
+            const badgeCreator = document.getElementById('active-chat-badge-creator');
+            const badgePrem = document.getElementById('active-chat-badge-premium');
+            if (chat.is_creator) {
+                badgeCreator.classList.remove('hidden');
+                badgePrem.classList.add('hidden');
+            } else if (chat.is_premium) {
+                badgeCreator.classList.add('hidden');
+                badgePrem.classList.remove('hidden');
+            } else {
+                badgeCreator.classList.add('hidden');
+                badgePrem.classList.add('hidden');
+            }
+
+            const isBizChat = Boolean(chat.is_business || chat.chat_type === 'business');
+            const badgeBiz = document.getElementById('active-chat-badge-business');
+            if (badgeBiz) {
+                if (isBizChat) {
+                    badgeBiz.classList.remove('hidden');
+                    badgeBiz.innerHTML = `<i class="fa-solid fa-briefcase"></i> <span>Бизнес: @${escapeHtml(chat.business_owner_name || 'аккаунт')}</span>`;
+                } else {
+                    badgeBiz.classList.add('hidden');
+                }
+            }
+
+            const sendBtnLabel = document.getElementById('btn-admin-send-label');
+            if (sendBtnLabel) {
+                if (isBizChat) {
+                    sendBtnLabel.textContent = `От имени @${chat.business_owner_name || 'юзера'}`;
+                } else {
+                    sendBtnLabel.textContent = 'Отправить';
+                }
+            }
+
+            const btnLeave = document.getElementById('btn-leave-group-chat');
+            if (btnLeave) {
+                if (chat.chat_id < 0) {
+                    btnLeave.classList.remove('hidden');
+                } else {
+                    btnLeave.classList.add('hidden');
+                }
+            }
+
+            await loadChatMessages(chatId);
+        }
+
+        async function loadChatMessages(chatId) {
+            const feed = document.getElementById('messages-feed-container');
+            feed.innerHTML = `
+                <div class="flex-1 flex flex-col items-center justify-center text-slate-400 gap-2">
+                    <i class="fa-solid fa-spinner fa-spin text-2xl text-cyan-400"></i>
+                    <span class="text-xs">Загрузка диалога...</span>
+                </div>
+            `;
+
+            try {
+                const res = await fetch(`/api/chats/${chatId}/messages`);
+                if (!res.ok) throw new Error("Не удалось загрузить сообщения");
+                const messages = await res.json();
+
+                if (messages.length === 0) {
+                    feed.innerHTML = `<div class="flex-1 flex items-center justify-center text-xs text-slate-500">В этом диалоге пока нет сохраненных сообщений.</div>`;
+                    return;
+                }
+
+                feed.innerHTML = messages.map(m => {
+                    const isBot = m.sender_type === 'bot';
+                    const bubbleClass = isBot ? 'bubble-out ml-auto' : 'bubble-in mr-auto';
+                    const alignClass = isBot ? 'justify-end' : 'justify-start';
+                    const nameColor = isBot ? 'text-cyan-200' : 'text-cyan-400';
+                    const msgId = m.id;
+                    const escapedRawText = (m.text || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                    const escapedSender = (m.sender_name || (isBot ? 'NullSecAI' : 'Пользователь')).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
+                    let mediaHtml = '';
+                    if (m.media_type === 'photo') {
+                        if (m.media_info && !m.media_info.startsWith('[')) {
+                            mediaHtml = `
+                                <div class="mb-2">
+                                    <img src="/api/media/file/${encodeURIComponent(m.media_info)}" 
+                                         alt="Фото" 
+                                         class="rounded-xl max-h-64 max-w-full object-cover border border-slate-700/50 cursor-pointer hover:opacity-95 transition shadow-md" 
+                                         onclick="window.open(this.src, '_blank')"
+                                         loading="lazy">
+                                </div>
+                            `;
+                        } else {
+                            mediaHtml = `<div class="mb-1.5 text-xs text-amber-300 font-semibold flex items-center gap-1.5"><i class="fa-solid fa-image"></i> [Фото]</div>`;
+                        }
+                    } else if (m.media_type === 'voice') {
+                        if (m.media_info && !m.media_info.startsWith('[')) {
+                            mediaHtml = `
+                                <div class="mb-2 bg-slate-900/60 p-2 rounded-xl border border-slate-700/40">
+                                    <div class="text-[11px] text-emerald-300 mb-1 flex items-center gap-1"><i class="fa-solid fa-microphone"></i> Голосовое сообщение</div>
+                                    <audio controls class="w-full h-8 rounded" src="/api/media/file/${encodeURIComponent(m.media_info)}"></audio>
+                                </div>
+                            `;
+                        } else {
+                            mediaHtml = `<div class="mb-1.5 text-xs text-emerald-300 font-semibold flex items-center gap-1.5"><i class="fa-solid fa-microphone"></i> [Голосовое сообщение]</div>`;
+                        }
+                    } else if (m.media_type === 'video' || m.media_type === 'video_note') {
+                        if (m.media_info && !m.media_info.startsWith('[')) {
+                            mediaHtml = `
+                                <div class="mb-2 bg-slate-900/60 p-2 rounded-xl border border-slate-700/40">
+                                    <video controls class="rounded-xl max-h-64 max-w-full" src="/api/media/file/${encodeURIComponent(m.media_info)}"></video>
+                                </div>
+                            `;
+                        } else {
+                            mediaHtml = `<div class="mb-1.5 text-xs text-indigo-300 font-semibold flex items-center gap-1.5"><i class="fa-solid fa-video"></i> [Видео]</div>`;
+                        }
+                    } else if (m.media_type === 'document') {
+                        mediaHtml = `<div class="mb-1.5 text-xs text-purple-300 font-semibold flex items-center gap-1.5"><i class="fa-solid fa-file-code"></i> [Файл / Документ]</div>`;
+                    }
+
+                    return `
+                        <div class="flex ${alignClass} w-full group relative mb-3" id="msg-row-${msgId}">
+                            <div class="max-w-xl p-3.5 ${bubbleClass} text-xs shadow-lg transition-all" id="msg-bubble-${msgId}">
+                                <div class="flex items-center justify-between gap-4 mb-1">
+                                    <span class="font-bold ${nameColor}">${escapeHtml(m.sender_name || (isBot ? 'NullSecAI' : 'Пользователь'))}</span>
+                                    <span class="text-[10px] text-slate-400 font-mono">${(m.timestamp || '').slice(11, 16)}</span>
+                                </div>
+                                ${mediaHtml}
+                                <div class="text-slate-100 whitespace-pre-wrap leading-relaxed break-words msg-body" id="msg-text-${msgId}">${formatMessageText(m.text)}</div>
+                                
+                                <!-- Message Action Buttons Bar -->
+                                <div class="mt-2.5 pt-2 border-t border-slate-700/40 flex items-center justify-end gap-1.5 text-[11px]">
+                                    <button onclick="copyMessageText(${msgId})" class="px-2 py-1 rounded-lg bg-slate-900/70 hover:bg-cyan-600 hover:text-white text-slate-400 transition flex items-center gap-1" title="Копировать текст">
+                                        <i class="fa-regular fa-copy"></i>
+                                    </button>
+                                    <button onclick="selectMessageText(${msgId})" class="px-2 py-1 rounded-lg bg-slate-900/70 hover:bg-cyan-600 hover:text-white text-slate-400 transition flex items-center gap-1" title="Выделить текст">
+                                        <i class="fa-solid fa-i-cursor"></i>
+                                    </button>
+                                    <button onclick="replyToMessage(${msgId}, '${escapedSender}', '${escapedRawText.slice(0, 50)}')" class="px-2 py-1 rounded-lg bg-slate-900/70 hover:bg-emerald-600 hover:text-white text-slate-400 transition flex items-center gap-1" title="Ответить на сообщение">
+                                        <i class="fa-solid fa-reply"></i>
+                                    </button>
+                                    <button onclick="forwardMessage(${msgId})" class="px-2 py-1 rounded-lg bg-slate-900/70 hover:bg-purple-600 hover:text-white text-slate-400 transition flex items-center gap-1" title="Переслать">
+                                        <i class="fa-solid fa-share"></i>
+                                    </button>
+                                    <button onclick="deleteSingleMessage(${msgId})" class="px-2 py-1 rounded-lg bg-slate-900/70 hover:bg-rose-600 hover:text-white text-rose-400 transition flex items-center gap-1" title="Удалить сообщение">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                feed.scrollTop = feed.scrollHeight;
+            } catch (e) {
+                feed.innerHTML = `<div class="p-8 text-center text-xs text-rose-400">Ошибка: ${e.message}</div>`;
+            }
+        }
+
+        // Message actions: Copy, Select, Reply, Forward, Delete
+        function copyMessageText(msgId) {
+            const el = document.getElementById(`msg-text-${msgId}`);
+            if (!el) return;
+            const textToCopy = el.innerText || el.textContent;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showToast("Текст скопирован в буфер обмена! 📋", "success");
+            }).catch(err => {
+                showToast("Не удалось скопировать: " + err, "error");
+            });
+        }
+
+        function selectMessageText(msgId) {
+            const el = document.getElementById(`msg-text-${msgId}`);
+            if (!el) return;
+            const range = document.createRange();
+            range.selectNodeContents(el);
+            const sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+            showToast("Текст выделен 🔤", "info");
+        }
+
+        function replyToMessage(msgId, sender, snippet) {
+            const input = document.getElementById('admin-reply-input');
+            if (!input) return;
+            input.placeholder = `Ответ для ${sender}: "${snippet}..."`;
+            input.dataset.replyToId = msgId;
+            input.focus();
+            showToast(`Режим ответа на сообщение #${msgId} ↩️`, "info");
+        }
+
+        async function forwardMessage(msgId) {
+            const targetChat = prompt("Введите ID целевого чата для пересылки сообщения:");
+            if (!targetChat) return;
+            try {
+                const res = await fetch(`/api/messages/${msgId}/forward`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ target_chat_id: targetChat })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showToast("Сообщение успешно переслано! ➡️", "success");
+                } else {
+                    showToast(data.error || "Ошибка пересылки", "error");
+                }
+            } catch (e) {
+                showToast("Ошибка: " + e.message, "error");
+            }
+        }
+
+        async function deleteSingleMessage(msgId) {
+            if (!confirm(`Удалить сообщение #${msgId}?`)) return;
+            try {
+                const res = await fetch(`/api/messages/${msgId}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (res.ok) {
+                    showToast("Сообщение удалено 🗑", "success");
+                    const row = document.getElementById(`msg-row-${msgId}`);
+                    if (row) {
+                        row.style.opacity = '0';
+                        setTimeout(() => row.remove(), 250);
+                    }
+                } else {
+                    showToast(data.message || "Ошибка удаления", "error");
+                }
+            } catch (e) {
+                showToast("Ошибка: " + e.message, "error");
+            }
+        }
+
+        function toggleVoiceReplyMode() {
+            appState.sendAsVoice = !appState.sendAsVoice;
+            const btn = document.getElementById('voice-toggle-btn');
+            const lbl = document.getElementById('voice-toggle-label');
+            if (appState.sendAsVoice) {
+                btn.className = 'px-3 py-2 rounded-xl bg-emerald-600/30 border border-emerald-500 text-emerald-300 text-xs font-semibold flex items-center gap-1.5 shadow-sm';
+                lbl.textContent = 'Голос 🎙';
+            } else {
+                btn.className = 'px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-cyan-400 text-xs font-semibold flex items-center gap-1.5';
+                lbl.textContent = 'Текст';
+            }
+        }
+
+        function insertQuickReply(text) {
+            const input = document.getElementById('admin-reply-input');
+            input.value = text;
+            input.focus();
+        }
+
+        async function sendAdminReply() {
+            const input = document.getElementById('admin-reply-input');
+            const text = input.value.trim();
+            if (!text || !appState.activeChatId) return;
+
+            const btn = document.getElementById('btn-admin-send');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Отправка...</span>';
+
+            try {
+                const res = await fetch(`/api/chats/${appState.activeChatId}/messages`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        text: text,
+                        send_as_voice: appState.sendAsVoice
+                    })
+                });
+                
+                const data = await res.json();
+                if (!res.ok) {
+                    throw new Error(data.error || 'Ошибка отправки');
+                }
+
+                input.value = '';
+                showToast("Сообщение успешно доставлено в Telegram!", "success");
+                await loadChatMessages(appState.activeChatId);
+                await fetchChats();
+            } catch (e) {
+                showToast("Ошибка отправки: " + e.message, "error");
+                if (e.message && (e.message.includes("не состоит в этой группе") || e.message.includes("not a member") || e.message.includes("kicked"))) {
+                    appState.activeChatId = null;
+                    document.getElementById('active-chat-header')?.classList.add('hidden');
+                    document.getElementById('chat-reply-bar')?.classList.add('hidden');
+                    document.getElementById('quick-replies-bar')?.classList.add('hidden');
+                    document.getElementById('empty-chat-placeholder')?.classList.remove('hidden');
+                    await fetchChats();
+                }
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> <span id="btn-admin-send-label">Отправить</span>';
+            }
+        }
+
+        async function requestAiReplyForActiveChat() {
+            if (!appState.activeChatId) return;
+            const btn = document.getElementById('btn-ai-auto-reply');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Генерация...</span>';
+
+            try {
+                const res = await fetch(`/api/chats/${appState.activeChatId}/ai_reply`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showToast("ИИ ответ сгенерирован и отправлен в чат!", "success");
+                    await loadChatMessages(appState.activeChatId);
+                    await fetchChats();
+                } else {
+                    showToast(data.error || "Ошибка генерации ИИ ответа", "error");
+                }
+            } catch (e) {
+                showToast("Ошибка: " + e.message, "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles text-xs"></i> <span>ИИ Авто-ответ</span>';
+            }
+        }
+
+        async function clearActiveChatMessages() {
+            if (!appState.activeChatId) return;
+            const isGroup = appState.activeChatId < 0;
+            const promptText = isGroup ? 
+                "Удалить этот чат/группу из панели управления?" : 
+                "Удалить этот диалог из панели управления?";
+            if (!confirm(promptText)) return;
+
+            try {
+                const res = await fetch(`/api/chats/${appState.activeChatId}`, { method: 'DELETE' });
+                if (res.ok) {
+                    showToast("Чат успешно удален из панели.", "success");
+                    appState.activeChatId = null;
+                    document.getElementById('active-chat-header')?.classList.add('hidden');
+                    document.getElementById('chat-reply-bar')?.classList.add('hidden');
+                    document.getElementById('quick-replies-bar')?.classList.add('hidden');
+                    document.getElementById('empty-chat-placeholder')?.classList.remove('hidden');
+                    const feed = document.getElementById('messages-feed-container');
+                    if (feed) feed.innerHTML = '';
+                    await fetchChats();
+                } else {
+                    const data = await res.json();
+                    showToast(data.error || "Ошибка удаления чата", "error");
+                }
+            } catch (e) {
+                showToast("Ошибка: " + e.message, "error");
+            }
+        }
+
+        // USERS DIRECTORY
+        async function fetchUsers() {
+            try {
+                const res = await fetch('/api/users');
+                if (res.ok) {
+                    appState.users = await res.json();
+                    renderUsersDirectory();
+                    renderSubscribersTable();
+                    // Re-render chats list too: the "Пользователи бота" filter
+                    // merges users without a private chat row
+                    if (appState.chatFilter === 'private') renderChatsList();
+                    const badge = document.getElementById('badge-users-count');
+                    if (badge) badge.textContent = appState.users.length;
+                }
+            } catch (e) {
+                console.error('Users fetch error:', e);
+            }
+        }
+
+        function filterUsersDirectory() {
+            renderUsersDirectory();
+        }
+
+        function setUserFilter(filterName) {
+            appState.userFilter = filterName;
+            ['all', 'creator', 'admin', 'premium', 'blocked', 'free'].forEach(f => {
+                const btn = document.getElementById(`ufilter-${f}`);
+                if (btn) {
+                    if (f === filterName) {
+                        btn.className = 'px-3 py-1 rounded-lg bg-cyan-600 text-white text-xs font-bold shadow-sm';
+                    } else {
+                        btn.className = 'px-3 py-1 rounded-lg text-slate-400 hover:text-white text-xs font-medium';
+                    }
+                }
+            });
+            renderUsersDirectory();
+        }
+
+        function renderUsersDirectory() {
+            const tbody = document.getElementById('users-table-body');
+            if (!tbody) return;
+
+            const search = (document.getElementById('users-search-input')?.value || '').toLowerCase().trim();
+            let users = appState.users || [];
+
+            if (document.getElementById('count-ufilter-all')) document.getElementById('count-ufilter-all').textContent = users.length;
+            if (document.getElementById('count-ufilter-creator')) document.getElementById('count-ufilter-creator').textContent = users.filter(u => u.is_creator).length;
+            if (document.getElementById('count-ufilter-admin')) document.getElementById('count-ufilter-admin').textContent = users.filter(u => u.is_admin && !u.is_creator).length;
+            if (document.getElementById('count-ufilter-premium')) document.getElementById('count-ufilter-premium').textContent = users.filter(u => u.is_premium).length;
+            if (document.getElementById('count-ufilter-blocked')) document.getElementById('count-ufilter-blocked').textContent = users.filter(u => u.is_blocked).length;
+            if (document.getElementById('count-ufilter-free')) document.getElementById('count-ufilter-free').textContent = users.filter(u => !u.is_premium && !u.is_creator && !u.is_admin && !u.is_blocked).length;
+
+            if (appState.userFilter === 'creator') {
+                users = users.filter(u => u.is_creator);
+            } else if (appState.userFilter === 'admin') {
+                users = users.filter(u => u.is_admin && !u.is_creator);
+            } else if (appState.userFilter === 'premium') {
+                users = users.filter(u => u.is_premium);
+            } else if (appState.userFilter === 'blocked') {
+                users = users.filter(u => u.is_blocked);
+            } else if (appState.userFilter === 'free') {
+                users = users.filter(u => !u.is_premium && !u.is_creator && !u.is_admin && !u.is_blocked);
+            }
+
+            if (search) {
+                users = users.filter(u => 
+                    (u.full_name || '').toLowerCase().includes(search) ||
+                    (u.username || '').toLowerCase().includes(search) ||
+                    String(u.user_id).includes(search)
+                );
+            }
+
+            if (users.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-slate-500">Пользователи не найдены</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = users.map(u => {
+                const isC = u.is_creator;
+                const isA = u.is_admin;
+                const isPrem = u.is_premium;
+                const isBlocked = Boolean(u.is_blocked);
+
+                let badges = [];
+                if (isC) {
+                    badges.push(`<span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-md text-[10px] font-bold flex items-center gap-1"><i class="fa-solid fa-crown text-[9px]"></i>Создатель</span>`);
+                }
+                if (isA && !isC) {
+                    badges.push(`<span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-md text-[10px] font-bold flex items-center gap-1"><i class="fa-solid fa-shield-halved text-[9px]"></i>Админ</span>`);
+                }
+                if (isPrem && !isC) {
+                    badges.push(`<span class="bg-yellow-400/20 text-yellow-300 border border-yellow-400/30 px-2 py-0.5 rounded-md text-[10px] font-bold flex items-center gap-1"><i class="fa-solid fa-star text-[9px]"></i>VIP (${u.days_left || 0} дн.)</span>`);
+                }
+                if (isBlocked && !isC) {
+                    badges.push(`<span class="bg-rose-500/20 text-rose-300 border border-rose-500/30 px-2 py-0.5 rounded-md text-[10px] font-bold flex items-center gap-1"><i class="fa-solid fa-ban text-[9px]"></i>Бан</span>`);
+                }
+                if (badges.length === 0) {
+                    badges.push(`<span class="bg-slate-800 text-slate-400 px-2 py-0.5 rounded-md text-[10px] font-semibold">Юзер</span>`);
+                }
+                const roleBadge = `<div class="flex flex-col gap-1 items-start">${badges.join('')}</div>`;
+
+                const curMode = u.mode || (isC ? 'evil' : 'default');
+                const modeSelect = `
+                    <select onchange="changeUserMode(${u.user_id}, this.value)" class="bg-slate-900 border border-slate-700 hover:border-cyan-500/60 text-slate-200 text-[11px] rounded-lg px-2 py-1 font-semibold focus:outline-none focus:border-cyan-400 transition cursor-pointer">
+                        <option value="evil" ${curMode === 'evil' ? 'selected' : ''}>😈 Злой</option>
+                        <option value="coder" ${curMode === 'coder' ? 'selected' : ''}>💻 Кодер</option>
+                        <option value="anime" ${curMode === 'anime' ? 'selected' : ''}>🌸 Аниме</option>
+                        <option value="girl" ${curMode === 'girl' ? 'selected' : ''}>❤️ Девушка</option>
+                        <option value="friend" ${curMode === 'friend' ? 'selected' : ''}>🤝 Братан</option>
+                        <option value="assistant" ${curMode === 'assistant' ? 'selected' : ''}>🎩 Ассистент</option>
+                        <option value="voice" ${curMode === 'voice' ? 'selected' : ''}>🎙 Голос</option>
+                        <option value="default" ${curMode === 'default' ? 'selected' : ''}>🤖 Дефолт</option>
+                    </select>
+                `;
+
+                const adminBtn = isC ? '' : (
+                    isA ? 
+                    `<button onclick="toggleUserAdmin(${u.user_id}, 'revoke')" class="px-2.5 py-1 rounded-lg bg-rose-500/15 text-rose-300 border border-rose-500/30 hover:bg-rose-500/30 text-[11px] font-bold transition flex items-center gap-1" title="Снять права администратора бота">
+                        <i class="fa-solid fa-user-xmark"></i> <span class="hidden sm:inline">Снять</span>
+                    </button>` :
+                    `<button onclick="toggleUserAdmin(${u.user_id}, 'grant')" class="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30 text-[11px] font-bold transition flex items-center gap-1" title="Выдать права Администратора бота (бот будет обращаться как к админу)">
+                        <i class="fa-solid fa-shield-halved"></i> <span class="hidden sm:inline">Админ</span>
+                    </button>`
+                );
+
+                const blockBtn = isC ? '' : (
+                    isBlocked ?
+                    `<button onclick="toggleUserBlock(${u.user_id}, false)" class="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30 text-[11px] font-bold transition flex items-center gap-1" title="Разблокировать пользователя">
+                        <i class="fa-solid fa-unlock"></i> <span class="hidden sm:inline">Разблок</span>
+                    </button>` :
+                    `<button onclick="toggleUserBlock(${u.user_id}, true)" class="px-2.5 py-1 rounded-lg bg-rose-500/15 text-rose-300 border border-rose-500/30 hover:bg-rose-500/30 text-[11px] font-bold transition flex items-center gap-1" title="Заблокировать пользователя (бот перестанет отвечать)">
+                        <i class="fa-solid fa-ban"></i> <span class="hidden sm:inline">Блок</span>
+                    </button>`
+                );
+
+                return `
+                    <tr class="hover:bg-slate-900/50 transition">
+                        <td class="px-4 py-3.5">
+                            <div class="flex items-center gap-2.5">
+                                <img src="/api/avatar/${u.user_id}" class="w-8 h-8 rounded-full object-cover ring-1 ring-slate-800" alt="Avatar">
+                                <div>
+                                    <div class="font-bold text-white text-xs">${escapeHtml(u.full_name)}</div>
+                                    <div class="text-[10px] text-slate-500">Рег: ${(u.first_seen || '').slice(0, 10)}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-4 py-3.5 font-mono text-[11px]">
+                            <div class="text-cyan-400 font-semibold">${u.username ? '@' + u.username : '—'}</div>
+                            <div class="text-slate-500 text-[10px]">ID: ${u.user_id}</div>
+                        </td>
+                        <td class="px-4 py-3.5">${roleBadge}</td>
+                        <td class="px-4 py-3.5">${modeSelect}</td>
+                        <td class="px-4 py-3.5">
+                            <div class="flex items-center gap-1 font-mono text-[11px] text-amber-300 font-semibold">
+                                <span>🪙 ${(u.coins || 0).toLocaleString()}</span>
+                            </div>
+                            <div class="text-[10px] text-slate-400">Репутация: ⭐ ${u.reputation || 0}</div>
+                        </td>
+                        <td class="px-4 py-3.5">
+                            <div class="text-[11px] text-slate-200">🖼 Фото: <b>${u.photos_today || 0} / 3</b></div>
+                            <div class="text-[10px] text-slate-500">⚡️ Запросы: ${u.queries_today || 0}</div>
+                        </td>
+                        <td class="px-4 py-3.5 font-mono text-slate-200 font-semibold">${u.total_messages || 0}</td>
+                        <td class="px-4 py-3.5 text-[11px] text-slate-400 font-mono">${(u.last_seen || '').slice(5, 16)}</td>
+                        <td class="px-4 py-3.5 text-right">
+                            <div class="flex items-center justify-end gap-1.5">
+                                ${adminBtn}
+                                ${blockBtn}
+                                <button onclick="openPremiumModal(${u.user_id}, '${escapeHtml(u.full_name)}')" class="px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30 text-[11px] font-bold transition" title="Выдать или продлить VIP">
+                                    <i class="fa-solid fa-crown"></i>
+                                </button>
+                                <button onclick="openEconomyModal(${u.user_id}, ${u.coins || 0}, ${u.reputation || 0})" class="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30 text-[11px] font-bold transition" title="Изменить монеты и репутацию">
+                                    <i class="fa-solid fa-coins"></i>
+                                </button>
+                                <button onclick="selectChat(${u.user_id}); switchTab('chats');" class="px-2.5 py-1 rounded-lg bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-500/30 text-[11px] font-bold transition" title="Открыть диалог">
+                                    <i class="fa-solid fa-comments"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderSubscribersTable() {
+            const tbody = document.getElementById('subscribers-table-body');
+            if (!tbody) return;
+
+            const vips = (appState.users || []).filter(u => u.is_premium || u.is_creator);
+
+            if (vips.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-slate-500">Нет активных Premium подписчиков</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = vips.map(u => {
+                const isC = u.is_creator;
+                const daysText = isC ? '👑 Бессрочно (Создатель)' : `${u.days_left || 0} дней`;
+                const expDate = isC ? 'Вечный доступ' : (u.expires_at || '—');
+
+                return `
+                    <tr class="hover:bg-slate-900/50 transition">
+                        <td class="px-5 py-3.5 font-semibold text-white flex items-center gap-2.5">
+                            <img src="/api/avatar/${u.user_id}" class="w-8 h-8 rounded-full object-cover" alt="Avatar">
+                            <span>${escapeHtml(u.full_name)}</span>
+                            ${isC ? '<i class="fa-solid fa-crown text-amber-400 text-xs"></i>' : '<i class="fa-solid fa-star text-yellow-400 text-xs"></i>'}
+                        </td>
+                        <td class="px-5 py-3.5 font-mono text-cyan-400">${u.user_id}</td>
+                        <td class="px-5 py-3.5 font-mono text-slate-300">${expDate}</td>
+                        <td class="px-5 py-3.5 font-semibold text-amber-300">${daysText}</td>
+                        <td class="px-5 py-3.5 text-right">
+                            <button onclick="openPremiumModal(${u.user_id}, '${escapeHtml(u.full_name)}')" class="px-3 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30 text-xs font-bold transition">
+                                Управление
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function openPremiumModal(uid = null, name = '') {
+            const modal = document.getElementById('modal-premium');
+            const inputUid = document.getElementById('modal-prem-uid');
+            const labelName = document.getElementById('modal-prem-name-label');
+
+            inputUid.value = uid !== null ? uid : '';
+            labelName.textContent = name ? `Выбрано: ${name}` : '';
+            setModalDaysPreset(30);
+
+            modal.classList.remove('hidden');
+        }
+
+        function openPremiumForActiveChat() {
+            if (!appState.activeChatId) return;
+            const chat = appState.chats.find(c => c.chat_id === appState.activeChatId);
+            openPremiumModal(appState.activeChatId, chat ? chat.chat_title : 'Активный чат');
+        }
+
+        function closePremiumModal() {
+            document.getElementById('modal-premium').classList.add('hidden');
+        }
+
+        function setModalDaysPreset(days) {
+            const input = document.getElementById('modal-prem-days');
+            const isInf = days === 'infinite' || days === 9999 || days === 'Бесконечно';
+            input.value = isInf ? 'Бесконечно' : days;
+            document.querySelectorAll('.prem-preset-btn').forEach(btn => {
+                if ((isInf && btn.textContent.includes('Навсегда')) || (!isInf && btn.textContent.includes(`${days} д`))) {
+                    btn.classList.add('border-amber-500', 'bg-amber-500/20', 'text-amber-300');
+                } else {
+                    btn.classList.remove('border-amber-500', 'bg-amber-500/20', 'text-amber-300');
+                }
+            });
+        }
+
+        async function submitGrantPremium() {
+            const uidStr = document.getElementById('modal-prem-uid').value.trim();
+            const rawDays = document.getElementById('modal-prem-days').value.trim().toLowerCase();
+            let days = 30;
+            if (['infinite', 'бесконечно', 'навсегда', 'вечно', 'inf', '∞'].includes(rawDays)) {
+                days = 'infinite';
+            } else {
+                days = parseInt(rawDays) || 30;
+            }
+
+            if (!uidStr) {
+                showToast("Укажите корректный User ID или Chat ID!", "error");
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/users/${uidStr}/premium`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'grant', days: days })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showToast(data.message || `Премиум на ${days} дн. успешно выдан!`, "success");
+                    closePremiumModal();
+                    await fetchUsers();
+                    await fetchChats();
+                } else {
+                    showToast(data.error || "Ошибка выдачи подписки", "error");
+                }
+            } catch (e) {
+                showToast("Ошибка: " + e.message, "error");
+            }
+        }
+
+        async function submitRevokePremium() {
+            const uidStr = document.getElementById('modal-prem-uid').value.trim();
+            if (!uidStr) return;
+            if (!confirm(`Отозвать Premium у ${uidStr}?`)) return;
+
+            try {
+                const res = await fetch(`/api/users/${uidStr}/premium`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'revoke' })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showToast(data.message || "Премиум отозван.", "success");
+                    closePremiumModal();
+                    await fetchUsers();
+                    await fetchChats();
+                } else {
+                    showToast(data.error || "Ошибка", "error");
+                }
+            } catch (e) {
+                showToast("Ошибка: " + e.message, "error");
+            }
+        }
+
+        function openEconomyModal(uid, coins, rep) {
+            document.getElementById('modal-eco-uid').value = uid;
+            document.getElementById('modal-eco-coins').value = coins;
+            document.getElementById('modal-eco-rep').value = rep;
+            document.getElementById('modal-economy').classList.remove('hidden');
+        }
+
+        function closeEconomyModal() {
+            document.getElementById('modal-economy').classList.add('hidden');
+        }
+
+        function adjustEcoRep(delta) {
+            const el = document.getElementById('modal-eco-rep');
+            el.value = (parseInt(el.value) || 0) + delta;
+        }
+
+        function setEcoRep(val) {
+            document.getElementById('modal-eco-rep').value = val;
+        }
+
+        async function submitEconomyEdit() {
+            const uid = document.getElementById('modal-eco-uid').value;
+            const coins = document.getElementById('modal-eco-coins').value;
+            const rep = document.getElementById('modal-eco-rep').value;
+
+            try {
+                const res = await fetch(`/api/users/${uid}/economy`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ set_coins: coins, set_rep: rep })
+                });
+                if (res.ok) {
+                    showToast("Баланс и репутация обновлены!", "success");
+                    closeEconomyModal();
+                    fetchUsers();
+                } else {
+                    const err = await res.json();
+                    showToast(err.error || "Ошибка сохранения", "error");
+                }
+            } catch (e) {
+                showToast("Ошибка: " + e.message, "error");
+            }
+        }
+
+        // BROADCAST
+        async function sendBroadcast() {
+            const target = document.getElementById('broadcast-target').value;
+            const isVoice = document.getElementById('broadcast-voice-mode').value === 'true';
+            const text = document.getElementById('broadcast-text').value.trim();
+
+            if (!text) {
+                showToast("Введите текст рассылки!", "error");
+                return;
+            }
+            if (!confirm(`Запустить рассылку для категории «${target}»?`)) return;
+
+            const btn = document.getElementById('btn-send-broadcast');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Рассылка отправляется...</span>';
+
+            try {
+                const res = await fetch('/api/broadcast', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ target: target, text: text, send_as_voice: isVoice })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showToast(`Рассылка завершена! Отправлено: ${data.sent}, Ошибок: ${data.failed}`, "success");
+                    document.getElementById('broadcast-text').value = '';
+                } else {
+                    showToast(data.error || "Ошибка рассылки", "error");
+                }
+            } catch (e) {
+                showToast("Ошибка: " + e.message, "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> <span>Запустить рассылку</span>';
+            }
+        }
+
+        // SCRIPTS & GIT RAW
+        async function fetchScripts() {
+            try {
+                const res = await fetch('/api/scripts?limit=60');
+                if (res.ok) {
+                    appState.scripts = await res.json();
+                    renderScriptsHub();
+                    const b = document.getElementById('badge-scripts-count');
+                    if (b) b.textContent = appState.scripts.length;
+                }
+            } catch (e) {
+                console.error('Scripts fetch error:', e);
+            }
+        }
+
+        function togglePublishForm() {
+            const card = document.getElementById('publish-form-card');
+            if (card) {
+                card.classList.toggle('hidden');
+                if (!card.classList.contains('hidden')) {
+                    document.getElementById('script-pub-title').focus();
+                }
+            }
+        }
+
+        async function submitPublishScript() {
+            const title = document.getElementById('script-pub-title').value.trim() || 'Безымянный скрипт';
+            const lang = document.getElementById('script-pub-lang').value;
+            const code = document.getElementById('script-pub-code').value.trim();
+
+            if (!code) {
+                showToast("Введите исходный код для публикации!", "error");
+                return;
+            }
+
+            const btn = document.getElementById('btn-publish-submit');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Публикация...</span>';
+
+            try {
+                const res = await fetch('/api/scripts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title: title, language: lang, code: code })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showToast("Скрипт успешно сохранен в Git Raw!", "success");
+                    document.getElementById('script-pub-title').value = '';
+                    document.getElementById('script-pub-code').value = '';
+                    togglePublishForm();
+                    await fetchScripts();
+                } else {
+                    showToast(data.error || "Ошибка публикации", "error");
+                }
+            } catch (e) {
+                showToast("Ошибка: " + e.message, "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-upload"></i> <span>Опубликовать в Git Raw</span>';
+            }
+        }
+
+        function setScriptFilter(filterType) {
+            appState.scriptFilter = filterType;
+            ['all', 'lua', 'html', 'cpp', 'python', 'javascript'].forEach(f => {
+                const btn = document.getElementById(`sfilter-${f}`);
+                if (btn) {
+                    if (f === filterType) {
+                        btn.className = 'px-3.5 py-1.5 rounded-xl bg-cyan-600 text-slate-950 font-bold text-xs shadow-sm';
+                    } else {
+                        btn.className = 'px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white text-xs font-semibold';
+                    }
+                }
+            });
+            renderScriptsHub();
+        }
+
+        function filterScriptsList() {
+            renderScriptsHub();
+        }
+
+        function renderScriptsHub() {
+            const container = document.getElementById('scripts-cards-grid');
+            if (!container) return;
+
+            let scripts = appState.scripts || [];
+            const search = (document.getElementById('scripts-search-input')?.value || '').toLowerCase().trim();
+
+            const countAll = scripts.length;
+            const countLua = scripts.filter(s => ['lua', 'luau'].includes(s.language)).length;
+            const countHtml = scripts.filter(s => ['html', 'htm'].includes(s.language)).length;
+            const countCpp = scripts.filter(s => ['cpp', 'c++', 'c'].includes(s.language)).length;
+            const countPy = scripts.filter(s => ['py', 'python'].includes(s.language)).length;
+            const countJs = scripts.filter(s => ['js', 'javascript', 'ts', 'typescript'].includes(s.language)).length;
+
+            if (document.getElementById('count-sfilter-all')) document.getElementById('count-sfilter-all').textContent = countAll;
+            if (document.getElementById('count-sfilter-lua')) document.getElementById('count-sfilter-lua').textContent = countLua;
+            if (document.getElementById('count-sfilter-html')) document.getElementById('count-sfilter-html').textContent = countHtml;
+            if (document.getElementById('count-sfilter-cpp')) document.getElementById('count-sfilter-cpp').textContent = countCpp;
+            if (document.getElementById('count-sfilter-python')) document.getElementById('count-sfilter-python').textContent = countPy;
+            if (document.getElementById('count-sfilter-javascript')) document.getElementById('count-sfilter-javascript').textContent = countJs;
+
+            if (appState.scriptFilter === 'lua') {
+                scripts = scripts.filter(s => ['lua', 'luau'].includes(s.language));
+            } else if (appState.scriptFilter === 'html') {
+                scripts = scripts.filter(s => ['html', 'htm'].includes(s.language));
+            } else if (appState.scriptFilter === 'cpp') {
+                scripts = scripts.filter(s => ['cpp', 'c++', 'c'].includes(s.language));
+            } else if (appState.scriptFilter === 'python') {
+                scripts = scripts.filter(s => ['py', 'python'].includes(s.language));
+            } else if (appState.scriptFilter === 'javascript') {
+                scripts = scripts.filter(s => ['js', 'javascript', 'ts', 'typescript'].includes(s.language));
+            }
+
+            if (search) {
+                scripts = scripts.filter(s =>
+                    (s.title || '').toLowerCase().includes(search) ||
+                    (s.script_id || '').toLowerCase().includes(search) ||
+                    (s.language || '').toLowerCase().includes(search) ||
+                    (s.code || '').toLowerCase().includes(search)
+                );
+            }
+
+            if (scripts.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full glass-panel p-10 text-center rounded-3xl border border-slate-800 flex flex-col items-center justify-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-900 text-slate-500 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                        <span class="text-xs text-slate-400 font-medium">Скрипты или сайты не найдены</span>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = scripts.map(s => {
+                const isLua = ['lua', 'luau'].includes(s.language);
+                const isHtml = ['html', 'htm'].includes(s.language);
+                const isCpp = ['cpp', 'c++', 'c'].includes(s.language);
+                const isPy = ['py', 'python'].includes(s.language);
+
+                let langBadgeClass = 'bg-slate-800 text-slate-300 border-slate-700';
+                if (isLua) langBadgeClass = 'bg-purple-500/20 text-purple-300 border-purple-500/30';
+                else if (isHtml) langBadgeClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30';
+                else if (isCpp) langBadgeClass = 'bg-blue-500/20 text-blue-300 border-blue-500/30';
+                else if (isPy) langBadgeClass = 'bg-amber-500/20 text-amber-300 border-amber-500/30';
+
+                const snippet = escapeHtml((s.code || '').slice(0, 160));
+                const host = window.location.origin;
+                const rawUrl = `${host}/raw/${s.script_id}`;
+
+                return `
+                    <div class="glass-panel p-4 rounded-3xl border border-slate-800/80 hover:border-cyan-500/40 transition-all flex flex-col justify-between gap-3 group">
+                        <div class="flex flex-col gap-2">
+                            <div class="flex items-center justify-between gap-2">
+                                <span class="px-2.5 py-0.5 rounded-lg text-[10px] font-bold font-mono uppercase tracking-wider border ${langBadgeClass}">
+                                    ${escapeHtml(s.language)}
+                                </span>
+                                <div class="flex items-center gap-2 text-[10px] text-slate-400 font-mono">
+                                    <span><i class="fa-solid fa-eye text-[9px] mr-1"></i>${s.views || 0}</span>
+                                    <span>•</span>
+                                    <span>${(s.created_at || '').slice(0, 10)}</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-xs truncate group-hover:text-cyan-300 transition" title="${escapeHtml(s.title)}">
+                                    ${escapeHtml(s.title || 'Безымянный скрипт')}
+                                </h4>
+                                <span class="text-[10px] text-slate-500 font-mono">ID: ${s.script_id}</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 text-[11px] font-mono text-cyan-200/80 overflow-hidden line-clamp-3 leading-relaxed">
+                                ${snippet}
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-800/60 text-[11px]">
+                            ${isLua ? `
+                            <button onclick="copyRobloxLoadstring('${s.script_id}')" class="flex-1 py-1.5 px-2.5 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 font-semibold flex items-center justify-center gap-1 transition text-center" title="Копировать строку для Roblox">
+                                <i class="fa-solid fa-bolt text-[10px]"></i>
+                                <span>Loadstring</span>
+                            </button>
+                            ` : ''}
+
+                            ${isHtml ? `
+                            <a href="/site/${s.script_id}" target="_blank" class="flex-1 py-1.5 px-2.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 font-semibold flex items-center justify-center gap-1 transition text-center">
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                <span>Открыть сайт</span>
+                            </a>
+                            ` : ''}
+
+                            <a href="/script/${s.script_id}" target="_blank" class="py-1.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-cyan-400 border border-slate-800 font-semibold flex items-center gap-1 transition" title="Открыть в темной IDE">
+                                <i class="fa-solid fa-code text-[10px]"></i>
+                                <span>IDE</span>
+                            </a>
+
+                            <button onclick="copyRawUrl('${s.script_id}')" class="py-1.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 font-semibold flex items-center gap-1 transition" title="Копировать Raw URL">
+                                <i class="fa-solid fa-link text-[10px]"></i>
+                                <span>Raw</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function copyRobloxLoadstring(scriptId) {
+            const host = window.location.origin;
+            const code = `loadstring(game:HttpGet("${host}/raw/${scriptId}"))()`;
+            navigator.clipboard.writeText(code).then(() => {
+                showToast("Roblox loadstring скопирован в буфер!", "success");
+            }).catch(() => {
+                showToast("Не удалось скопировать", "error");
+            });
+        }
+
+        function copyRawUrl(scriptId) {
+            const host = window.location.origin;
+            const url = `${host}/raw/${scriptId}`;
+            navigator.clipboard.writeText(url).then(() => {
+                showToast("Raw URL скопирован в буфер!", "success");
+            }).catch(() => {
+                showToast("Не удалось скопировать", "error");
+            });
+        }
+
+        // FRONTEND STUDIO & AI SANDBOX
+        function runSandboxCode() {
+            const code = document.getElementById('sandbox-code-editor')?.value || '';
+            const frame = document.getElementById('sandbox-preview-frame');
+            if (frame) {
+                frame.srcdoc = code;
+            }
+        }
+
+        function copySandboxCode() {
+            const code = document.getElementById('sandbox-code-editor')?.value || '';
+            navigator.clipboard.writeText(code).then(() => {
+                showToast("Код скопирован в буфер!", "success");
+            });
+        }
+
+        async function generateAiStudioCode() {
+            const prompt = document.getElementById('ai-generator-prompt')?.value.trim();
+            const lang = document.getElementById('ai-generator-lang')?.value || 'html';
+
+            if (!prompt) {
+                showToast("Введите описание для генерации кода!", "error");
+                return;
+            }
+
+            const btn = document.getElementById('btn-generate-ai-studio');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Генерация...</span>';
+
+            try {
+                const res = await fetch('/api/generate_code', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: prompt, language: lang })
+                });
+                const data = await res.json();
+                if (res.ok && data.code) {
+                    document.getElementById('sandbox-code-editor').value = data.code;
+                    runSandboxCode();
+                    showToast("Код успешно сгенерирован и отрендерен в песочнице!", "success");
+                } else {
+                    showToast(data.error || "Ошибка генерации", "error");
+                }
+            } catch (e) {
+                showToast("Ошибка: " + e.message, "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-sparkles"></i> <span>Сгенерировать ИИ</span>';
+            }
+        }
+
+        async function refreshAllData(showNotification = false) {
+            const btn = document.getElementById('refresh-btn');
+            btn.classList.add('animate-spin');
+            await Promise.all([fetchStats(), fetchChats(), fetchUsers(), fetchScripts()]);
+            if (appState.activeChatId) {
+                await loadChatMessages(appState.activeChatId);
+            }
+            setTimeout(() => btn.classList.remove('animate-spin'), 600);
+            if (showNotification) showToast("Все данные обновлены!", "success");
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+                function copyCodeSnippet(btn) {
+            try {
+                const wrapper = btn.closest('.code-wrapper');
+                const codeEl = wrapper ? wrapper.querySelector('code') : null;
+                if (!codeEl) return;
+                const text = codeEl.innerText || codeEl.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    const original = btn.innerHTML;
+                    btn.innerHTML = '<i class="fa-solid fa-check text-emerald-400 text-[10px]"></i> <span class="text-emerald-400">Скопировано!</span>';
+                    setTimeout(() => { btn.innerHTML = original; }, 2000);
+                });
+            } catch (e) {
+                console.error("Copy failed:", e);
+            }
+        }
+
+        function formatMarkdownSafe(rawText) {
+            if (!rawText) return '';
+
+            // 1. Изолируем блоки кода
+            const codeBlocks = [];
+            let text = rawText.replace(/```([a-zA-Z0-9_-]*)\s*([\s\S]*?)\s*```/g, (match, lang, code) => {
+                const id = codeBlocks.length;
+                const cleanLang = (lang || 'code').toUpperCase();
+                const safeCode = code
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;');
+                
+                const html = `
+                    <div class="code-wrapper my-2 rounded-xl border border-cyan-500/25 bg-[#080d16] overflow-hidden shadow-lg min-w-0 max-w-full">
+                        <div class="flex items-center justify-between px-3 py-1.5 bg-[#121824] border-b border-slate-800 text-[10px] font-mono text-cyan-400">
+                            <span class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-code text-[9px]"></i> ${cleanLang}</span>
+                            <button type="button" onclick="copyCodeSnippet(this)" class="text-slate-400 hover:text-white transition flex items-center gap-1 active:scale-95 px-2 py-0.5 rounded bg-slate-800/60">
+                                <i class="fa-regular fa-copy text-[10px]"></i>
+                                <span>Копировать</span>
+                            </button>
+                        </div>
+                        <pre class="code-block p-3 text-[11px] leading-relaxed font-mono overflow-x-auto text-slate-200 select-text"><code>${safeCode}</code></pre>
+                    </div>
+                `;
+                codeBlocks.push(html);
+                return `%%%CODEBLOCK_${id}%%%`;
+            });
+
+            // 2. Изолируем инлайн-код
+            const inlineCodes = [];
+            text = text.replace(/`([^`\n]+)`/g, (match, inline) => {
+                const id = inlineCodes.length;
+                const safeInline = inline
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;');
+                const html = `<code class="bg-[#1b2333] text-cyan-300 px-1.5 py-0.5 rounded text-[11px] font-mono border border-cyan-500/20">${safeInline}</code>`;
+                inlineCodes.push(html);
+                return `%%%INLINECODE_${id}%%%`;
+            });
+
+            // 3. Экранируем текст
+            text = text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+
+            // 4. Заголовки
+            text = text.replace(/^### (.*$)/gim, '<div class="font-bold text-cyan-400 text-[12px] mt-2 mb-1">$1</div>');
+            text = text.replace(/^## (.*$)/gim, '<div class="font-bold text-cyan-300 text-[13px] mt-2.5 mb-1">$1</div>');
+            text = text.replace(/^# (.*$)/gim, '<div class="font-bold text-white text-[14px] mt-3 mb-1.5">$1</div>');
+
+            // 5. Жирный и курсив
+            text = text.replace(/\*\*([^*]+)\*\*/g, '<strong class="text-white font-semibold">$1</strong>');
+            text = text.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em class="text-slate-300">$1</em>');
+
+            // 6. Списки
+            text = text.replace(/^\s*[\*\-]\s+(.*$)/gim, '<div class="flex items-start gap-1.5 pl-1 my-0.5"><span class="text-cyan-400 font-bold">•</span><span class="flex-1">$1</span></div>');
+
+            // 7. Переносы строк
+            text = text.replace(/\n/g, '<br>');
+
+            // 8. Восстанавливаем инлайн и блоки кода
+            text = text.replace(/%%%INLINECODE_(\d+)%%%/g, (match, id) => inlineCodes[parseInt(id)] || '');
+            text = text.replace(/%%%CODEBLOCK_(\d+)%%%/g, (match, id) => codeBlocks[parseInt(id)] || '');
+
+            return text;
+        }
+        function formatMessageText(text) { return formatMarkdownSafe(text); }
+
+        window.addEventListener('resize', () => {
+            const sidebar = document.getElementById('chats-sidebar');
+            const chatContainer = document.getElementById('chat-view-container');
+            if (!sidebar || !chatContainer) return;
+            if (window.innerWidth >= 768) {
+                sidebar.classList.remove('hidden');
+                chatContainer.classList.remove('hidden');
+                chatContainer.classList.add('flex');
+            } else {
+                if (appState.activeChatId) {
+                    sidebar.classList.add('hidden');
+                    chatContainer.classList.remove('hidden');
+                    chatContainer.classList.add('flex');
+                } else {
+                    sidebar.classList.remove('hidden');
+                    chatContainer.classList.add('hidden');
+                    chatContainer.classList.remove('flex');
+                }
+            }
+        });
+
+        async function logoutAdmin() {
+            try {
+                await fetch('/api/auth/logout', { method: 'POST' });
+            } catch (e) {}
+            window.location.href = '/';
+        }
+
+        
+        // ----------------------------------------------------
+        // NullSecAI OMFG Hello Background Player (Mini App Sync)
+        // ----------------------------------------------------
+        let isMusicPlaying = false;
+        function toggleMusic() {
+            const audio = document.getElementById('bg-music');
+            const eq = document.getElementById('eq-container');
+            const label = document.getElementById('music-label');
+            if (!audio) return;
+
+            if (isMusicPlaying) {
+                audio.pause();
+                isMusicPlaying = false;
+                if (eq) eq.classList.add('eq-paused');
+                if (label) label.classList.replace('text-cyan-400', 'text-slate-400');
+            } else {
+                audio.play().then(() => {
+                    isMusicPlaying = true;
+                    if (eq) eq.classList.remove('eq-paused');
+                    if (label) {
+                        label.classList.replace('text-slate-400', 'text-cyan-400');
+                    }
+                }).catch(err => {
+                    console.log("Audio autoplay prevented:", err);
+                });
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            refreshAllData();
+            runSandboxCode();
+            setInterval(refreshAllData, 8000);
+
+            const aiInput = document.getElementById('ai-chat-input');
+            if (aiInput) {
+                aiInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendDirectAIMessage();
+                    }
+                });
+            }
+
+            // Mobile initial tab
+            if (window.innerWidth < 768) {
+                switchTab('chats');
+            }
+            selectHeroModeWeb('chat', false);
+        });
+
+        // ==========================================
+        // NULLSEC DIRECT AI DIALOGUE HANDLER
+        // ==========================================
+        let aiChatHistory = [];
+
+        
+        // ----------------------------------------------------
+        // Web Hero Mode Selector (Mini App Style)
+        // ----------------------------------------------------
+        const WEB_HERO_MODES = {
+            chat: {
+                placeholder: 'Спросить NullSecAI Core...',
+                defaultPrompt: '',
+                cards: [
+                    {
+                        icon: 'fa-solid fa-sparkles',
+                        bg: 'bg-cyan-950/70',
+                        border: 'border-cyan-500/30',
+                        iconColor: 'text-cyan-400',
+                        title: 'Возможности Core',
+                        desc: 'Полный обзор функций, архитектуры и возможностей',
+                        prompt: 'Расскажи подробно обо всех своих возможностях, поддерживаемых языках и командах.'
+                    },
+                    {
+                        icon: 'fa-solid fa-box-archive',
+                        bg: 'bg-indigo-950/70',
+                        border: 'border-indigo-500/30',
+                        iconColor: 'text-indigo-400',
+                        title: 'Анализ файлов и архивов',
+                        desc: 'Работа с ZIP, 7Z, C++, HPP, логами и кодом',
+                        prompt: 'Как правильно загрузить тебе архив (ZIP, 7Z, C++, HPP) для полного аудита?'
+                    },
+                    {
+                        icon: 'fa-solid fa-server',
+                        bg: 'bg-emerald-950/70',
+                        border: 'border-emerald-500/30',
+                        iconColor: 'text-emerald-400',
+                        title: 'Диагностика бота',
+                        desc: 'Состояние базы SQLite, кэша, лимитов и сети',
+                        prompt: 'Проведи комплексную диагностику состояния серверов, базы данных, кэша и лимитов бота.'
+                    },
+                    {
+                        icon: 'fa-solid fa-shield-halved',
+                        bg: 'bg-purple-950/70',
+                        border: 'border-purple-500/30',
+                        iconColor: 'text-purple-400',
+                        title: 'Кибер-защита',
+                        desc: 'Механизмы скрытности, антидетект и безопасность',
+                        prompt: 'Расскажи о своих алгоритмах защиты, безопасности и антидетект технологиях.'
+                    }
+                ]
+            },
+            code: {
+                placeholder: 'Спроектируй production-код (Luau, C++, Rust, Go, Python)...',
+                defaultPrompt: 'Спроектируй архитектуру и напиши production-код для: ',
+                cards: [
+                    {
+                        icon: 'fa-solid fa-code',
+                        bg: 'bg-cyan-950/70',
+                        border: 'border-cyan-500/30',
+                        iconColor: 'text-cyan-400',
+                        title: 'Lua / Roblox Скрипт',
+                        desc: 'Модульный чистый код, ESP, Aim и защита',
+                        prompt: 'Напиши надежный Lua / Luau скрипт для Roblox с чистой модульной архитектурой.'
+                    },
+                    {
+                        icon: 'fa-solid fa-microchip',
+                        bg: 'bg-indigo-950/70',
+                        border: 'border-indigo-500/30',
+                        iconColor: 'text-indigo-400',
+                        title: 'C++ / Reverse & Exploit',
+                        desc: 'Хуки памяти, инъекции и сигнатуры',
+                        prompt: 'Покажи пример безопасного C++ хука функций и чтения/записи структур памяти.'
+                    },
+                    {
+                        icon: 'fa-brands fa-python',
+                        bg: 'bg-emerald-950/70',
+                        border: 'border-emerald-500/30',
+                        iconColor: 'text-emerald-400',
+                        title: 'Python / FastAPI API',
+                        desc: 'Асинхронные роуты, валидация и кэш',
+                        prompt: 'Спроектируй production-ready асинхронный REST API микросервис на FastAPI и Python.'
+                    },
+                    {
+                        icon: 'fa-solid fa-palette',
+                        bg: 'bg-purple-950/70',
+                        border: 'border-purple-500/30',
+                        iconColor: 'text-purple-400',
+                        title: 'Интерфейс UI',
+                        desc: 'Верстка неоновых кибер-компонентов',
+                        prompt: 'Сгенерируй кибернетический адаптивный веб-компонент на Tailwind CSS с неоновым стилем.'
+                    }
+                ]
+            },
+            task: {
+                placeholder: 'Стресс-тест, аудит уязвимостей, устойчивость кода...',
+                defaultPrompt: 'Проведи стресс-тест и диагностику уязвимостей для: ',
+                cards: [
+                    {
+                        icon: 'fa-solid fa-bolt',
+                        bg: 'bg-amber-950/70',
+                        border: 'border-amber-500/30',
+                        iconColor: 'text-amber-400',
+                        title: 'Стресс-тест архитектуры',
+                        desc: 'Устойчивость при пиковых нагрузках',
+                        prompt: 'Проведи стресс-тест архитектуры и найди слабые места при высокой нагрузке.'
+                    },
+                    {
+                        icon: 'fa-solid fa-shield-virus',
+                        bg: 'bg-rose-950/70',
+                        border: 'border-rose-500/30',
+                        iconColor: 'text-rose-400',
+                        title: 'Аудит уязвимостей',
+                        desc: 'Поиск переполнений, race condition и инъекций',
+                        prompt: 'Проведи аудит безопасности: найди уязвимости, race conditions и ошибки переполнения.'
+                    },
+                    {
+                        icon: 'fa-solid fa-bug',
+                        bg: 'bg-cyan-950/70',
+                        border: 'border-cyan-500/30',
+                        iconColor: 'text-cyan-400',
+                        title: 'Поиск багов и ошибок',
+                        desc: 'Глубокий логический анализ кода',
+                        prompt: 'Проанализируй логику кода, найди скрытые баги и предложи оптимальные исправления.'
+                    },
+                    {
+                        icon: 'fa-solid fa-server',
+                        bg: 'bg-emerald-950/70',
+                        border: 'border-emerald-500/30',
+                        iconColor: 'text-emerald-400',
+                        title: 'Диагностика бота и сервера',
+                        desc: 'Проверка кэша, базы SQLite, лимитов и сети',
+                        prompt: 'Проведи комплексную диагностику состояния серверов, базы данных, кэша и лимитов бота.'
+                    }
+                ]
+            }
+        };
+
+        let currentWebHeroMode = 'chat';
+
+        function selectHeroModeWeb(mode, userInitiated = true) {
+            currentWebHeroMode = mode;
+            const pills = ['chat', 'code', 'task'];
+            pills.forEach(p => {
+                const el = document.getElementById(`web-pill-${p}`);
+                if (el) {
+                    if (p === mode) {
+                        el.className = 'px-4 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md shadow-cyan-500/25 active:scale-95 transition cursor-pointer';
+                    } else {
+                        el.className = 'px-4 py-1.5 rounded-full text-xs font-semibold bg-slate-800/90 text-slate-300 hover:bg-slate-700/80 active:scale-95 transition cursor-pointer';
+                    }
+                }
+            });
+
+            const config = WEB_HERO_MODES[mode] || WEB_HERO_MODES.chat;
+            const input = document.getElementById('ai-chat-input');
+            if (input) {
+                input.placeholder = config.placeholder;
+                if (userInitiated) {
+                    if (config.defaultPrompt) {
+                        input.value = config.defaultPrompt;
+                    } else if (input.value.startsWith('Спроектируй архитектуру') || input.value.startsWith('Проведи стресс-тест')) {
+                        input.value = '';
+                    }
+                    input.focus();
+                    const len = input.value.length;
+                    input.setSelectionRange(len, len);
+                }
+            }
+
+            renderWebHeroCards(mode);
+        }
+
+        function renderWebHeroCards(mode) {
+            const container = document.getElementById('web-hero-cards');
+            if (!container) return;
+            const config = WEB_HERO_MODES[mode] || WEB_HERO_MODES.chat;
+
+            container.innerHTML = config.cards.map((card, idx) => `
+                <div onclick="fillAIPrompt('${card.prompt.replace(/'/g, "\'")}', true)" class="p-3 bg-[#161d2b]/80 border border-slate-800 hover:border-cyan-500/50 rounded-2xl cursor-pointer transition hover:bg-[#1b2334] active:scale-[0.98] group shadow-sm flex items-center justify-between gap-2.5">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <div class="w-8 h-8 rounded-xl ${card.bg} border ${card.border} flex items-center justify-center ${card.iconColor} text-xs flex-shrink-0">
+                            <i class="${card.icon}"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-xs font-bold text-white group-hover:text-cyan-300 truncate">${card.title}</div>
+                            <div class="text-[10px] text-slate-400 truncate">${card.desc}</div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-up text-[10px] text-slate-500 group-hover:text-cyan-400 group-hover:-translate-y-0.5 transition flex-shrink-0 pr-1"></i>
+                </div>
+            `).join('');
+        }
+
+        function fillAIPrompt(txt, autoSend = false) {
+            const inp = document.getElementById('ai-chat-input');
+            if (inp) {
+                inp.value = txt;
+                if (autoSend) {
+                    sendDirectAIMessage();
+                } else {
+                    inp.focus();
+                    const len = inp.value.length;
+                    inp.setSelectionRange(len, len);
+                }
+            }
+        }
+
+        function clearAIChatHistory() {
+            aiChatHistory = [];
+            const container = document.getElementById('ai-chat-messages');
+            if (container) {
+                container.innerHTML = `
+                    <div class="flex items-start gap-3 max-w-2xl">
+                        <div class="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-cyan-400 flex-shrink-0 text-xs">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <div class="bg-[#0a101d] border border-cyan-500/20 rounded-2xl rounded-tl-sm p-3.5 text-slate-200 leading-relaxed shadow-sm">
+                            <div class="text-[11px] font-mono text-cyan-400 mb-1 font-bold">NULLSEC CORE AI // ДИАЛОГ СБРОШЕН</div>
+                            Диалог очищен. Готов к новым задачам, оператор!
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        async function sendDirectAIMessage() {
+            const input = document.getElementById('ai-chat-input');
+            const container = document.getElementById('ai-chat-messages');
+            const btn = document.getElementById('btn-send-ai');
+            if (!input || !container) return;
+            const text = input.value.trim();
+            if (!text) return;
+
+            // Render Operator bubble
+            const heroWelcome = document.getElementById('ai-hero-welcome');
+            if (heroWelcome) heroWelcome.style.display = 'none';
+
+            const userBubble = document.createElement('div');
+            userBubble.className = 'flex items-start justify-end gap-3';
+            userBubble.innerHTML = `
+                <div class="bubble-out max-w-2xl p-3.5 text-xs md:text-sm leading-relaxed shadow-md">
+                    <div class="text-[10px] font-mono text-cyan-400 font-bold mb-1">ОПЕРАТОР (ВЫ)</div>
+                    <div class="whitespace-pre-wrap font-sans text-xs md:text-sm text-slate-100">${escapeHtml(text)}</div>
+                </div>
+            `;
+            container.appendChild(userBubble);
+            input.value = '';
+            container.scrollTop = container.scrollHeight;
+
+            // Loading bubble
+            const loadBubble = document.createElement('div');
+            loadBubble.className = 'flex items-start gap-3 max-w-2xl';
+            loadBubble.id = 'ai-loading-bubble';
+            loadBubble.innerHTML = `
+                <div class="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-cyan-400 flex-shrink-0 text-xs">
+                    <i class="fa-solid fa-brain animate-pulse"></i>
+                </div>
+                <div class="bg-[#0a101d] border border-cyan-500/20 rounded-2xl rounded-tl-sm p-3.5 text-slate-400 leading-relaxed font-mono text-xs">
+                    [NULLSEC-AI анализирует запрос...]
+                </div>
+            `;
+            container.appendChild(loadBubble);
+            container.scrollTop = container.scrollHeight;
+
+            if (btn) btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/ai/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text, history: aiChatHistory })
+                });
+                const data = await res.json();
+                loadBubble.remove();
+
+                const reply = data.reply || data.error || 'Нет ответа от ИИ.';
+                aiChatHistory.push({ role: 'user', content: text });
+                aiChatHistory.push({ role: 'assistant', content: reply });
+
+                const aiBubble = document.createElement('div');
+                aiBubble.className = 'flex items-start gap-3 max-w-3xl';
+                aiBubble.innerHTML = `
+                    <div class="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-cyan-400 flex-shrink-0 text-xs">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div class="bg-[#0a101d] border border-cyan-500/20 rounded-2xl rounded-tl-sm p-3.5 text-slate-200 leading-relaxed shadow-sm w-full">
+                        <div class="text-[10px] font-mono text-cyan-400 font-bold mb-1 flex items-center justify-between">
+                            <span>NULLSEC CORE AI</span>
+                            <span class="text-slate-500 font-normal">24/7 ACTIVE</span>
+                        </div>
+                        <div class="font-sans text-xs md:text-sm text-slate-100 min-w-0 max-w-full space-y-1">${formatMarkdownSafe(reply)}</div>
+                    </div>
+                `;
+                container.appendChild(aiBubble);
+            } catch (err) {
+                loadBubble.remove();
+                const errBubble = document.createElement('div');
+                errBubble.className = 'text-rose-400 text-xs font-mono pl-11';
+                errBubble.textContent = `[ERR] Ошибка связи с ИИ: ${err.message}`;
+                container.appendChild(errBubble);
+            } finally {
+                if (btn) btn.disabled = false;
+                container.scrollTop = container.scrollHeight;
+            }
+        }
+    </script>
+
+
+    <!-- INTRO VIDEO MODAL -->
+    <div id="intro-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700/60 rounded-3xl max-w-2xl w-full p-4 md:p-6 shadow-2xl relative">
+            <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
+                <div class="flex items-center gap-2.5">
+                    <img src="/static/logo.png" class="w-6 h-6 rounded-lg object-contain">
+                    <h3 class="text-white font-bold text-base md:text-lg">NullSecAI — Официальное Интро</h3>
+                </div>
+                <button onclick="closeIntroModal()" class="text-slate-400 hover:text-white text-xl p-1 rounded-lg transition"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="rounded-2xl overflow-hidden bg-black aspect-video flex items-center justify-center shadow-inner border border-slate-800">
+                <video id="intro-video-player" controls preload="metadata" poster="/static/logo.png" class="w-full h-full object-contain">
+                    <source src="/static/NullSecAI.mp4" type="video/mp4">
+                    Ваш браузер не поддерживает воспроизведение видео.
+                </video>
+            </div>
+        </div>
+    </div>
+    <script>
+    function openIntroModal() {
+        const m = document.getElementById('intro-modal');
+        if (m) {
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+            const v = document.getElementById('intro-video-player');
+            if (v) { v.currentTime = 0; v.play().catch(() => {}); }
+        }
+    }
+    function closeIntroModal() {
+        const m = document.getElementById('intro-modal');
+        if (m) {
+            m.classList.add('hidden');
+            m.classList.remove('flex');
+            const v = document.getElementById('intro-video-player');
+            if (v) { v.pause(); }
+        }
+    }
+    </script>
+
+</body>
+</html>

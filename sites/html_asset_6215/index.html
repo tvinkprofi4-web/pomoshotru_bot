@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Учи.ру — Образовательная платформа (Накрутка яиц)</title>
+<style>
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+background-color: #f0f4f8;
+color: #333;
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
+}
+.container {
+width: 100%;
+max-width: 480px;
+background: #fff;
+padding: 30px;
+border-radius: 12px;
+box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+h1 {
+color: #1a73e8;
+text-align: center;
+margin-bottom: 20px;
+font-size: 24px;
+}
+.form-group {
+margin-bottom: 15px;
+}
+label {
+display: block;
+margin-bottom: 5px;
+font-weight: 600;
+color: #555;
+}
+input {
+width: 100%;
+padding: 12px;
+border: 1px solid #ddd;
+border-radius: 6px;
+font-size: 16px;
+}
+button {
+width: 100%;
+padding: 12px;
+background-color: #1a73e8;
+color: white;
+border: none;
+border-radius: 6px;
+font-size: 16px;
+font-weight: bold;
+cursor: pointer;
+transition: background 0.2s;
+margin-top: 10px;
+}
+button:hover {
+background-color: #1557b0;
+}
+.error {
+color: #d93025;
+text-align: center;
+margin-top: 10px;
+font-size: 14px;
+}
+.dashboard, .minigame-screen {
+display: none;
+}
+.stats-card {
+background: #e8f0fe;
+padding: 20px;
+border-radius: 8px;
+text-align: center;
+margin-bottom: 20px;
+}
+.stats-card h2 {
+color: #1a73e8;
+font-size: 32px;
+margin-top: 5px;
+}
+.leaderboard {
+margin-bottom: 20px;
+}
+.leaderboard h3 {
+margin-bottom: 10px;
+color: #444;
+}
+.leaderboard ul {
+list-style: none;
+border: 1px solid #ddd;
+border-radius: 6px;
+overflow: hidden;
+}
+.leaderboard li {
+padding: 10px 15px;
+border-bottom: 1px solid #eee;
+display: flex;
+justify-content: space-between;
+}
+.leaderboard li:last-child {
+border-bottom: none;
+}
+.leaderboard li:nth-child(1) { background: #fff8e1; font-weight: bold; }
+.leaderboard li:nth-child(2) { background: #f5f5f5; }
+.leaderboard li:nth-child(3) { background: #fbe9e7; }
+.menu-btns button {
+background-color: #34a853;
+margin-bottom: 8px;
+}
+.menu-btns button:hover {
+background-color: #2b8143;
+}
+.back-btn {
+background-color: #5f6368 !important;
+}
+.back-btn:hover {
+background-color: #484c50 !important;
+}
+.game-area {
+background: #f9f9f9;
+padding: 15px;
+border-radius: 6px;
+margin-bottom: 15px;
+text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<!-- Экран авторизации -->
+<div id="login-screen">
+<h1>Учи.ру — Вход</h1>
+<div class="form-group">
+<label for="login">Логин:</label>
+<input type="text" id="login" placeholder="Введите логин (75)">
+</div>
+<div class="form-group">
+<label for="password">Пароль:</label>
+<input type="password" id="password" placeholder="Введите пароль (912пляж2)">
+</div>
+<button onclick="handleLogin()">Войти в аккаунт</button>
+<div id="error-msg" class="error"></div>
+</div>
+
+<!-- Личный кабинет (Дашборд) -->
+<div id="dashboard-screen" class="dashboard">
+<h1>Личный кабинет Учи.ру</h1>
+<div class="stats-card">
+<p>Твои яйца:</p>
+<h2 id="eggs-count">999</h2>
+</div>
+
+<div class="leaderboard">
+<h3>Топ участников:</h3>
+<ul>
+<li><span>1. Александр</span> <span>1500 яиц</span></li>
+<li><span>2. Иван</span> <span>1200 яиц</span></li>
+<li><span>3. Кирилл</span> <span>1050 яиц</span></li>
+<li><span>4. Платон</span> <span>980 яиц</span></li>
+</ul>
+</div>
+
+<div class="menu-btns">
+<button onclick="openGame('math')">Повторение математики</button>
+<button onclick="openGame('russian')">Повторение русского языка</button>
+<button onclick="openGame('history')">Повторение истории</button>
+</div>
+</div>
+
+<!-- Экран мини-игр -->
+<div id="minigame-screen" class="minigame-screen">
+<h1 id="game-title">Мини-игра</h1>
+<div class="game-area" id="game-content">
+<!-- Контент игры -->
+</div>
+<button class="back-btn" onclick="closeGame()">Назад в кабинет</button>
+</div>
+</div>
+
+<script>
+let userEggs = 999;
+
+function handleLogin() {
+const loginInput = document.getElementById('login').value.trim();
+const passInput = document.getElementById('password').value.trim();
+const errorMsg = document.getElementById('error-msg');
+
+if (loginInput === '75' && passInput === '912пляж2') {
+document.getElementById('login-screen').style.display = 'none';
+document.getElementById('dashboard-screen').style.display = 'block';
+document.getElementById('eggs-count').innerText = userEggs;
+errorMsg.innerText = '';
+} else {
+errorMsg.innerText = 'Неверный логин или пароль. (Подсказка: 75 / 912пляж2)';
+}
+}
+
+function openGame(type) {
+document.getElementById('dashboard-screen').style.display = 'none';
+const gameScreen = document.getElementById('minigame-screen');
+gameScreen.style.display = 'block';
+const title = document.getElementById('game-title');
+const content = document.getElementById('game-content');
+
+if (type === 'math') {
+title.innerText = 'Повторение математики';
+content.innerHTML = `
+<p style="margin-bottom: 10px;">Сколько будет 7 * 8?</p>
+<input type="number" id="ans-input" placeholder="Ответ" style="margin-bottom: 10px;">
+<button onclick="checkMath(56)">Ответить</button>
+`;
+} else if (type === 'russian') {
+title.innerText = 'Повторение русского языка';
+content.innerHTML = `
+<p style="margin-bottom: 10px;">Как пишется слово: кор__дор?</p>
+<input type="text" id="ans-input" placeholder="Вставь букву/слово" style="margin-bottom: 10px;">
+<button onclick="checkText('коридор')">Ответить</button>
+`;
+} else if (type === 'history') {
+title.innerText = 'Повторение истории';
+content.innerHTML = `
+<p style="margin-bottom: 10px;">В каком году произошло Крещение Руси?</p>
+<input type="number" id="ans-input" placeholder="Год" style="margin-bottom: 10px;">
+<button onclick="checkMath(988)">Ответить</button>
+`;
+}
+}
+
+function checkMath(correct) {
+const val = parseInt(document.getElementById('ans-input').value);
+if (val === correct) {
+userEggs += 10;
+alert('Верно. Начислено +10 яиц 🥚');
+document.getElementById('eggs-count').innerText = userEggs;
+closeGame();
+} else {
+alert('Неверно, попробуй ещё раз.');
+}
+}
+
+function checkText(correct) {
+const val = document.getElementById('ans-input').value.trim().toLowerCase();
+if (val === correct) {
+userEggs += 10;
+alert('Красава. Верно, +10 яиц 🥚');
+document.getElementById('eggs-count').innerText = userEggs;
+closeGame();
+} else {
+alert('Неверно, попробуй ещё раз.');
+}
+}
+
+function closeGame() {
+document.getElementById('minigame-screen').style.display = 'none';
+document.getElementById('dashboard-screen').style.display = 'block';
+}
+</script>
+</body>
+</html>

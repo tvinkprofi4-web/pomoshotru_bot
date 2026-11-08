@@ -1,0 +1,100 @@
+import asyncio
+import re
+from aiogram import Bot, Dispatcher, F, Router
+from aiogram.filters import Command
+from aiogram.types import Message
+from aiogram.utils.markdown import hbold, hcode, escape_md
+
+# Регулярные выражения для валидации входных данных
+PHONE_REGEX = re.compile(r"^\+?[1-9]\d{1,14}$")
+USERNAME_REGEX = re.compile(r"^@?[a-zA-Z0-9_]{5,32}$")
+USER_ID_REGEX = re.compile(r"^\d+$")
+
+# Mock-база данных для симуляции OSINT-модуля
+MOCK_DATABASE = {
+    "user_1": {
+        "id": 123456789,
+        "username": "@john_doe",
+        "phone": "+1234567890",
+        "first_name": "John",
+        "last_name": "Doe",
+        "hidden": False
+    },
+    "user_2": {
+        "id": 987654321,
+        "username": "@ghost",
+        "phone": "+0987654321",
+        "first_name": "Ghost",
+        "last_name": "Account",
+        "hidden": True
+    }
+}
+
+router = Router()
+
+@router.message(Command("osint"))
+async def cmd_osint(message: Message):
+    parts = message.text.split(maxsplit=1)
+    
+    # Проверка наличия аргументов
+    if len(parts) < 2:
+        await message.answer(
+            f"❌ Ошибка использования команды.\n"
+            f"Пример: {hcode('/osint @username')} или {hcode('/osint 123456789')}"
+        )
+        return
+
+    query = parts[1].strip()
+    clean_query = query.lstrip("@")
+
+    # Строгая валидация формата входных данных
+    if not (USER_ID_REGEX.match(query) or USERNAME_REGEX.match(query) or PHONE_REGEX.match(query)):
+        await message.answer(
+            f"❌ {hbold('Неверный формат запроса.')}\n"
+            f"Используйте User ID, Username или номер телефона."
+        )
+        return
+
+    # Поиск по Mock-базе данных
+    result = None
+    for data in MOCK_DATABASE.values():
+        if (
+            str(data["id"]) == query or 
+            data["username"].lstrip("@") == clean_query or 
+            data["phone"] == query
+        ):
+            result = data
+            break
+
+    if not result:
+        await message.answer(f"🔍 По запросу {hcode(query)} ничего не найдено.")
+        return
+
+    # Обработка статуса скрытого номера/профиля
+    if result["hidden"]:
+        await message.answer(
+            f"🔒 {hbold('Профиль скрыт настройки приватности.')}\n"
+            f"ID: {hcode(str(result['id']))}"
+        )
+        return
+
+    response_text = (
+        f"🔍 {hbold('Результаты OSINT-поиска:')}\n\n"
+        f"🆔 ID: {hcode(str(result['id']))}\n"
+        f"👤 Username: {hcode(result['username'])}\n"
+        f"📞 Телефон: {hcode(result['phone'])}\n"
+        f"📛 Имя: {escape_md(result['first_name'])} {escape_md(result['last_name'])}"
+    )
+    
+    await message.answer(response_text)
+
+async def main():
+    bot = Bot(token="123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ")
+    dp = Dispatcher()
+    dp.include_router(router)
+    
+    # Запуск бота (в демо-режиме просто проверяется компиляция и инициализация)
+    print("Bot is configured successfully.")
+
+if __name__ == "__main__":
+    asyncio.run(main())
